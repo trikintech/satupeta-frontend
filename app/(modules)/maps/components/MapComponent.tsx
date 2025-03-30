@@ -5,18 +5,16 @@ import { useAtom } from "jotai";
 import { mapTypeAtom } from "../state/mapAtom";
 import { CesiumMap } from "./CesiumMap";
 import dynamic from "next/dynamic";
+import MapSettings from "./MapSettings";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
 const MapComponent: React.FC = () => {
-  const [mapType, setMapType] = useAtom(mapTypeAtom);
+  const [mapType] = useAtom(mapTypeAtom);
 
   return (
-    <div style={{ height: "100vh" }}>
-      <button
-        onClick={() => setMapType(mapType === "leaflet" ? "cesium" : "leaflet")}
-      >
-        Toggle Map Type
-      </button>
+    <div style={{ height: "100vh" }} className="relative">
+      <div className=""></div>
+      <MapSettings />
 
       {mapType === "leaflet" ? <LeafletMap /> : <CesiumMap />}
     </div>
