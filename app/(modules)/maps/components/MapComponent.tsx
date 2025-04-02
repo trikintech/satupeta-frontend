@@ -2,12 +2,14 @@
 
 import React from "react";
 import { useAtom } from "jotai";
-import { mapTypeAtom } from "../state/mapAtom";
+import { mapTypeAtom } from "../state/mapTypeAtom";
 import { CesiumMap } from "./CesiumMap";
 import dynamic from "next/dynamic";
 import MapSettings from "./MapSettings";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
+const MemoizedLeafletMap = React.memo(LeafletMap);
+
 const MapComponent: React.FC = () => {
   const [mapType] = useAtom(mapTypeAtom);
 
@@ -16,7 +18,7 @@ const MapComponent: React.FC = () => {
       <div className=""></div>
       <MapSettings />
 
-      {mapType === "leaflet" ? <LeafletMap /> : <CesiumMap />}
+      {mapType === "leaflet" ? <MemoizedLeafletMap /> : <CesiumMap />}
     </div>
   );
 };

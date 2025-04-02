@@ -6,7 +6,7 @@ import {
 } from "@/shared/components/ui/popover";
 import { useSetAtom } from "jotai";
 import { Settings2 } from "lucide-react";
-import { mapTypeAtom } from "../state/mapAtom";
+import { mapTypeAtom } from "../state/mapTypeAtom";
 
 const MapSettings = () => {
   const setMapType = useSetAtom(mapTypeAtom);
