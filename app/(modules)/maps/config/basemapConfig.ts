@@ -40,17 +40,11 @@ export const basemapConfig = {
         'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a>',
       maxZoom: 17,
     },
+
     cesium: {
-      type: "terrain",
+      type: "OpenStreetMapImageryProvider",
       options: {
-        requestVertexNormals: true,
-      },
-      // For Cesium terrain we need a base imagery layer
-      baseImagery: {
-        type: "OpenStreetMapImageryProvider",
-        options: {
-          url: "https://a.tile.openstreetmap.org/",
-        },
+        url: "https://a.tile.opentopomap.org/",
       },
     },
   },
