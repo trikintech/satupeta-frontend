@@ -24,25 +24,25 @@ const LeafletMap: React.FC = () => {
       return;
     }
 
-    if (!basemapLayer) {
-      const newLayer = L.tileLayer(currentConfig.leaflet.url, {
-        attribution: currentConfig.leaflet.attribution,
-        maxZoom: currentConfig.leaflet.maxZoom,
-      });
-
-      if (newLayer) {
-        setBasemapLayer(newLayer);
-        map?.addLayer(newLayer);
-      }
-    } else {
-      basemapLayer.addTo(map);
+    if (basemapLayer) {
+      map.removeLayer(basemapLayer);
     }
-  }, [map, basemapLayer, activeBasemap]);
+
+    const newLayer = L.tileLayer(currentConfig.leaflet.url, {
+      attribution: currentConfig.leaflet.attribution,
+      maxZoom: currentConfig.leaflet.maxZoom,
+    });
+
+    setBasemapLayer(newLayer);
+    map.addLayer(newLayer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, activeBasemap]);
 
   return (
     <MapContainer
-      center={[51.505, -0.09]}
-      zoom={13}
+      center={[-7.5361, 112.2384]}
+      zoom={8}
+      zoomControl={false}
       ref={setMap}
       style={{ height: "100%", width: "100%" }}
     />

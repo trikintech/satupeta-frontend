@@ -8,8 +8,6 @@ import dynamic from "next/dynamic";
 import MapSettings from "./MapSettings";
 
 const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
-const MemoizedLeafletMap = React.memo(LeafletMap);
-
 const MapComponent: React.FC = () => {
   const [mapType] = useAtom(mapTypeAtom);
 
@@ -18,7 +16,7 @@ const MapComponent: React.FC = () => {
       <div className=""></div>
       <MapSettings />
 
-      {mapType === "leaflet" ? <MemoizedLeafletMap /> : <CesiumMap />}
+      {mapType === "leaflet" ? <LeafletMap /> : <CesiumMap />}
     </div>
   );
 };
