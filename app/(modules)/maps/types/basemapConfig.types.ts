@@ -6,12 +6,14 @@ interface LeafletConfig {
 
 export interface CesiumConfig {
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: any;
   baseImagery?: CesiumBaseImageryConfig;
 }
 
 interface CesiumBaseImageryConfig {
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: any;
 }
 

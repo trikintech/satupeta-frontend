@@ -1,7 +1,7 @@
 export const basemapConfig = {
   osm: {
     name: "OpenStreetMap",
-    thumbnail: "osm-thumb.png", // Optional: for thumbnail previews
+    thumbnail: "osm-thumb.png",
     leaflet: {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       attribution:
@@ -60,7 +60,7 @@ export const basemapConfig = {
     cesium: {
       type: "UrlTemplateImageryProvider",
       options: {
-        url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{y}/{x}.png",
+        url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
         subdomains: ["a", "b", "c", "d"],
         minimumLevel: 0,
         maximumLevel: 19,
@@ -79,7 +79,7 @@ export const basemapConfig = {
     cesium: {
       type: "UrlTemplateImageryProvider",
       options: {
-        url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{y}/{x}.png",
+        url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
         subdomains: ["a", "b", "c", "d"],
         minimumLevel: 0,
         maximumLevel: 19,

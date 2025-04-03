@@ -23,7 +23,7 @@ export const createCesiumProvider = async (
     default:
       console.warn(`Unknown provider type: ${config.type}`);
       return new Cesium.OpenStreetMapImageryProvider({
-        url: "https://a.tile.openstreetmap.org/",
+        url: "https://tile.openstreetmap.org/",
       });
   }
 };
