@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import Image from "next/image";
+import OpenTrigger from "./OpenTrigger";
+import LogoImage from "./LogoImage";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,15 +21,7 @@ export default function Sidebar() {
           }`}
         >
           <div className="flex justify-center">
-            <div className="relative h-[24px] w-[120px]">
-              <Image
-                src="/logo.svg"
-                alt="Logo"
-                fill
-                className="dark:invert object-contain"
-                priority
-              />
-            </div>
+            <LogoImage />
           </div>
 
           <Button
@@ -41,34 +34,12 @@ export default function Sidebar() {
           </Button>
         </div>
       </div>
-
       <div
         className={`absolute transition-all duration-300 ease-out top-4 ${
           isOpen ? "opacity-0 -translate-x-4" : "opacity-100 left-4"
         }`}
       >
-        <div className="bg-white shadow-lg rounded-lg border border-gray-300 overflow-hidden transition-all hover:shadow-md">
-          <div className="p-3">
-            <div className="w-[120px] h-[24px] relative">
-              <Image
-                src="/logo.svg"
-                alt="Logo"
-                fill
-                className="dark:invert object-contain"
-                priority
-              />
-            </div>
-          </div>
-          <Button
-            variant="default"
-            size="lg"
-            onClick={() => setIsOpen(true)}
-            className="w-full rounded-t-none"
-          >
-            Show Workbench
-            <ChevronRight className="h-5 w-5 shrink-0 ml-2" />
-          </Button>
-        </div>
+        <OpenTrigger onOpen={() => setIsOpen(true)} />
       </div>
     </div>
   );
