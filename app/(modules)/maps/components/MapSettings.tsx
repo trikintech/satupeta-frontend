@@ -4,15 +4,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/shared/components/ui/popover";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Settings2 } from "lucide-react";
 import { mapTypeAtom } from "../state/mapTypeAtom";
 import { basemapConfig } from "../config/basemapConfig";
 import { activeBasemapAtom, BasemapType } from "../state/activeBasemapAtom";
+import { useState } from "react";
 
 const MapSettings = () => {
   const [mapType, setMapType] = useAtom(mapTypeAtom);
-  const setActiveBasemap = useSetAtom(activeBasemapAtom);
+  const [activeBasemap, setActiveBasemap] = useAtom(activeBasemapAtom);
+  const [activeBasemapName, setActiveBasemapName] = useState(
+    basemapConfig[activeBasemap].name
+  );
 
   return (
     <div className="absolute top-4 right-4 z-[403]">
@@ -48,27 +52,35 @@ const MapSettings = () => {
             </div>
             <div>
               <div>Base Map</div>
-              <div className="text-xs">Dark Matter</div>
+              <div className="text-xs">{activeBasemapName}</div>
             </div>
             <div className="grid gap-2">
               <div className="grid grid-cols-4 items-center gap-2">
-                {Object.entries(basemapConfig).map(([key, { thumbnail }]) => (
-                  <button
-                    key={key}
-                    onClick={() => {
-                      setActiveBasemap(key as BasemapType);
-                    }}
-                    className="cursor-pointer w-16 h-16 rounded text-xs break-words bg-gray-300 bg-cover bg-center hover:border hover:border-primary"
-                    style={{
-                      backgroundImage: `url(${
-                        thumbnail ? `/${thumbnail}` : ""
-                      })`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      backgroundRepeat: "no-repeat",
-                    }}
-                  ></button>
-                ))}
+                {Object.entries(basemapConfig).map(
+                  ([key, { thumbnail, name }]) => (
+                    <button
+                      key={key}
+                      onMouseEnter={() => setActiveBasemapName(name)}
+                      onMouseLeave={() =>
+                        setActiveBasemapName(basemapConfig[activeBasemap].name)
+                      }
+                      onClick={() => {
+                        setActiveBasemap(key as BasemapType);
+                      }}
+                      className={`cursor-pointer w-16 h-16 rounded text-xs break-words bg-gray-300 bg-cover bg-center hover:border border-primary ${
+                        activeBasemap === key && "border"
+                      }`}
+                      style={{
+                        backgroundImage: `url(${
+                          thumbnail ? `/${thumbnail}` : ""
+                        })`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                    ></button>
+                  )
+                )}
               </div>
             </div>
           </div>
