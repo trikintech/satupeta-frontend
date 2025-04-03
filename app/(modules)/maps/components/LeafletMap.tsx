@@ -7,13 +7,14 @@ import { basemapConfig } from "../config/basemapConfig";
 
 import { MapContainer } from "react-leaflet";
 import L from "leaflet";
-import { mapConfig } from "../config/mapConfig";
 import { mapAtom } from "../state/mapAtom";
+import { mapSettingsAtom } from "../state/mapSettingsAtom";
 
 const LeafletMap: React.FC = () => {
   const activeBasemap = useAtomValue(activeBasemapAtom);
   const [basemapLayer, setBasemapLayer] = useState<L.Layer | null>(null);
   const [map, setMap] = useAtom(mapAtom);
+  const [mapSettings] = useAtom(mapSettingsAtom);
 
   useEffect(() => {
     if (!map) return;
@@ -42,7 +43,7 @@ const LeafletMap: React.FC = () => {
 
   return (
     <MapContainer
-      center={[mapConfig.center[0], mapConfig.center[1]]}
+      center={[mapSettings.center[0], mapSettings.center[1]]}
       zoom={8}
       zoomControl={false}
       ref={setMap}

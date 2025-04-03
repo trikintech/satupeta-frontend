@@ -4,7 +4,7 @@ import { createCesiumProvider } from "../factories/cesiumProvider";
 import { leafletZoomToCesiumHeight } from "../utils/cesiumUtils";
 import { activeBasemapAtom } from "../state/activeBasemapAtom";
 import { useAtom, useAtomValue } from "jotai";
-import { mapConfigAtom } from "../state/mapConfigAtom";
+import { mapSettingsAtom } from "../state/mapSettingsAtom";
 import { basemapConfig } from "../config/basemapConfig";
 
 export const useCesiumMap = () => {
@@ -12,7 +12,7 @@ export const useCesiumMap = () => {
   const viewerRef = useRef<Cesium.Viewer | null>(null);
   const [isMapInitialized, setIsMapInitialized] = useState(false);
   const activeBasemap = useAtomValue(activeBasemapAtom);
-  const [mapConfig] = useAtom(mapConfigAtom);
+  const [mapSettings] = useAtom(mapSettingsAtom);
 
   useEffect(() => {
     if (!cesiumContainer.current || viewerRef.current) return;
@@ -33,9 +33,9 @@ export const useCesiumMap = () => {
 
       viewer.camera.setView({
         destination: Cesium.Cartesian3.fromDegrees(
-          mapConfig.center[1],
-          mapConfig.center[0],
-          leafletZoomToCesiumHeight(mapConfig.zoomLevel)
+          mapSettings.center[1],
+          mapSettings.center[0],
+          leafletZoomToCesiumHeight(mapSettings.zoomLevel)
         ),
       });
 
@@ -101,7 +101,7 @@ export const useCesiumMap = () => {
       if (!viewerRef.current) return;
 
       const finalHeight =
-        height ?? leafletZoomToCesiumHeight(mapConfig.zoomLevel);
+        height ?? leafletZoomToCesiumHeight(mapSettings.zoomLevel);
 
       viewerRef.current.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(
@@ -112,7 +112,7 @@ export const useCesiumMap = () => {
         duration: duration ?? 2.0,
       });
     },
-    [mapConfig.zoomLevel]
+    [mapSettings.zoomLevel]
   );
 
   return {
