@@ -19,14 +19,16 @@ export default function Sidebar() {
             isOpen ? "opacity-100 delay-100" : "opacity-0"
           }`}
         >
-          <div className="relative h-[24px] w-[120px]">
-            <Image
-              src="/logo.svg"
-              alt="Logo"
-              fill
-              className="dark:invert object-contain"
-              priority
-            />
+          <div className="flex justify-center">
+            <div className="relative h-[24px] w-[120px]">
+              <Image
+                src="/logo.svg"
+                alt="Logo"
+                fill
+                className="dark:invert object-contain"
+                priority
+              />
+            </div>
           </div>
 
           <Button
