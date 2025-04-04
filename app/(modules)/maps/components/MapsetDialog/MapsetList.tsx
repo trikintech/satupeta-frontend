@@ -84,7 +84,7 @@ const MapsetList: React.FC = () => {
   );
 
   return (
-    <div className="p-4 flex flex-col h-full max-w-xl mx-auto bg-white rounded-lg shadow-lg">
+    <div className="p-4 flex flex-col h-full max-w-xl mx-auto bg-white rounded-l-lg shadow-lg">
       <div className="mb-4">
         <div className="flex justify-between items-center mb-3">
           <h2 className="font-bold text-lg text-gray-800">Map Layers</h2>
@@ -117,9 +117,6 @@ const MapsetList: React.FC = () => {
         <span>
           Showing {filteredMapsets.length} of {mapsets.length} available layers
         </span>
-        {selectedMapsetId && (
-          <span className="text-primary">1 layer selected</span>
-        )}
       </div>
     </div>
   );

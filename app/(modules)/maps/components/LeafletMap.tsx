@@ -47,6 +47,7 @@ const LeafletMap: React.FC = () => {
       zoom={8}
       zoomControl={false}
       ref={setMap}
+      attributionControl={false}
       style={{ height: "100%", width: "100%" }}
     />
   );
