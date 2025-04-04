@@ -6,9 +6,12 @@ import SearchInput from "@/shared/components/ds/SearchInput";
 import CloseTrigger from "./CloseTrigger";
 import { Button } from "@/shared/components/ui/button";
 import EmptyState from "./EmptyState";
+import { useSetAtom } from "jotai";
+import { isOpenMapsetDialogAtom } from "../../state/mapsetDialogAtom";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const setIsOpenDialog = useSetAtom(isOpenMapsetDialogAtom);
 
   return (
     <div className="absolute top-0 left-4 h-full flex items-center z-[403]">
@@ -26,8 +29,8 @@ export default function Sidebar() {
             <LogoImage />
           </div>
 
-          <SearchInput />
-          <Button>Explore Data</Button>
+          <SearchInput onChange={() => []} />
+          <Button onClick={() => setIsOpenDialog(true)}>Explore Data</Button>
           <hr />
           <EmptyState />
 
