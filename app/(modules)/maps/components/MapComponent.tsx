@@ -7,7 +7,9 @@ import { CesiumMap } from "./CesiumMap";
 import dynamic from "next/dynamic";
 import MapSettings from "./MapSettings";
 
-const LeafletMap = dynamic(() => import("./LeafletMap"), { ssr: false });
+const LeafletMap = dynamic(() => import("./LeafletMap"), {
+  ssr: false,
+});
 const MapComponent: React.FC = () => {
   const [mapType] = useAtom(mapTypeAtom);
 

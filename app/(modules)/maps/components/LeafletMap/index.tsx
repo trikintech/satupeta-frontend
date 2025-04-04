@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
-import { activeBasemapAtom } from "../state/activeBasemapAtom";
-import { basemapConfig } from "../config/basemapConfig";
+import { activeBasemapAtom } from "../../state/activeBasemapAtom";
+import { basemapConfig } from "../../config/basemapConfig";
 
 import { MapContainer } from "react-leaflet";
 import L from "leaflet";
-import { mapAtom } from "../state/mapAtom";
-import { mapSettingsAtom } from "../state/mapSettingsAtom";
+import { mapAtom } from "../../state/mapAtom";
+import { mapSettingsAtom } from "../../state/mapSettingsAtom";
+import ZoomControl from "./ZoomControl";
 
 const LeafletMap: React.FC = () => {
   const activeBasemap = useAtomValue(activeBasemapAtom);
@@ -42,14 +43,17 @@ const LeafletMap: React.FC = () => {
   }, [map, activeBasemap]);
 
   return (
-    <MapContainer
-      center={[mapSettings.center[0], mapSettings.center[1]]}
-      zoom={8}
-      zoomControl={false}
-      ref={setMap}
-      attributionControl={false}
-      style={{ height: "100%", width: "100%" }}
-    />
+    <>
+      <MapContainer
+        center={[mapSettings.center[0], mapSettings.center[1]]}
+        zoom={8}
+        zoomControl={false}
+        ref={setMap}
+        attributionControl={false}
+        style={{ height: "100%", width: "100%" }}
+      />
+      <ZoomControl />
+    </>
   );
 };
 
