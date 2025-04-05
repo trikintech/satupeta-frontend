@@ -53,6 +53,7 @@ const MapsetList: React.FC = () => {
 
   const handleAddLayer = useCallback((mapset: Mapset) => {
     setSelectedMapset(mapset);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filteredMapsets = mapsets.filter((mapset) =>
