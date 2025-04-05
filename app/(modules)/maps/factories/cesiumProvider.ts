@@ -1,6 +1,6 @@
 import * as Cesium from "cesium";
 
-import { CesiumConfig } from "../types/basemapConfig.types";
+import { CesiumConfig } from "../types/BasemapConfig";
 
 export const createCesiumProvider = async (
   config: CesiumConfig

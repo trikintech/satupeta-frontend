@@ -1,15 +1,14 @@
 import React, { useState, useCallback, memo } from "react";
 import { Map, Layers, Plus, Minus } from "lucide-react";
 import SearchInput from "@/shared/components/ds/SearchInput";
-
-interface Mapset {
-  id: string;
-  name: string;
-}
+import { mapsets } from "../../utils/mapsets";
+import { useAtom } from "jotai";
+import { selectedMapsetAtom } from "../../state/mapsetDialogAtom";
+import { Mapset } from "../../types/Mapset";
 
 interface MapsetItemProps {
   mapset: Mapset;
-  onClick: (id: string) => void;
+  onClick: (mapset: Mapset) => void;
   isSelected: boolean;
 }
 
@@ -19,7 +18,7 @@ const MapsetItem: React.FC<MapsetItemProps> = memo(
       className={`text-left bg-muted p-2 w-full rounded-lg flex justify-between items-center transition duration-200 ease-in-out cursor-pointer my-3 ${
         isSelected ? "border-l-4 border-primary" : "hover:bg-muted/80"
       }`}
-      onClick={() => onClick(mapset.id)}
+      onClick={() => onClick(mapset)}
     >
       <div className="flex items-center gap-3">
         <div className="p-2 rounded-md">
@@ -46,37 +45,14 @@ MapsetItem.displayName = "MapsetItem";
 
 const MapsetList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedMapsetId, setSelectedMapsetId] = useState<string | null>(null);
-
-  const mapsets: Mapset[] = [
-    {
-      id: "mapset-1",
-      name: "Peta Dasar Majalengka",
-    },
-    {
-      id: "mapset-2",
-      name: "Peta Topografi Bandung",
-    },
-    {
-      id: "mapset-3",
-      name: "Peta Infrastruktur Jakarta",
-    },
-    {
-      id: "mapset-4",
-      name: "Peta Administratif Surabaya",
-    },
-    {
-      id: "mapset-5",
-      name: "Peta Demografi Yogyakarta",
-    },
-  ];
+  const [selectedMapset, setSelectedMapset] = useAtom(selectedMapsetAtom);
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value);
   }, []);
 
-  const handleAddLayer = useCallback((id: string) => {
-    setSelectedMapsetId(id);
+  const handleAddLayer = useCallback((mapset: Mapset) => {
+    setSelectedMapset(mapset);
   }, []);
 
   const filteredMapsets = mapsets.filter((mapset) =>
@@ -107,7 +83,7 @@ const MapsetList: React.FC = () => {
               key={mapset.id}
               mapset={mapset}
               onClick={handleAddLayer}
-              isSelected={mapset.id === selectedMapsetId}
+              isSelected={mapset === selectedMapset}
             />
           ))}
         </div>

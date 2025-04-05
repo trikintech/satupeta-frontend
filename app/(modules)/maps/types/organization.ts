@@ -1,0 +1,21 @@
+export type Organization = {
+  id: number;
+  name: string;
+  slug: string;
+  deskripsi: string;
+  image: string;
+  notelp: string;
+  alamat: string;
+  website: string;
+  email: string;
+  count_dataset_all: number;
+  count_dataset_public: number;
+  count_mapset_all: number;
+  count_mapset_public: number;
+  is_active: boolean;
+  is_deleted: boolean;
+  cuid: number;
+  cdate: string;
+  muid: number;
+  mdate: string;
+};

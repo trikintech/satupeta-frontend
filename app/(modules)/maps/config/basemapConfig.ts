@@ -1,4 +1,6 @@
-export const basemapConfig = {
+import { BasemapConfig } from "../types/BasemapConfig";
+
+export const basemapConfig: BasemapConfig = {
   osm: {
     name: "OpenStreetMap",
     thumbnail: "osm-thumb.png",

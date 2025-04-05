@@ -1,8 +1,8 @@
 import { atom } from "jotai";
 
-import { Mapset } from "../types/mapset.types";
+import { Mapset } from "../types/Mapset";
 
 const isOpenMapsetDialogAtom = atom<boolean>(false);
-const activeDetailMapset = atom<Mapset | null>(null);
+const selectedMapsetAtom = atom<Mapset | null>(null);
 
-export { isOpenMapsetDialogAtom, activeDetailMapset };
+export { isOpenMapsetDialogAtom, selectedMapsetAtom };
