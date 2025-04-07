@@ -25,21 +25,22 @@ export default function Sidebar() {
         }`}
       >
         <div
-          className={`px-4 flex flex-col gap-2 transition-opacity duration-200 ${
+          className={`flex flex-col gap-2 transition-opacity duration-200 ${
             isOpen ? "opacity-100 delay-100" : "opacity-0"
           }`}
         >
-          <div className="flex justify-center my-5">
-            <LogoImage />
+          <div className="px-4 flex flex-col gap-2">
+            <div className="flex justify-center my-5">
+              <LogoImage />
+            </div>
+
+            <SearchInput onChange={() => []} />
+            <Button onClick={() => setIsOpenDialog(true)}>Explore Data</Button>
+            <hr />
           </div>
-
-          <SearchInput onChange={() => []} />
-          <Button onClick={() => setIsOpenDialog(true)}>Explore Data</Button>
-          <hr />
+          <LayerControls />
+          <CloseTrigger onClose={() => setIsOpen(false)} />
         </div>
-
-        <LayerControls />
-        <CloseTrigger onClose={() => setIsOpen(false)} />
       </div>
       <div
         className={`absolute transition-all duration-300 ease-out top-4 ${

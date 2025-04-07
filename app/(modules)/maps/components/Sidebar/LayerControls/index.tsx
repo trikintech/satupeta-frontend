@@ -1,16 +1,83 @@
 import { useAtom } from "jotai";
+import { useDrag, useDrop, DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import {
+  ActiveLayer,
   activeLayersAtom,
   removeLayerAtom,
+  reorderLayersAtom, // Add this import
 } from "../../../state/activeLayersAtom";
 import EmptyState from "../EmptyState";
 import { mapAtom } from "../../../state/mapAtom";
 import L from "leaflet";
 import { LayerControlItem } from "./LayerControlItem";
+import { useCallback, useRef } from "react";
+
+// Add this type for DnD
+interface DragItem {
+  id: string;
+  index: number;
+}
+
+// Create a draggable layer item component
+const DraggableLayerItem = ({
+  layer,
+  index,
+  moveLayer,
+  onRemove,
+  onZoom,
+}: {
+  layer: ActiveLayer;
+  index: number;
+  moveLayer: (dragIndex: number, hoverIndex: number) => void;
+  onRemove: (id: string) => void;
+  onZoom: (bounds?: L.LatLngBoundsExpression | null) => void;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [{ isDragging }, drag] = useDrag({
+    type: "LAYER",
+    item: { id: layer.id, index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const [, drop] = useDrop({
+    accept: "LAYER",
+    hover(item: DragItem) {
+      if (!ref.current) return;
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      if (dragIndex === hoverIndex) return;
+
+      moveLayer(dragIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+  });
+
+  drag(drop(ref));
+
+  return (
+    <div
+      ref={ref}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+      className="cursor-move" // Add cursor style
+    >
+      <LayerControlItem
+        layer={layer}
+        onRemove={() => onRemove}
+        onZoom={onZoom}
+      />
+    </div>
+  );
+};
 
 export default function LayerControls() {
   const [activeLayers] = useAtom(activeLayersAtom);
   const [, removeLayer] = useAtom(removeLayerAtom);
+  const [, reorderLayers] = useAtom(reorderLayersAtom);
   const [map] = useAtom(mapAtom);
 
   const handleZoomToLayer = (bounds?: L.LatLngBoundsExpression | null) => {
@@ -22,25 +89,40 @@ export default function LayerControls() {
     }
   };
 
+  const moveLayer = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      reorderLayers({ fromIndex: dragIndex, toIndex: hoverIndex });
+    },
+    [reorderLayers]
+  );
+
   if (activeLayers.length === 0) {
     return <EmptyState />;
   }
 
   return (
-    <div>
-      <div className="px-4 py-2 font-semibold">
-        Active Layers({activeLayers.length})
+    <DndProvider backend={HTML5Backend}>
+      <div>
+        <div className="px-4 py-2 font-semibold">
+          Active Layers({activeLayers.length})
+        </div>
+        <div className="px-4 flex flex-col space-y-4 h-[70vh] overflow-auto">
+          {[...activeLayers].reverse().map((layer, i) => {
+            const index = activeLayers.length - 1 - i;
+
+            return (
+              <DraggableLayerItem
+                key={layer.id}
+                index={index}
+                layer={layer}
+                moveLayer={moveLayer}
+                onRemove={removeLayer}
+                onZoom={handleZoomToLayer}
+              />
+            );
+          })}
+        </div>
       </div>
-      <div className="px-4 flex flex-col space-y-4 h-[70vh] overflow-auto">
-        {activeLayers.map((layer) => (
-          <LayerControlItem
-            key={layer.id}
-            layer={layer}
-            onRemove={() => removeLayer}
-            onZoom={handleZoomToLayer}
-          />
-        ))}
-      </div>
-    </div>
+    </DndProvider>
   );
 }
