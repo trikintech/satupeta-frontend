@@ -1,60 +1,72 @@
 import { atom } from "jotai";
 
+import { LatLngBoundsExpression } from "leaflet";
+
 type LayerSettings = {
-  opacity: number;
   visible: boolean;
+  opacity: number;
   zIndex: number;
 };
 
-type WMSTileLayer = {
+export type WMSLayerConfig = {
   type: "wms";
-  url: string;
-  layers: string;
+  url?: string;
+  layers?: string;
+  format?: string;
+  transparent?: boolean;
+  bounds?: LatLngBoundsExpression | null;
 };
 
-type ActiveLayer = {
+export type ActiveLayer = {
   id: string;
   name: string;
   settings: LayerSettings;
-  layer: WMSTileLayer;
+  layer: WMSLayerConfig;
 };
 
 export const activeLayersAtom = atom<ActiveLayer[]>([]);
 
-export const activeLayerIdsAtom = atom((get) =>
-  get(activeLayersAtom).map((layer) => layer.id)
+export const addLayerAtom = atom(
+  null,
+  (get, set, layer: Omit<ActiveLayer, "settings">) => {
+    set(activeLayersAtom, [
+      ...get(activeLayersAtom),
+      {
+        ...layer,
+        settings: {
+          visible: true,
+          opacity: 1,
+          zIndex: get(activeLayersAtom).length + 1,
+        },
+      },
+    ]);
+  }
 );
 
-export const visibleLayersAtom = atom((get) =>
-  get(activeLayersAtom).filter((layer) => layer.settings.visible)
-);
-
-export const addActiveLayerAtom = atom(null, (get, set, layer: ActiveLayer) => {
-  const current = get(activeLayersAtom);
-  set(activeLayersAtom, [...current, layer]);
-});
-
-export const removeActiveLayerAtom = atom(null, (get, set, layerId: string) => {
-  const current = get(activeLayersAtom);
-  set(
-    activeLayersAtom,
-    current.filter((layer) => layer.id !== layerId)
+export const toggleLayerAtom = atom(null, (get, set, layerId: string) => {
+  set(activeLayersAtom, (prev) =>
+    prev.map((layer) =>
+      layer.id === layerId
+        ? {
+            ...layer,
+            settings: { ...layer.settings, visible: !layer.settings.visible },
+          }
+        : layer
+    )
   );
 });
 
-export const updateLayerSettingsAtom = atom(
+export const removeLayerAtom = atom(null, (get, set, layerId: string) => {
+  set(activeLayersAtom, (prev) => prev.filter((layer) => layer.id !== layerId));
+});
+
+export const setLayerOpacityAtom = atom(
   null,
-  (
-    get,
-    set,
-    { layerId, settings }: { layerId: string; settings: Partial<LayerSettings> }
-  ) => {
-    const current = get(activeLayersAtom);
-    set(
-      activeLayersAtom,
-      current.map((layer) =>
+  (get, set, { layerId, opacity }: { layerId: string; opacity: number }) => {
+    set(activeLayersAtom, (prev) =>
+      prev.map((layer) =>
         layer.id === layerId
-          ? { ...layer, settings: { ...layer.settings, ...settings } }
+          ? { ...layer, settings: { ...layer.settings, opacity } }
           : layer
       )
     );

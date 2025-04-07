@@ -1,13 +1,13 @@
-import { AttributeKugi } from "./AttributeKugi";
-import { HistoryDraft } from "./HistoryDraft";
-import { MapsetSource } from "./MapsetSource";
-import { MapsetType } from "./MapsetType";
-import { Organization } from "./Organization";
-import { Topic } from "./Topic";
-import { User } from "./User";
+import { AttributeKugi } from "./attributeKugi";
+import { HistoryDraft } from "./historyDraft";
+import { MapsetSource } from "./mapsetSource";
+import { MapsetType } from "./mapsetType";
+import { Organization } from "./organization";
+import { Topic } from "./topic";
+import { User } from "./user";
 
 export type Mapset = {
-  id: number;
+  id: string;
   name: string;
   slug: string;
   description: string;

@@ -6,8 +6,7 @@ export const parseWmsUrl = (url: string | undefined | null) => {
     const parsedUrl = new URL(url);
     const params = parsedUrl.searchParams;
 
-    console.log(rawBaseUrl);
-
+    const bbox = params.get("bbox");
     return {
       baseUrl: rawBaseUrl,
       params: {
@@ -17,6 +16,7 @@ export const parseWmsUrl = (url: string | undefined | null) => {
         layers: params.get("layers") ?? "",
         styles: params.get("styles") ?? "",
         format: params.get("format") ?? "image/png",
+        bounds: bbox ? parseBBoxToBounds(bbox) : null,
         transparent: "true",
         srs: params.get("srs") ?? params.get("crs") ?? "EPSG:4326",
       },
@@ -46,8 +46,28 @@ export const getWmsTileLayerUrl = (url: string | undefined | null) => {
     [crsParamKey]: params.srs,
   });
 
-  console.log(wmsParams);
-  console.log(baseUrl);
-
   return `${baseUrl}?${wmsParams.toString()}`;
 };
+
+import { LatLngBoundsExpression } from "leaflet";
+
+export function parseBBoxToBounds(
+  bboxString: string
+): LatLngBoundsExpression | null {
+  try {
+    if (!bboxString) return null;
+
+    const [minX, minY, maxX, maxY] = bboxString.split(",").map(Number);
+    if ([minX, minY, maxX, maxY].some(isNaN)) return null;
+
+    const bounds: LatLngBoundsExpression = [
+      [minY, minX],
+      [maxY, maxX],
+    ];
+
+    return bounds;
+  } catch (e) {
+    console.error("Invalid bbox input:", e);
+    return null;
+  }
+}

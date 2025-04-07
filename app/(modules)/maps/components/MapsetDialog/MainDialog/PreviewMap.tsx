@@ -1,12 +1,10 @@
 import { MapContainer, TileLayer, WMSTileLayer } from "react-leaflet";
 import { mapConfig } from "../../../config/mapConfig";
-import { useAtomValue } from "jotai";
-import { selectedMapsetAtom } from "../../../state/mapsetDialogAtom";
 import { parseWmsUrl } from "../../../utils/wmsUtils";
+import { Mapset } from "../../../types/Mapset";
 
-export default function PreviewMap() {
-  const selectedMapset = useAtomValue(selectedMapsetAtom);
-  const parsed = parseWmsUrl(selectedMapset?.mapsetservice_url);
+export default function PreviewMap({ mapset }: Readonly<{ mapset: Mapset }>) {
+  const parsed = parseWmsUrl(mapset?.mapsetservice_url);
 
   return (
     <MapContainer

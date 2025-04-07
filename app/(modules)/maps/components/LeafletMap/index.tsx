@@ -10,6 +10,7 @@ import L from "leaflet";
 import { mapAtom } from "../../state/mapAtom";
 import { mapSettingsAtom } from "../../state/mapSettingsAtom";
 import ZoomControl from "./ZoomControl";
+import { LayerManager } from "../LayerManager";
 
 const LeafletMap: React.FC = () => {
   const activeBasemap = useAtomValue(activeBasemapAtom);
@@ -52,6 +53,7 @@ const LeafletMap: React.FC = () => {
         attributionControl={false}
         style={{ height: "100%", width: "100%" }}
       />
+      <LayerManager map={map} />
       <ZoomControl />
     </>
   );
