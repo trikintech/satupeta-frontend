@@ -87,9 +87,9 @@ export const LayerControlItem = ({
                   })}
                   alt={`${layer.name} legend`}
                   width={200}
-                  height={40} // optional, atau pakai layout responsive
+                  height={40}
                   className="w-auto h-auto max-w-full"
-                  unoptimized // ← Kalau dari sumber eksternal tanpa domain whitelist
+                  unoptimized
                 />
               ) : (
                 <p>No legend available</p>

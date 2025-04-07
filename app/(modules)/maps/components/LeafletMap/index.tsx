@@ -40,6 +40,7 @@ const LeafletMap: React.FC = () => {
 
     setBasemapLayer(newLayer);
     map.addLayer(newLayer);
+    newLayer.bringToBack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, activeBasemap]);
 
