@@ -1,10 +1,11 @@
-import React, { useState, useCallback, memo } from "react";
+import React, { useState, useCallback } from "react";
 import { Map, Layers, Plus, Minus } from "lucide-react";
 import SearchInput from "@/shared/components/ds/SearchInput";
-import { mapsets } from "../../utils/mapsets";
+import { mapsets as rawMapsets } from "../../utils/mapsets";
 import { useAtom } from "jotai";
 import { selectedMapsetAtom } from "../../state/mapsetDialogAtom";
 import { Mapset } from "../../types/Mapset";
+import { useLayerToggle } from "../../hooks/useLayerToggle";
 
 interface MapsetItemProps {
   mapset: Mapset;
@@ -12,8 +13,14 @@ interface MapsetItemProps {
   isSelected: boolean;
 }
 
-const MapsetItem: React.FC<MapsetItemProps> = memo(
-  ({ mapset, onClick, isSelected }) => (
+const MapsetItem: React.FC<MapsetItemProps> = ({
+  mapset,
+  onClick,
+  isSelected,
+}) => {
+  const { isActive, toggleLayer } = useLayerToggle(mapset);
+
+  return (
     <button
       className={`text-left bg-muted p-2 w-full rounded-lg flex justify-between items-center transition duration-200 ease-in-out cursor-pointer my-3 ${
         isSelected ? "border-l-4 border-primary" : "hover:bg-muted/80"
@@ -31,21 +38,26 @@ const MapsetItem: React.FC<MapsetItemProps> = memo(
         </div>
       </div>
       <div className="flex items-center space-x-3">
-        {isSelected ? (
-          <Minus size={18} className="text-gray-400" />
+        {isActive ? (
+          <Minus size={18} className="text-gray-400" onClick={toggleLayer} />
         ) : (
-          <Plus size={18} className="text-gray-400" />
+          <Plus size={18} className="text-gray-400" onClick={toggleLayer} />
         )}
       </div>
     </button>
-  )
-);
+  );
+};
 
 MapsetItem.displayName = "MapsetItem";
 
 const MapsetList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedMapset, setSelectedMapset] = useAtom(selectedMapsetAtom);
+
+  const mapsets = rawMapsets.map((m) => ({
+    ...m,
+    id: String(m.id),
+  }));
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value);
@@ -56,7 +68,7 @@ const MapsetList: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const filteredMapsets = mapsets.filter((mapset) =>
+  const filteredMapsets = mapsets.filter((mapset: Mapset) =>
     mapset.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -84,7 +96,7 @@ const MapsetList: React.FC = () => {
               key={mapset.id}
               mapset={mapset}
               onClick={handleAddLayer}
-              isSelected={mapset === selectedMapset}
+              isSelected={mapset.id === selectedMapset?.id}
             />
           ))}
         </div>
