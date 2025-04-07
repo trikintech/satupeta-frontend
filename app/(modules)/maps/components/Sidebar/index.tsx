@@ -5,9 +5,13 @@ import LogoImage from "./LogoImage";
 import SearchInput from "@/shared/components/ds/SearchInput";
 import CloseTrigger from "./CloseTrigger";
 import { Button } from "@/shared/components/ui/button";
-import EmptyState from "./EmptyState";
 import { useSetAtom } from "jotai";
 import { isOpenMapsetDialogAtom } from "../../state/mapsetDialogAtom";
+import dynamic from "next/dynamic";
+
+const LayerControls = dynamic(() => import("./LayerControls"), {
+  ssr: false,
+});
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +25,7 @@ export default function Sidebar() {
         }`}
       >
         <div
-          className={`p-4 flex flex-col gap-2 transition-opacity duration-200 ${
+          className={`px-4 flex flex-col gap-2 transition-opacity duration-200 ${
             isOpen ? "opacity-100 delay-100" : "opacity-0"
           }`}
         >
@@ -32,10 +36,10 @@ export default function Sidebar() {
           <SearchInput onChange={() => []} />
           <Button onClick={() => setIsOpenDialog(true)}>Explore Data</Button>
           <hr />
-          <EmptyState />
-
-          <CloseTrigger onClose={() => setIsOpen(false)} />
         </div>
+
+        <LayerControls />
+        <CloseTrigger onClose={() => setIsOpen(false)} />
       </div>
       <div
         className={`absolute transition-all duration-300 ease-out top-4 ${

@@ -71,3 +71,36 @@ export function parseBBoxToBounds(
     return null;
   }
 }
+
+interface GetLegendUrlOptions {
+  baseUrl: string;
+  layerName: string;
+  format?: string;
+  width?: number;
+  height?: number;
+  version?: string;
+  sld_version?: string;
+}
+
+export const getLegendUrl = ({
+  baseUrl,
+  layerName,
+  format = "image/png",
+  width,
+  height,
+  version = "1.1.1",
+  sld_version = "1.1.0",
+}: GetLegendUrlOptions): string => {
+  const url = new URL(baseUrl);
+  url.searchParams.set("SERVICE", "WMS");
+  url.searchParams.set("VERSION", version);
+  url.searchParams.set("REQUEST", "GetLegendGraphic");
+  url.searchParams.set("FORMAT", format);
+  url.searchParams.set("LAYER", layerName);
+  url.searchParams.set("SLD_VERSION", sld_version);
+
+  if (width) url.searchParams.set("WIDTH", width.toString());
+  if (height) url.searchParams.set("HEIGHT", height.toString());
+
+  return url.toString();
+};
