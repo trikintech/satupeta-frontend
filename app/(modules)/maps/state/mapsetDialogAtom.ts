@@ -1,6 +1,6 @@
-import { atom } from "jotai";
+import { Mapset } from "@/shared/types/mapset";
 
-import { Mapset } from "../types/mapset";
+import { atom } from "jotai";
 
 const isOpenMapsetDialogAtom = atom<boolean>(false);
 const selectedMapsetAtom = atom<Mapset | null>(null);

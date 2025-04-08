@@ -12,25 +12,24 @@ import {
 } from "../../../state/mapsetDialogAtom";
 import { useQuery } from "@tanstack/react-query";
 import { getMapsets } from "@/shared/services/mapsetService";
-import { ActiveLayer } from "../../../state/activeLayersAtom";
+import { ActiveLayer, removeLayerAtom } from "../../../state/activeLayersAtom";
 
 interface LayerControlItemProps {
   layer: ActiveLayer;
   layerInstance?: L.Layer;
-  onRemove: () => void;
   onZoom: (bounds?: L.LatLngBoundsExpression | null) => void;
 }
 
 export const LayerControlItem = ({
   layer,
   layerInstance,
-  onRemove,
   onZoom,
 }: LayerControlItemProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [opacity, setOpacity] = useState(1);
   const [, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);
   const [, setSelectedMapset] = useAtom(selectedMapsetAtom);
+  const [, removeLayer] = useAtom(removeLayerAtom);
   const { data: mapsets } = useQuery({
     queryKey: ["mapsets"],
     queryFn: getMapsets,
@@ -95,7 +94,7 @@ export const LayerControlItem = ({
               <Button
                 className="text-xs"
                 size="sm"
-                onClick={onRemove}
+                onClick={() => removeLayer(layer.id)}
                 title="Remove layer"
               >
                 <Trash2 size={12} />

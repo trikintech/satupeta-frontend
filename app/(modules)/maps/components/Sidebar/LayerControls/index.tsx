@@ -4,7 +4,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import {
   ActiveLayer,
   activeLayersAtom,
-  removeLayerAtom,
   reorderLayersAtom,
 } from "../../../state/activeLayersAtom";
 import EmptyState from "../EmptyState";
@@ -24,14 +23,12 @@ const DraggableLayerItem = ({
   layerInstance,
   index,
   moveLayer,
-  onRemove,
   onZoom,
 }: {
   layer: ActiveLayer;
   layerInstance?: L.Layer;
   index: number;
   moveLayer: (dragIndex: number, hoverIndex: number) => void;
-  onRemove: (id: string) => void;
   onZoom: (bounds?: L.LatLngBoundsExpression | null) => void;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -69,7 +66,6 @@ const DraggableLayerItem = ({
       <LayerControlItem
         layer={layer}
         layerInstance={layerInstance}
-        onRemove={() => onRemove}
         onZoom={onZoom}
       />
     </div>
@@ -78,7 +74,6 @@ const DraggableLayerItem = ({
 
 export default function LayerControls() {
   const [activeLayers] = useAtom(activeLayersAtom);
-  const [, removeLayer] = useAtom(removeLayerAtom);
   const [, reorderLayers] = useAtom(reorderLayersAtom);
   const [map] = useAtom(mapAtom);
   const [layerInstances] = useAtom(leafletLayerInstancesAtom);
@@ -121,7 +116,6 @@ export default function LayerControls() {
                 layer={layer}
                 layerInstance={layerInstance}
                 moveLayer={moveLayer}
-                onRemove={removeLayer}
                 onZoom={handleZoomToLayer}
               />
             );
