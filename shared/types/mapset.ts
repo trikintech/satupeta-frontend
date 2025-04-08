@@ -7,7 +7,7 @@ import { Topic } from "./topic";
 import { User } from "./user";
 
 export type Mapset = {
-  id: string;
+  id: number;
   name: string;
   slug: string;
   description: string;

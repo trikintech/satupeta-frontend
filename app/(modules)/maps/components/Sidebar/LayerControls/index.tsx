@@ -5,7 +5,7 @@ import {
   ActiveLayer,
   activeLayersAtom,
   removeLayerAtom,
-  reorderLayersAtom, // Add this import
+  reorderLayersAtom,
 } from "../../../state/activeLayersAtom";
 import EmptyState from "../EmptyState";
 import { mapAtom } from "../../../state/mapAtom";
@@ -14,7 +14,6 @@ import { LayerControlItem } from "./LayerControlItem";
 import { useCallback, useRef } from "react";
 import { leafletLayerInstancesAtom } from "../../../state/leafletLayerInstancesAtom";
 
-// Add this type for DnD
 interface DragItem {
   id: string;
   index: number;

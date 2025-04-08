@@ -17,9 +17,15 @@ export type WMSLayerConfig = {
   bounds?: LatLngBoundsExpression | null;
 };
 
+export type Source = {
+  id: number | string;
+  source: string;
+};
+
 export type ActiveLayer = {
   id: string;
   name: string;
+  source: Source;
   settings: LayerSettings;
   layer: WMSLayerConfig;
 };

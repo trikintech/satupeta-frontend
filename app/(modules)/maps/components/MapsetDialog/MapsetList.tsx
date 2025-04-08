@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from "react";
 import { Map, Layers, Plus, Minus } from "lucide-react";
 import SearchInput from "@/shared/components/ds/SearchInput";
-import { mapsets as rawMapsets } from "../../utils/mapsets";
+import { mapsets as rawMapsets } from "../../../../../shared/utils/mapsets";
 import { useAtom } from "jotai";
 import { selectedMapsetAtom } from "../../state/mapsetDialogAtom";
-import { Mapset } from "../../types/Mapset";
 import { useLayerToggle } from "../../hooks/useLayerToggle";
+import { Mapset } from "@/shared/types/mapset";
 
 interface MapsetItemProps {
   mapset: Mapset;
@@ -18,7 +18,7 @@ const MapsetItem: React.FC<MapsetItemProps> = ({
   onClick,
   isSelected,
 }) => {
-  const { isActive, toggleLayer } = useLayerToggle(mapset);
+  const { isActiveLayer, toggleLayer } = useLayerToggle(mapset);
 
   return (
     <button
@@ -38,7 +38,7 @@ const MapsetItem: React.FC<MapsetItemProps> = ({
         </div>
       </div>
       <div className="flex items-center space-x-3">
-        {isActive ? (
+        {isActiveLayer ? (
           <Minus size={18} className="text-gray-400" onClick={toggleLayer} />
         ) : (
           <Plus size={18} className="text-gray-400" onClick={toggleLayer} />
@@ -56,7 +56,7 @@ const MapsetList: React.FC = () => {
 
   const mapsets = rawMapsets.map((m) => ({
     ...m,
-    id: String(m.id),
+    id: m.id,
   }));
 
   const handleSearch = useCallback((value: string) => {

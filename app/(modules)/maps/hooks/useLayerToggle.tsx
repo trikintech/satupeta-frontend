@@ -1,5 +1,4 @@
 import { useAtom } from "jotai";
-import { Mapset } from "../types/Mapset";
 import {
   activeLayersAtom,
   addLayerAtom,
@@ -7,6 +6,7 @@ import {
 } from "../state/activeLayersAtom";
 import { isOpenMapsetDialogAtom } from "../state/mapsetDialogAtom";
 import { parseWmsUrl } from "../utils/wmsUtils";
+import { Mapset } from "@/shared/types/mapset";
 
 export function useLayerToggle(mapset: Mapset) {
   const [activeLayers] = useAtom(activeLayersAtom);
@@ -14,17 +14,23 @@ export function useLayerToggle(mapset: Mapset) {
   const [, removeLayer] = useAtom(removeLayerAtom);
   const [, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);
 
-  const isActive = activeLayers.some((layer) => layer.id === mapset.id);
+  const isActiveLayer = activeLayers.find(
+    (layer) => layer.source.id === mapset.id
+  );
 
   const toggleLayer = () => {
-    if (isActive) {
-      removeLayer(mapset.id);
+    if (isActiveLayer) {
+      removeLayer(isActiveLayer.id);
     } else {
       const parsed = parseWmsUrl(mapset?.mapsetservice_url);
 
       addLayer({
-        id: mapset.id,
+        id: "db_" + mapset.id,
         name: mapset.name,
+        source: {
+          id: mapset.id,
+          source: "db",
+        },
         layer: {
           type: "wms",
           url: parsed?.baseUrl,
@@ -40,7 +46,7 @@ export function useLayerToggle(mapset: Mapset) {
   };
 
   return {
-    isActive,
+    isActiveLayer,
     toggleLayer,
   };
 }
