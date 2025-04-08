@@ -12,6 +12,7 @@ import { mapAtom } from "../../../state/mapAtom";
 import L from "leaflet";
 import { LayerControlItem } from "./LayerControlItem";
 import { useCallback, useRef } from "react";
+import { leafletLayerInstancesAtom } from "../../../state/leafletLayerInstancesAtom";
 
 // Add this type for DnD
 interface DragItem {
@@ -19,15 +20,16 @@ interface DragItem {
   index: number;
 }
 
-// Create a draggable layer item component
 const DraggableLayerItem = ({
   layer,
+  layerInstance,
   index,
   moveLayer,
   onRemove,
   onZoom,
 }: {
   layer: ActiveLayer;
+  layerInstance?: L.Layer;
   index: number;
   moveLayer: (dragIndex: number, hoverIndex: number) => void;
   onRemove: (id: string) => void;
@@ -63,10 +65,11 @@ const DraggableLayerItem = ({
     <div
       ref={ref}
       style={{ opacity: isDragging ? 0.5 : 1 }}
-      className="cursor-move" // Add cursor style
+      className="cursor-pointer"
     >
       <LayerControlItem
         layer={layer}
+        layerInstance={layerInstance}
         onRemove={() => onRemove}
         onZoom={onZoom}
       />
@@ -79,6 +82,7 @@ export default function LayerControls() {
   const [, removeLayer] = useAtom(removeLayerAtom);
   const [, reorderLayers] = useAtom(reorderLayersAtom);
   const [map] = useAtom(mapAtom);
+  const [layerInstances] = useAtom(leafletLayerInstancesAtom);
 
   const handleZoomToLayer = (bounds?: L.LatLngBoundsExpression | null) => {
     if (!map) return;
@@ -109,12 +113,14 @@ export default function LayerControls() {
         <div className="px-4 flex flex-col space-y-4 h-[70vh] overflow-auto">
           {[...activeLayers].reverse().map((layer, i) => {
             const index = activeLayers.length - 1 - i;
+            const layerInstance = layerInstances.get(layer.id);
 
             return (
               <DraggableLayerItem
                 key={layer.id}
                 index={index}
                 layer={layer}
+                layerInstance={layerInstance}
                 moveLayer={moveLayer}
                 onRemove={removeLayer}
                 onZoom={handleZoomToLayer}
