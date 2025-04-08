@@ -1,6 +1,6 @@
 export default function EmptyState() {
   return (
-    <div className="mt-8 text-sm">
+    <div className="mt-8 text-sm p-4">
       <div className="max-w-xl mx-auto p-3 bg-gray-50 rounded-2xl shadow-md">
         <h2 className="text-lg font-semibold mb-4 text-gray-800">
           Get Started
