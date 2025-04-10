@@ -1,34 +1,21 @@
-import { User } from "@/shared/types/user";
-
 import { ApiResponse } from "../types/api-response";
+import { User } from "../types/user";
 
 import api from "./api";
 
-const getUsers = async ({
-  page,
-  per_page,
-  search,
-}: {
-  page?: number;
-  per_page?: number;
-  search?: string;
-}): Promise<ApiResponse<User[]>> => {
-  try {
-    const response = await api.get("/user", {
-      params: {
-        page,
-        per_page,
-        search,
-      },
-    });
-
-    return response.data;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  } catch (error) {
-    throw new Error("Error fetching users");
-  }
-};
-
 export const userApi = {
-  getUsers,
+  getUsers: async (): Promise<ApiResponse<User[]>> => {
+    const response = await api.get("/user");
+    return response.data;
+  },
+
+  getUserById: async (id: number): Promise<ApiResponse<User>> => {
+    const response = await api.get(`/user/${id}`);
+    return response.data;
+  },
+
+  deleteUser: async (id: number): Promise<ApiResponse<null>> => {
+    const response = await api.delete(`/user/${id}`);
+    return response.data;
+  },
 };

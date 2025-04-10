@@ -9,6 +9,7 @@ interface Props {
   error: Error | null;
   users: User[];
   columns: ColumnDef<User>[];
+  openDialog: (type: "delete" | "deactivate", user: User) => void; // Add openDialog prop
 }
 
 export const TableContent = ({
@@ -17,6 +18,8 @@ export const TableContent = ({
   error,
   users,
   columns,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  openDialog,
 }: Props) => {
   if (isLoading) {
     return (
