@@ -2,11 +2,11 @@
 import { useState } from "react";
 import OpenTrigger from "./OpenTrigger";
 import LogoImage from "./LogoImage";
-import SearchInput from "@/shared/components/ds/SearchInput";
+import SearchInput from "@/shared/components/SearchInput";
 import CloseTrigger from "./CloseTrigger";
 import { Button } from "@/shared/components/ui/button";
 import { useSetAtom } from "jotai";
-import { isOpenMapsetDialogAtom } from "../../state/mapsetDialogAtom";
+import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
 import dynamic from "next/dynamic";
 
 const LayerControls = dynamic(() => import("./LayerControls"), {

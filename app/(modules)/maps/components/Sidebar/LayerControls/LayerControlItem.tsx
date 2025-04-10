@@ -3,16 +3,16 @@ import { Button } from "@/shared/components/ui/button";
 import { Slider } from "@/shared/components/ui/slider";
 import { ZoomIn, Trash2, ChevronDown, ChevronRight, Info } from "lucide-react";
 import L from "leaflet";
-import { getLegendUrl } from "../../../utils/wmsUtils";
+import { getLegendUrl } from "../../../utils/wms";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import {
   isOpenMapsetDialogAtom,
   selectedMapsetAtom,
-} from "../../../state/mapsetDialogAtom";
+} from "../../../state/mapset-dialog";
 import { useQuery } from "@tanstack/react-query";
-import { getMapsets } from "@/shared/services/mapsetService";
-import { ActiveLayer, removeLayerAtom } from "../../../state/activeLayersAtom";
+import { getMapsets } from "@/shared/services/mapset";
+import { ActiveLayer, removeLayerAtom } from "../../../state/active-layers";
 
 interface LayerControlItemProps {
   layer: ActiveLayer;

@@ -6,9 +6,9 @@ import {
 } from "@/shared/components/ui/popover";
 import { useAtom } from "jotai";
 import { Settings2 } from "lucide-react";
-import { mapTypeAtom } from "../state/mapTypeAtom";
-import { basemapConfig } from "../config/basemapConfig";
-import { activeBasemapAtom, BasemapType } from "../state/activeBasemapAtom";
+import { mapTypeAtom } from "../state/map-type";
+import { basemapConfig } from "../config/basemap-config";
+import { activeBasemapAtom, BasemapType } from "../state/active-basemap";
 import { useState } from "react";
 
 const MapSettings = () => {

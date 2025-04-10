@@ -1,6 +1,6 @@
 import { useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
-import { selectedMapsetAtom } from "../../../state/mapsetDialogAtom";
+import { selectedMapsetAtom } from "../../../state/mapset-dialog";
 import EmptyState from "./EmptyState";
 import DescriptionSection from "./DescriptionSection";
 import { LayerToggle } from "./LayerToggle";

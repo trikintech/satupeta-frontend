@@ -7,7 +7,7 @@ import {
   DialogOverlay,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { isOpenMapsetDialogAtom } from "../../state/mapsetDialogAtom";
+import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
 import MapsetList from "./MapsetList";
 import MainDialog from "./MainDialog";
 

@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { useAtom, useAtomValue } from "jotai";
-import { activeBasemapAtom } from "../../state/activeBasemapAtom";
-import { basemapConfig } from "../../config/basemapConfig";
+import { activeBasemapAtom } from "../../state/active-basemap";
+import { basemapConfig } from "../../config/basemap-config";
 
 import { MapContainer } from "react-leaflet";
 import L from "leaflet";
-import { mapAtom } from "../../state/mapAtom";
-import { mapSettingsAtom } from "../../state/mapSettingsAtom";
+import { mapAtom } from "../../state/map";
+import { mapSettingsAtom } from "../../state/map-settings";
 import ZoomControl from "./ZoomControl";
 import { LayerManager } from "../LayerManager";
 

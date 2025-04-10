@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import L from "leaflet";
-import { activeLayersAtom } from "../state/activeLayersAtom";
-import { leafletLayerInstancesAtom } from "../state/leafletLayerInstancesAtom";
+import { activeLayersAtom } from "../state/active-layers";
+import { leafletLayerInstancesAtom } from "../state/leaflet-layer-instances";
 
 export const LayerManager = ({ map }: { map: L.Map | null }) => {
   const activeLayers = useAtomValue(activeLayersAtom);

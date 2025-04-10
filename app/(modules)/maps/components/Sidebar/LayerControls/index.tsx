@@ -5,13 +5,13 @@ import {
   ActiveLayer,
   activeLayersAtom,
   reorderLayersAtom,
-} from "../../../state/activeLayersAtom";
+} from "../../../state/active-layers";
 import EmptyState from "../EmptyState";
-import { mapAtom } from "../../../state/mapAtom";
+import { mapAtom } from "../../../state/map";
 import L from "leaflet";
 import { LayerControlItem } from "./LayerControlItem";
 import { useCallback, useRef } from "react";
-import { leafletLayerInstancesAtom } from "../../../state/leafletLayerInstancesAtom";
+import { leafletLayerInstancesAtom } from "../../../state/leaflet-layer-instances";
 
 interface DragItem {
   id: string;

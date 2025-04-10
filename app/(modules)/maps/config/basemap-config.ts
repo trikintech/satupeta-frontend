@@ -1,4 +1,4 @@
-import { BasemapConfig } from "../types/BasemapConfig";
+import { BasemapConfig } from "../types/basemap-config";
 
 export const basemapConfig: BasemapConfig = {
   osm: {

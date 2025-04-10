@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useAtom } from "jotai";
-import { mapTypeAtom } from "../state/mapTypeAtom";
+import { mapTypeAtom } from "../state/map-type";
 import { CesiumMap } from "./CesiumMap";
 import dynamic from "next/dynamic";
 import MapSettings from "./MapSettings";

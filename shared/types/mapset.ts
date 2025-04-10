@@ -1,7 +1,7 @@
-import { AttributeKugi } from "./attributeKugi";
-import { HistoryDraft } from "./historyDraft";
-import { MapsetSource } from "./mapsetSource";
-import { MapsetType } from "./mapsetType";
+import { AttributeKugi } from "./attribute-kugi";
+import { HistoryDraft } from "./history-draft";
+import { MapsetSource } from "./mapset-source";
+import { MapsetType } from "./mapset-type";
 import { Organization } from "./organization";
 import { Topic } from "./topic";
 import { User } from "./user";

@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import * as Cesium from "cesium";
-import { createCesiumProvider } from "../factories/cesiumProvider";
-import { leafletZoomToCesiumHeight } from "../utils/cesiumUtils";
-import { activeBasemapAtom } from "../state/activeBasemapAtom";
+import { createCesiumProvider } from "../factories/cesium-provider";
+import { leafletZoomToCesiumHeight } from "../utils/cesium";
+import { activeBasemapAtom } from "../state/active-basemap";
 import { useAtom, useAtomValue } from "jotai";
-import { mapSettingsAtom } from "../state/mapSettingsAtom";
-import { basemapConfig } from "../config/basemapConfig";
+import { mapSettingsAtom } from "../state/map-settings";
+import { basemapConfig } from "../config/basemap-config";
 
 export const useCesiumMap = () => {
   const cesiumContainer = useRef<HTMLDivElement>(null);

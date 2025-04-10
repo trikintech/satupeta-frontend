@@ -1,6 +1,6 @@
 "use client";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import { mapAtom } from "../../state/mapAtom";
+import { mapAtom } from "../../state/map";
 import { useAtom } from "jotai";
 
 export default function ZoomControl() {

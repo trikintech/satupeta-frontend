@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from "react";
 import { Map, Layers, Plus, Minus } from "lucide-react";
-import SearchInput from "@/shared/components/ds/SearchInput";
+import SearchInput from "@/shared/components/SearchInput";
 import { mapsets as rawMapsets } from "../../../../../shared/utils/mapsets";
 import { useAtom } from "jotai";
-import { selectedMapsetAtom } from "../../state/mapsetDialogAtom";
+import { selectedMapsetAtom } from "../../state/mapset-dialog";
 import { useLayerToggle } from "../../hooks/useLayerToggle";
 import { Mapset } from "@/shared/types/mapset";
 
