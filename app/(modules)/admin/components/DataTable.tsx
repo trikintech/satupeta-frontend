@@ -23,13 +23,20 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 import { Button } from "@/shared/components/ui/button";
-import { ChevronLeft, ChevronRight, ArrowUpDown } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  ArrowUpDown,
+} from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchColumn?: string;
   searchPlaceholder?: string;
+  pageSize?: number;
 }
 
 export function createSortableHeader<T>(label: string) {
@@ -56,27 +63,101 @@ export function DataTable<TData, TValue>({
   data,
   searchColumn,
   searchPlaceholder = "Search...",
+  pageSize = 10,
 }: Readonly<DataTableProps<TData, TValue>>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [searchValue, setSearchValue] = useState("");
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     state: {
       sorting,
       columnFilters,
     },
     initialState: {
-      pagination: { pageSize: 10 },
+      pagination: {
+        pageSize,
+      },
     },
   });
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+    if (searchColumn) {
+      table.getColumn(searchColumn)?.setFilterValue(value);
+    }
+  };
+
+  const renderPageNumbers = () => {
+    const currentPage = table.getState().pagination.pageIndex + 1;
+    const pageCount = table.getPageCount();
+    const pagesToShow = 5;
+    const halfPagesToShow = Math.floor(pagesToShow / 2);
+
+    let startPage = Math.max(1, currentPage - halfPagesToShow);
+    let endPage = Math.min(pageCount, currentPage + halfPagesToShow);
+
+    if (currentPage <= halfPagesToShow) {
+      endPage = Math.min(pagesToShow, pageCount);
+    }
+
+    if (currentPage >= pageCount - halfPagesToShow) {
+      startPage = Math.max(1, pageCount - pagesToShow + 1);
+    }
+
+    const pages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant={i === currentPage ? "default" : "outline"}
+          size="sm"
+          onClick={() => table.setPageIndex(i - 1)}
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    return (
+      <div className="flex items-center space-x-1">
+        {currentPage > halfPagesToShow + 1 && pageCount > pagesToShow && (
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.setPageIndex(0)}
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </Button>
+            <span className="px-2">...</span>
+          </>
+        )}
+        {pages}
+        {currentPage < pageCount - halfPagesToShow &&
+          pageCount > pagesToShow && (
+            <>
+              <span className="px-2">...</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.setPageIndex(pageCount - 1)}
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </Button>
+            </>
+          )}
+      </div>
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -85,12 +166,8 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center w-full max-w-sm">
           <Input
             placeholder={searchPlaceholder}
-            value={
-              (table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""
-            }
-            onChange={(event) =>
-              table.getColumn(searchColumn)?.setFilterValue(event.target.value)
-            }
+            value={searchValue}
+            onChange={(e) => handleSearch(e.target.value)}
             className="max-w-sm"
           />
         </div>
@@ -174,6 +251,9 @@ export function DataTable<TData, TValue>({
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
+
+          {renderPageNumbers()}
+
           <Button
             variant="outline"
             size="sm"

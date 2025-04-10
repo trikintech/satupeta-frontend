@@ -3,8 +3,7 @@
 import React from "react";
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";
-import { Bell, Search } from "lucide-react";
-import { Input } from "@/shared/components/ui/input";
+import { Bell } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import {
   DropdownMenu,
@@ -29,15 +28,9 @@ const Header = () => {
 
   return (
     <header className="h-16 flex items-center justify-between px-6 border-b bg-white">
-      {/* Search bar */}
-      <div className="relative w-72">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-        <Input placeholder="Search..." className="pl-8 h-9" />
-      </div>
+      <div className="relative w-72"></div>
 
-      {/* Right side actions */}
       <div className="flex items-center space-x-4">
-        {/* Notification button */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
@@ -54,7 +47,6 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* User profile */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center space-x-2">
