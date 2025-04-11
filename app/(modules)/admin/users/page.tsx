@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query"; // Added useQueryClient
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Card,
   CardContent,
@@ -27,7 +27,7 @@ import {
 } from "@/shared/components/ui/dialog";
 
 export default function UsersPage() {
-  const queryClient = useQueryClient(); // Get queryClient instance
+  const queryClient = useQueryClient();
 
   const {
     data: apiResponse,
@@ -39,7 +39,7 @@ export default function UsersPage() {
     queryFn: () => userApi.getUsers(),
   });
 
-  const openDialog = (type: "delete" | "deactivate", user: User) => {
+  const openDialog = (type: "delete", user: User) => {
     setActionType(type);
     setSelectedUser(user);
     setIsDialogOpen(true);
@@ -61,12 +61,8 @@ export default function UsersPage() {
       if (actionType === "delete") {
         await userApi.deleteUser(selectedUser.id);
         toast.success("User permanently deleted");
-      } else if (actionType === "deactivate") {
-        await userApi.deleteUser(selectedUser.id);
-        toast.success("User deactivated");
       }
 
-      // Invalidate the query to trigger a refetch
       await queryClient.invalidateQueries({ queryKey: ["users"] });
     } catch (error) {
       console.error(error);

@@ -19,7 +19,7 @@ import { User } from "@/shared/types/user";
 import { createSortableHeader } from "../../components/DataTable";
 
 export const getUserTableColumns = (
-  openDialog: (type: "delete" | "deactivate", user: User) => void
+  openDialog: (type: "delete", user: User) => void
 ): ColumnDef<User>[] => [
   {
     accessorKey: "name",
@@ -93,9 +93,7 @@ export const getUserTableColumns = (
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() =>
-                openDialog(user.is_deleted ? "delete" : "deactivate", user)
-              }
+              onClick={() => openDialog("delete", user)}
               className="text-red-600"
             >
               <Trash2 className="mr-2 h-4 w-4" />

@@ -9,7 +9,7 @@ interface Props {
   error: Error | null;
   users: User[];
   columns: ColumnDef<User>[];
-  openDialog: (type: "delete" | "deactivate", user: User) => void; // Add openDialog prop
+  openDialog: (type: "delete", user: User) => void;
 }
 
 export const TableContent = ({
