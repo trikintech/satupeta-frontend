@@ -1,7 +1,7 @@
-import MapComponent from "./components/MapComponent";
+import MapComponent from "./components/map-component";
 import "leaflet/dist/leaflet.css";
-import Sidebar from "./components/Sidebar";
-import MapsetDialog from "./components/MapsetDialog";
+import Sidebar from "./components/sidebar";
+import MapsetDialog from "./components/mapset-dialog";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

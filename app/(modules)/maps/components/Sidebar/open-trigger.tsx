@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { ChevronRight } from "lucide-react";
-import LogoImage from "./LogoImage";
+import LogoImage from "./logo-image";
 
 type OpenTriggerProps = {
   onOpen: () => void;

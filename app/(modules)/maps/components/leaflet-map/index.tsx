@@ -9,8 +9,8 @@ import { MapContainer } from "react-leaflet";
 import L from "leaflet";
 import { mapAtom } from "../../state/map";
 import { mapSettingsAtom } from "../../state/map-settings";
-import ZoomControl from "./ZoomControl";
-import { LayerManager } from "../LayerManager";
+import ZoomControl from "./zoom-control";
+import { LayerManager } from "../layer-manager";
 
 const LeafletMap: React.FC = () => {
   const activeBasemap = useAtomValue(activeBasemapAtom);

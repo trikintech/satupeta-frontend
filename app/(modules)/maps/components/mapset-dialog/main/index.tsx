@@ -1,11 +1,11 @@
 import { useAtomValue } from "jotai";
 import dynamic from "next/dynamic";
 import { selectedMapsetAtom } from "../../../state/mapset-dialog";
-import EmptyState from "./EmptyState";
-import DescriptionSection from "./DescriptionSection";
-import { LayerToggle } from "./LayerToggle";
+import EmptyState from "./empty-state";
+import DescriptionSection from "./description-section";
+import { LayerToggle } from "./layer-toggle";
 
-const PreviewMap = dynamic(() => import("./PreviewMap"), { ssr: false });
+const PreviewMap = dynamic(() => import("./preview-map"), { ssr: false });
 
 export default function MainDialog() {
   const selectedMapset = useAtomValue(selectedMapsetAtom);

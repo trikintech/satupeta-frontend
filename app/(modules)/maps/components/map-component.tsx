@@ -3,11 +3,11 @@
 import React from "react";
 import { useAtom } from "jotai";
 import { mapTypeAtom } from "../state/map-type";
-import { CesiumMap } from "./CesiumMap";
+import { CesiumMap } from "./cesium-map";
 import dynamic from "next/dynamic";
-import MapSettings from "./MapSettings";
+import MapSettings from "./map-settings";
 
-const LeafletMap = dynamic(() => import("./LeafletMap"), {
+const LeafletMap = dynamic(() => import("./leaflet-map"), {
   ssr: false,
 });
 const MapComponent: React.FC = () => {

@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
 } from "@/shared/components/ui/dropdown-menu";
 import { User } from "@/shared/types/user";
-import { createSortableHeader } from "../../components/DataTable";
+import { createSortableHeader } from "../../components/data-table";
 
 export const getUserTableColumns = (
   openDialog: (type: "delete", user: User) => void

@@ -6,10 +6,10 @@ import {
   activeLayersAtom,
   reorderLayersAtom,
 } from "../../../state/active-layers";
-import EmptyState from "../EmptyState";
+import EmptyState from "../empty-state";
 import { mapAtom } from "../../../state/map";
 import L from "leaflet";
-import { LayerControlItem } from "./LayerControlItem";
+import { LayerControlItem } from "./layer-control-item";
 import { useCallback, useRef } from "react";
 import { leafletLayerInstancesAtom } from "../../../state/leaflet-layer-instances";
 

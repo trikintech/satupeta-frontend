@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
-import MapsetList from "./MapsetList";
-import MainDialog from "./MainDialog";
+import MapsetList from "./mapset-list";
+import MainDialog from "./main";
 
 export default function MapsetDialog() {
   const [isOpenDialog, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);

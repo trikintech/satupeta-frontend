@@ -14,8 +14,8 @@ import { UserPlus } from "lucide-react";
 import { userApi } from "@/shared/services/user";
 import { ApiResponse } from "@/shared/types/api-response";
 import { User } from "@/shared/types/user";
-import { getUserTableColumns } from "./components/TableColumns";
-import { TableContent } from "./components/TableContent";
+import { getUserTableColumns } from "./components/table-columns";
+import { TableContent } from "./components/table-content";
 import { toast } from "sonner";
 import {
   Dialog,

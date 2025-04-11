@@ -1,7 +1,7 @@
 import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { User } from "@/shared/types/user";
-import { DataTable } from "../../components/DataTable";
+import { DataTable } from "../../components/data-table";
 
 interface Props {
   isLoading: boolean;
