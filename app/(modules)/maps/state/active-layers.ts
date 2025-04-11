@@ -101,3 +101,41 @@ export const reorderLayersAtom = atom(
     set(activeLayersAtom, updated);
   }
 );
+
+export const enableAllLayersAtom = atom(null, (get, set) => {
+  set(activeLayersAtom, (prev) =>
+    prev.map((layer) => ({
+      ...layer,
+      settings: { ...layer.settings, visible: true },
+    }))
+  );
+});
+
+export const disableAllLayersAtom = atom(null, (get, set) => {
+  set(activeLayersAtom, (prev) =>
+    prev.map((layer) => ({
+      ...layer,
+      settings: { ...layer.settings, visible: false },
+    }))
+  );
+});
+
+export const toggleAllLayersAtom = atom(null, (get, set) => {
+  const allVisible = get(activeLayersAtom).every(
+    (layer) => layer.settings.visible
+  );
+  set(activeLayersAtom, (prev) =>
+    prev.map((layer) => ({
+      ...layer,
+      settings: { ...layer.settings, visible: !allVisible },
+    }))
+  );
+});
+
+export const allLayersVisibleAtom = atom((get) =>
+  get(activeLayersAtom).every((layer) => layer.settings.visible)
+);
+
+export const anyLayersVisibleAtom = atom((get) =>
+  get(activeLayersAtom).some((layer) => layer.settings.visible)
+);

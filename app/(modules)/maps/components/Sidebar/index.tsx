@@ -21,7 +21,7 @@ export default function Sidebar() {
     <div className="absolute top-0 left-4 h-full flex items-center z-[403]">
       <div
         className={`relative h-[97%] my-auto flex flex-col bg-white shadow-lg border border-gray-300 rounded-lg transition-[width] duration-300 ease-out ${
-          isOpen ? "w-80" : "w-0 border-0"
+          isOpen ? "w-100" : "w-0 border-0"
         }`}
       >
         <div

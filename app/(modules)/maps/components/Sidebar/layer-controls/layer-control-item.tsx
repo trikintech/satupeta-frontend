@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Slider } from "@/shared/components/ui/slider";
-import { ZoomIn, Trash2, ChevronDown, ChevronRight, Info } from "lucide-react";
+import { ZoomIn, Trash2, Info, Triangle, Eye, EyeOff } from "lucide-react";
 import L from "leaflet";
 import { getLegendUrl } from "../../../utils/wms";
 import Image from "next/image";
@@ -12,7 +12,12 @@ import {
 } from "../../../state/mapset-dialog";
 import { useQuery } from "@tanstack/react-query";
 import { getMapsets } from "@/shared/services/mapset";
-import { ActiveLayer, removeLayerAtom } from "../../../state/active-layers";
+import {
+  ActiveLayer,
+  removeLayerAtom,
+  toggleLayerAtom,
+} from "../../../state/active-layers";
+import { mapAtom } from "../../../state/map";
 
 interface LayerControlItemProps {
   layer: ActiveLayer;
@@ -30,10 +35,12 @@ export const LayerControlItem = ({
   const [, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);
   const [, setSelectedMapset] = useAtom(selectedMapsetAtom);
   const [, removeLayer] = useAtom(removeLayerAtom);
+  const [, toggleLayer] = useAtom(toggleLayerAtom);
   const { data: mapsets } = useQuery({
     queryKey: ["mapsets"],
     queryFn: getMapsets,
   });
+  const [map] = useAtom(mapAtom);
 
   const handleOpacityChange = (value: number[]) => {
     if (layerInstance && layerInstance instanceof L.TileLayer.WMS) {
@@ -55,18 +62,53 @@ export const LayerControlItem = ({
     }
   };
 
+  const handleToggleVisibility = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!map) return;
+
+    toggleLayer(layer.id);
+    if (layerInstance) {
+      if (layer.settings.visible) {
+        layerInstance.remove();
+      } else {
+        layerInstance.addTo(map);
+      }
+    }
+  };
+
   return (
     <div className="bg-muted p-3 rounded-lg">
-      <button
-        onClick={() => setIsExpanded((prev) => !prev)}
-        className="cursor-pointer w-full flex items-center justify-between py-2"
-      >
-        <h4 className="font-medium text-left text-sm">{layer.name}</h4>
-
-        <div className="w-6 h-6 flex items-center justify-center shrink-0">
-          {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+      <div className="cursor-pointer w-full flex items-center justify-between py-2">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleToggleVisibility}
+            title={layer.settings.visible ? "Hide layer" : "Show layer"}
+            className="text-gray-600 hover:text-gray-900 p-1"
+          >
+            {layer.settings.visible ? <Eye size={16} /> : <EyeOff size={16} />}
+          </button>
+          <button
+            onClick={() => setIsExpanded((prev) => !prev)}
+            className="text-left font-medium text-sm hover:underline focus:underline"
+          >
+            {layer.name}
+          </button>
         </div>
-      </button>
+
+        <button
+          onClick={() => setIsExpanded((prev) => !prev)}
+          className="w-6 h-6 flex items-center justify-center shrink-0"
+        >
+          {isExpanded ? (
+            <Triangle size={12} className="rotate-0 fill-current text-black" />
+          ) : (
+            <Triangle
+              size={12}
+              className="rotate-180 fill-current text-black"
+            />
+          )}
+        </button>
+      </div>
 
       {isExpanded && (
         <div className="space-y-3 mt-3">

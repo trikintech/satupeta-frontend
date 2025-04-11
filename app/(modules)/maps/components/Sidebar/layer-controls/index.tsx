@@ -4,14 +4,18 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import {
   ActiveLayer,
   activeLayersAtom,
+  disableAllLayersAtom,
+  enableAllLayersAtom,
   reorderLayersAtom,
 } from "../../../state/active-layers";
 import EmptyState from "../empty-state";
 import { mapAtom } from "../../../state/map";
 import L from "leaflet";
 import { LayerControlItem } from "./layer-control-item";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { leafletLayerInstancesAtom } from "../../../state/leaflet-layer-instances";
+import { Button } from "@/shared/components/ui/button";
+import { Eye, EyeOff } from "lucide-react";
 
 interface DragItem {
   id: string;
@@ -75,8 +79,11 @@ const DraggableLayerItem = ({
 export default function LayerControls() {
   const [activeLayers] = useAtom(activeLayersAtom);
   const [, reorderLayers] = useAtom(reorderLayersAtom);
+  const [, enableAllLayers] = useAtom(enableAllLayersAtom);
+  const [, disableAllLayers] = useAtom(disableAllLayersAtom);
   const [map] = useAtom(mapAtom);
   const [layerInstances] = useAtom(leafletLayerInstancesAtom);
+  const [allLayersVisible, setAllLayersVisible] = useState(true);
 
   const handleZoomToLayer = (bounds?: L.LatLngBoundsExpression | null) => {
     if (!map) return;
@@ -94,6 +101,25 @@ export default function LayerControls() {
     [reorderLayers]
   );
 
+  const toggleAllLayers = () => {
+    if (allLayersVisible) {
+      disableAllLayers();
+      // Hide all layers from the map
+      activeLayers.forEach((layer) => {
+        const instance = layerInstances.get(layer.id);
+        if (instance) instance.remove();
+      });
+    } else {
+      enableAllLayers();
+      // Show all layers on the map
+      activeLayers.forEach((layer) => {
+        const instance = layerInstances.get(layer.id);
+        if (instance && map) instance.addTo(map);
+      });
+    }
+    setAllLayersVisible(!allLayersVisible);
+  };
+
   if (activeLayers.length === 0) {
     return <EmptyState />;
   }
@@ -101,8 +127,23 @@ export default function LayerControls() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div>
-        <div className="px-4 py-2 font-semibold">
-          Active Layers({activeLayers.length})
+        <div className="px-4 py-2 flex justify-between items-center">
+          <div className="font-semibold">
+            Active Layers({activeLayers.length})
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggleAllLayers}
+            title={allLayersVisible ? "Hide all layers" : "Show all layers"}
+          >
+            {allLayersVisible ? (
+              <EyeOff className="h-4 w-4 mr-1" />
+            ) : (
+              <Eye className="h-4 w-4 mr-1" />
+            )}
+            {allLayersVisible ? "Hide All" : "Show All"}
+          </Button>
         </div>
         <div className="px-4 flex flex-col space-y-4 h-[70vh] overflow-auto">
           {[...activeLayers].reverse().map((layer, i) => {
