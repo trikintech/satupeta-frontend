@@ -79,7 +79,6 @@ export const setLayerOpacityAtom = atom(
   }
 );
 
-// In your activeLayersAtom.ts
 export const reorderLayersAtom = atom(
   null,
   (
@@ -91,12 +90,11 @@ export const reorderLayersAtom = atom(
     const [moved] = layers.splice(fromIndex, 1);
     layers.splice(toIndex, 0, moved);
 
-    // Update zIndex to match new order
     const updated = layers.map((layer, index) => ({
       ...layer,
       settings: {
         ...layer.settings,
-        zIndex: index + 1, // zIndex starts at 1
+        zIndex: index + 1,
       },
     }));
 

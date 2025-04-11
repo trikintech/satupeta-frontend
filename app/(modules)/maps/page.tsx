@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import Sidebar from "./components/sidebar";
 import MapsetDialog from "./components/mapset-dialog";
 import { Metadata } from "next";
+import FeatureInformation from "./components/feature-information";
 
 export const metadata: Metadata = {
   title: "Maps Portal",
@@ -15,6 +16,7 @@ export default function Maps() {
       <Sidebar />
       <MapComponent />
       <MapsetDialog />
+      <FeatureInformation />
     </div>
   );
 }
