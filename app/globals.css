@@ -134,3 +134,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .container {
+    max-width: 100%;
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 1444px;
+    }
+  }
+}
