@@ -3,15 +3,12 @@ import { Mapset } from "@/shared/types/mapset";
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
 
-const PreviewMap = dynamic(
-  () => import("../../../../shared/components/preview-map"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full aspect-square bg-gray-200 animate-pulse" />
-    ),
-  }
-);
+const PreviewMap = dynamic(() => import("@/shared/components/preview-map"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full aspect-square bg-gray-200 animate-pulse" />
+  ),
+});
 
 export function MapsetCard({ mapset }: Readonly<{ mapset: Mapset }>) {
   return (

@@ -12,7 +12,6 @@ export default function Home() {
         <HeroSection />
         <CatalogSection />
         <StatisticsSection />
-        {/* Tambahkan section Berita dan Pengumuman jika diperlukan */}
       </div>
       <Footer />
     </main>

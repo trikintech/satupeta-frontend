@@ -12,7 +12,7 @@ export default function PreviewMap({ mapset }: Readonly<{ mapset: Mapset }>) {
       zoom={7}
       zoomControl={false}
       attributionControl={false}
-      className="h-full w-full rounded-lg"
+      className="h-full w-full"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
