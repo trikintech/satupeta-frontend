@@ -13,6 +13,12 @@ export default function PreviewMap({ mapset }: Readonly<{ mapset: Mapset }>) {
       zoomControl={false}
       attributionControl={false}
       className="h-full w-full"
+      scrollWheelZoom={false}
+      dragging={false}
+      doubleClickZoom={false}
+      keyboard={false}
+      touchZoom={false}
+      boxZoom={false}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
