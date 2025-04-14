@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function LogoImage() {
   return (
-    <div className="w-[120px] h-[24px] relative">
+    <div className="w-[128px] h-[28px] relative">
       <Image
         src="/logo.svg"
         alt="Logo"
