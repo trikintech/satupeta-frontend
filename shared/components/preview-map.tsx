@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, WMSTileLayer } from "react-leaflet";
-import { mapConfig } from "../../../config/map-config";
-import { parseWmsUrl } from "../../../utils/wms";
-import { Mapset } from "../../../types/Mapset";
+import { mapConfig } from "../../app/(modules)/maps/config/map-config";
+import { parseWmsUrl } from "../../app/(modules)/maps/utils/wms";
+import { Mapset } from "@/shared/types/mapset";
 
 export default function PreviewMap({ mapset }: Readonly<{ mapset: Mapset }>) {
   const parsed = parseWmsUrl(mapset?.mapsetservice_url);
@@ -12,7 +12,7 @@ export default function PreviewMap({ mapset }: Readonly<{ mapset: Mapset }>) {
       zoom={7}
       zoomControl={false}
       attributionControl={false}
-      className="h-64 w-full rounded-lg"
+      className="h-full w-full rounded-lg"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

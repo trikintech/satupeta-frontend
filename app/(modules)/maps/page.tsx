@@ -1,5 +1,4 @@
 import MapComponent from "./components/map-component";
-import "leaflet/dist/leaflet.css";
 import Sidebar from "./components/sidebar";
 import MapsetDialog from "./components/mapset-dialog";
 import { Metadata } from "next";

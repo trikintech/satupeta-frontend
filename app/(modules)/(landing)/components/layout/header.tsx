@@ -28,7 +28,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 bg-zinc-50 z-50 font-inter transition-all duration-300 border-b border-zinc-200 text-slate-800",
+        "fixed top-0 z-[403] left-0 right-0 bg-zinc-50 font-inter transition-all duration-300 border-b border-zinc-200 text-slate-800",
         isScrolled ? "py-3 shadow-sm" : "py-3"
       )}
     >

@@ -1,6 +1,6 @@
 import { Card, CardProps } from "@/shared/components/ds/card";
 
-export function MapCard({
+export function MainMapsetCard({
   href,
   image,
   tag,

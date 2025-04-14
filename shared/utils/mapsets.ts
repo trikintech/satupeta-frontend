@@ -1,4 +1,6 @@
-export const mapsets = [
+import { Mapset } from "../types/mapset";
+
+export const mapsets: Mapset[] = [
   {
     id: 1,
     name: "Peta Batas Administrasi Desa/Kelurahan di Kabupaten Majalengka",

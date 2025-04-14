@@ -1,6 +1,6 @@
 import { CatalogSection } from "./(modules)/(landing)/components/catalog-section";
-import { Footer } from "./(modules)/(landing)/components/footer";
-import { Header } from "./(modules)/(landing)/components/header";
+import { Footer } from "./(modules)/(landing)/components/layout/footer";
+import { Header } from "./(modules)/(landing)/components/layout/header";
 import { HeroSection } from "./(modules)/(landing)/components/hero-section";
 import { StatisticsSection } from "./(modules)/(landing)/components/statistic-section";
 

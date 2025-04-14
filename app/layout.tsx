@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/shared/providers";
 import AdminRouteGuard from "@/shared/components/auth/admin-route-guard";
 import { Toaster } from "@/shared/components/ui/sonner";
+import "leaflet/dist/leaflet.css";
 
 const interSans = Inter({
   variable: "--font-inter-sans",

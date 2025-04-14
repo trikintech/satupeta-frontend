@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { MapCard } from "./map-card";
+import { MainMapsetCard } from "./main-mapset-card";
 
 const mapsets = [
   {
@@ -58,7 +58,7 @@ export function CatalogSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {mapsets.map((item) => (
-            <MapCard
+            <MainMapsetCard
               key={item.id}
               href={item.href}
               image={item.image}

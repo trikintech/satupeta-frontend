@@ -5,7 +5,10 @@ import EmptyState from "./empty-state";
 import DescriptionSection from "./description-section";
 import { LayerToggle } from "./layer-toggle";
 
-const PreviewMap = dynamic(() => import("./preview-map"), { ssr: false });
+const PreviewMap = dynamic(
+  () => import("../../../../../../shared/components/preview-map"),
+  { ssr: false }
+);
 
 export default function MainDialog() {
   const selectedMapset = useAtomValue(selectedMapsetAtom);
@@ -14,7 +17,7 @@ export default function MainDialog() {
     <div className="py-4 px-4 h-full flex flex-col gap-4">
       {selectedMapset ? (
         <div className="h-[75vh] mt-8 overflow-auto">
-          <div className="relative">
+          <div className="relative h-64">
             <PreviewMap mapset={selectedMapset} />
             <LayerToggle mapset={selectedMapset} />
           </div>

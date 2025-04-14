@@ -42,7 +42,7 @@ export type Mapset = {
   is_popular: boolean;
   is_active: boolean;
   is_deleted: boolean;
-  user: User;
+  user?: User;
   cuid: number;
   cdate: string;
   muid: number;
