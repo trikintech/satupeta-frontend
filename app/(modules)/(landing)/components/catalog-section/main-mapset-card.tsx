@@ -26,7 +26,7 @@ export function MainMapsetCard({ mapset }: Readonly<{ mapset: Mapset }>) {
           </div>
 
           <h3
-            className="line-clamp-4 hover:text-primary mt-2 font-medium lg:line-clamp-2 xl:line-clamp-3
+            className="line-clamp-4 hover:text-primary mb-0 font-medium lg:line-clamp-2 xl:line-clamp-3
               text-base sm:text-lg md:text-lg lg:text-lg xl:text-2xl"
           >
             {mapset.name}
