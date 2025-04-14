@@ -33,12 +33,12 @@ export function CatalogSection() {
             </Link>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="w-full lg:w-1/3">
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="w-full md:w-1/3">
               <MainMapsetCard mapset={mapsets[0]} key={mapsets[0].id} />
             </div>
 
-            <div className="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-8">
               {mapsets.slice(1, 5).map((mapset) => (
                 <MapsetCard key={mapset.id} mapset={mapset} />
               ))}
