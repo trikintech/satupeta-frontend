@@ -12,14 +12,16 @@ export function StatisticsSection() {
 
         <p className="text-gray-600 mb-8 max-w-3xl">
           Statistik Konten menampilkan jumlah total mapset dan metadata yang
-          tersedia di dalam platform Satu Peta, memberikan gambaran tentang
-          mengapa capaian dan ketersediaan data geospasial yang terpublikasi.
+          tersedia di dalam platform Satu Peta, memberikan gambaran terkini
+          mengenai cakupan dan kelengkapan data geospasial yang terpublikasi
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-          <div className="bg-primary-light p-6 rounded-lg">
-            <h3 className="text-5xl font-bold text-primary mb-2">303</h3>
-            <p className="text-gray-700 mb-4">Mapset</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 mb-4 border border-[#94A3B8]">
+          <div className="bg-primary-light p-4">
+            <div className="flex flex-col gap-4 mb-24">
+              <h3 className="text-8xl font-bold text-primary mb-2">303</h3>
+              <p className="text-slate-600 mb-4 text-2xl">Mapset</p>
+            </div>
             <Link
               href="/statistik/mapset"
               className="flex items-center text-primary text-sm font-medium hover:underline"
@@ -29,12 +31,14 @@ export function StatisticsSection() {
             </Link>
           </div>
 
-          <div className="bg-background-dark p-6 rounded-lg">
-            <h3 className="text-5xl font-bold text-white mb-2">115</h3>
-            <p className="text-gray-300 mb-4">Metadata</p>
+          <div className="bg-sky-950 p-4 text-slate-50">
+            <div className="flex flex-col gap-4 mb-24">
+              <h3 className="text-8xl font-bold mb-2">115</h3>
+              <p className="mb-4 text-2xl">Metadata</p>
+            </div>
             <Link
-              href="/statistik/metadata"
-              className="flex items-center text-white text-sm font-medium hover:underline"
+              href="/statistik/mapset"
+              className="flex items-center text-sm font-medium hover:underline"
             >
               Lihat selengkapnya
               <ChevronRight size={16} className="ml-1" />
