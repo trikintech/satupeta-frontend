@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export function StatisticsSection() {
   return (
@@ -30,7 +30,7 @@ export function StatisticsSection() {
                 className="flex items-center text-primary text-sm font-medium hover:underline"
               >
                 Lihat selengkapnya
-                <ChevronRight size={16} className="ml-1" />
+                <ArrowRight size={16} className="ml-1" />
               </Link>
             </div>
 
@@ -44,7 +44,7 @@ export function StatisticsSection() {
                 className="flex items-center text-sm font-medium hover:underline"
               >
                 Lihat selengkapnya
-                <ChevronRight size={16} className="ml-1" />
+                <ArrowRight size={16} className="ml-1" />
               </Link>
             </div>
           </div>
