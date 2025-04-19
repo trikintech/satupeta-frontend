@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export function NewsSection() {
   return (
-    <section className="py-10 bg-gray-50">
+    <section className="py-10">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-20">
           <div className="w-1/2">
