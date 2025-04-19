@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OpenTrigger from "./open-trigger";
 import LogoImage from "./logo-image";
 import SearchInput from "@/shared/components/search-input";
@@ -8,6 +8,7 @@ import { Button } from "@/shared/components/ui/button";
 import { useSetAtom } from "jotai";
 import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
 import dynamic from "next/dynamic";
+import { useQueryParam, StringParam } from "use-query-params";
 
 const LayerControls = dynamic(() => import("./layer-controls"), {
   ssr: false,
@@ -16,6 +17,20 @@ const LayerControls = dynamic(() => import("./layer-controls"), {
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const setIsOpenDialog = useSetAtom(isOpenMapsetDialogAtom);
+  const [openCatalog] = useQueryParam("open-catalog", StringParam);
+  const [, setQuery] = useQueryParam("query", StringParam);
+  const [input, setInput] = useState("");
+
+  const handleChange = (val: string) => {
+    setInput(val);
+    setQuery(val);
+  };
+
+  useEffect(() => {
+    if (openCatalog === "true") {
+      setIsOpen(true);
+    }
+  }, [openCatalog]);
 
   return (
     <div className="absolute top-0 left-4 h-full flex items-center z-[403]">
@@ -34,7 +49,7 @@ export default function Sidebar() {
               <LogoImage />
             </div>
 
-            <SearchInput onChange={() => []} />
+            <SearchInput value={input} onChange={(val) => handleChange(val)} />
             <Button onClick={() => setIsOpenDialog(true)}>Explore Data</Button>
             <hr />
           </div>

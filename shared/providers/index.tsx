@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./theme-provider";
+import { QueryParamProvider } from "use-query-params";
+import NextAdapterApp from "next-query-params/app";
 
 const queryClient = new QueryClient();
 
@@ -18,24 +20,24 @@ export function Providers({
 
   return (
     <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        {/* Only render ThemeProvider after mounting to avoid hydration issues */}
-        {mounted ? (
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light" // Default to light, system detection happens client-side
-            enableSystem={false} // Disable immediate system preference to prevent flash
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        ) : (
-          // Render without ThemeProvider initially
-          <div className="light-theme" suppressHydrationWarning>
-            {children}
-          </div>
-        )}
-      </QueryClientProvider>
+      <QueryParamProvider adapter={NextAdapterApp}>
+        <QueryClientProvider client={queryClient}>
+          {mounted ? (
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem={false}
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          ) : (
+            <div className="light-theme" suppressHydrationWarning>
+              {children}
+            </div>
+          )}
+        </QueryClientProvider>
+      </QueryParamProvider>
     </SessionProvider>
   );
 }

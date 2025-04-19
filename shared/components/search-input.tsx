@@ -3,11 +3,13 @@ import { Search } from "lucide-react";
 interface SearchInputProps {
   onChange: (value: string) => void;
   placeholder?: string;
+  value?: string;
 }
 
 export default function SearchInput({
   onChange,
   placeholder,
+  value,
 }: Readonly<SearchInputProps>) {
   return (
     <div className="relative">
@@ -19,6 +21,7 @@ export default function SearchInput({
         className="bg-muted w-full pl-10 pr-4 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         placeholder={placeholder ?? "Search..."}
         onChange={(e) => onChange(e.target.value)}
+        value={value}
       />
     </div>
   );

@@ -10,9 +10,18 @@ import {
 import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
 import MapsetList from "./mapset-list";
 import MainDialog from "./main";
+import { useQueryParam, StringParam } from "use-query-params";
+import { useEffect } from "react";
 
 export default function MapsetDialog() {
   const [isOpenDialog, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);
+  const [openCatalog] = useQueryParam("open-catalog", StringParam);
+
+  useEffect(() => {
+    if (openCatalog === "true") {
+      setIsOpenDialog(true);
+    }
+  }, [openCatalog, setIsOpenDialog]);
 
   return (
     <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>

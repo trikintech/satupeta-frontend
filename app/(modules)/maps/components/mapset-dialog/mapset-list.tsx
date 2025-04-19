@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Map, Layers, Plus, Minus } from "lucide-react";
 import SearchInput from "@/shared/components/search-input";
 import { mapsets as rawMapsets } from "../../../../../shared/utils/mapsets";
@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 import { selectedMapsetAtom } from "../../state/mapset-dialog";
 import { useLayerToggle } from "../../hooks/useLayerToggle";
 import { Mapset } from "@/shared/types/mapset";
+import { useQueryParam, StringParam } from "use-query-params";
 
 interface MapsetItemProps {
   mapset: Mapset;
@@ -51,7 +52,12 @@ const MapsetItem: React.FC<MapsetItemProps> = ({
 MapsetItem.displayName = "MapsetItem";
 
 const MapsetList: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [query, setQuery] = useQueryParam("query", StringParam);
+  const [searchTerm, setSearchTerm] = useState(query || "");
+
+  useEffect(() => {
+    setSearchTerm(query || "");
+  }, [query]);
   const [selectedMapset, setSelectedMapset] = useAtom(selectedMapsetAtom);
 
   const mapsets = rawMapsets.map((m) => ({
@@ -59,9 +65,13 @@ const MapsetList: React.FC = () => {
     id: m.id,
   }));
 
-  const handleSearch = useCallback((value: string) => {
-    setSearchTerm(value);
-  }, []);
+  const handleSearch = useCallback(
+    (value: string) => {
+      setSearchTerm(value);
+      setQuery(value || undefined); // Remove param if input is empty
+    },
+    [setQuery]
+  );
 
   const handleAddLayer = useCallback((mapset: Mapset) => {
     setSelectedMapset(mapset);
@@ -81,7 +91,11 @@ const MapsetList: React.FC = () => {
             {filteredMapsets.length} items
           </span>
         </div>
-        <SearchInput onChange={handleSearch} placeholder="Search layers..." />
+        <SearchInput
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Search layers..."
+        />
       </div>
 
       {filteredMapsets.length === 0 ? (
