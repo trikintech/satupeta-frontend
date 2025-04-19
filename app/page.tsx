@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col">
       <Header />
-      <div className="flex-grow">
+      <div className="flex-grow mb-36">
         <HeroSection />
         <CatalogSection />
         <OrganizationSection />
