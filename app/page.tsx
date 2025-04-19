@@ -4,6 +4,7 @@ import { HeroSection } from "./(modules)/(landing)/components/hero-section";
 import { StatisticsSection } from "./(modules)/(landing)/components/statistic-section";
 import { NewsSection } from "./(modules)/(landing)/components/news-section";
 import Footer from "./(modules)/(landing)/components/layout/footer";
+import { OrganizationSection } from "./(modules)/(landing)/components/organization-section";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <div className="flex-grow">
         <HeroSection />
         <CatalogSection />
+        <OrganizationSection />
         <StatisticsSection />
         <NewsSection />
       </div>
