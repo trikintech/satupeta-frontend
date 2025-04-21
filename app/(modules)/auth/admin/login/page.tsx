@@ -33,8 +33,6 @@ export default function LoginPage() {
         callbackUrl,
       });
 
-      console.log(res);
-
       if (res?.error) {
         throw new Error(res.error);
       }

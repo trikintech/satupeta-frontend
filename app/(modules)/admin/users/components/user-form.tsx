@@ -15,6 +15,7 @@ import { Button } from "@/shared/components/ds/button";
 import { User } from "@/shared/types/user";
 import userApi from "@/shared/services/user";
 import FormOrganizationSelect from "@/shared/components/form-organization-select";
+import RoleSelect from "./role-select";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -45,7 +46,7 @@ const formSchema = z.object({
   image: z.string().optional(),
   wilayah_id: z.number({ required_error: "Wilayah tidak boleh kosong" }),
   organisasi_id: z.number({ required_error: "Organisasi tidak boleh kosong" }),
-  role: z.string().optional(),
+  role: z.string({ required_error: "Role tidak boleh kosong" }),
   is_active: z.boolean().optional(),
 });
 
@@ -66,7 +67,7 @@ export const UserForm = () => {
       image: "",
       wilayah_id: 1,
       organisasi_id: undefined,
-      role: "administrator",
+      role: undefined,
       is_active: true,
     },
   });
@@ -165,12 +166,31 @@ export const UserForm = () => {
         />
 
         <FormItem>
+          <FormLabel>Role</FormLabel>
+          <RoleSelect name="role" placeholder="Pilih Role" />
+        </FormItem>
+
+        <FormItem>
           <FormLabel>Organisasi</FormLabel>
           <FormOrganizationSelect
             name="organisasi_id"
             placeholder="Pilih Organisasi"
           />
         </FormItem>
+
+        <FormField
+          name="jabatan"
+          control={form.control}
+          render={({ field }) => (
+            <FormInput
+              name="jabatan"
+              label="Jabatan"
+              placeholder="Jabatan"
+              field={field}
+              error={form.formState.errors.jabatan}
+            />
+          )}
+        />
 
         <Button type="submit" disabled={isPending}>
           {isPending ? "Submitting..." : "Submit"}

@@ -42,9 +42,6 @@ export default function FeatureInformation() {
             )
           );
 
-          console.log(feature.info);
-          console.log(propertyKeys);
-
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const columns: ColumnDef<RowData>[] = propertyKeys.map((key: any) => {
             const column: ColumnDef<RowData> = {

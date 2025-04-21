@@ -25,6 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import Link from "next/link";
 
 export default function UsersPage() {
   const queryClient = useQueryClient();
@@ -80,10 +81,12 @@ export default function UsersPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Users</h1>
-        <Button>
-          <UserPlus className="mr-2 h-4 w-4" />
-          Add User
-        </Button>
+        <Link href="/admin/users/create">
+          <Button>
+            <UserPlus className="mr-2 h-4 w-4" />
+            Add User
+          </Button>
+        </Link>
       </div>
 
       <Card>

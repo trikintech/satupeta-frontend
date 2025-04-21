@@ -12,8 +12,6 @@ const AdminIndex = () => {
     if (session) {
       router.replace("/admin/dashboard");
     }
-
-    console.log(session);
   }, [session, router]);
 
   if (!session) {
