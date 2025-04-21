@@ -205,6 +205,21 @@ export const UserForm = () => {
         <Button type="submit" disabled={isPending}>
           {isPending ? "Submitting..." : "Submit"}
         </Button>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            success({
+              title: "Berhasil",
+              description: "User berhasil ditambahkan",
+              onConfirm: () => {
+                form.reset();
+                redirect("/admin/users");
+              },
+            });
+          }}
+        >
+          Cancel
+        </Button>
       </form>
     </Form>
   );
