@@ -14,8 +14,15 @@ export const userApi = {
     return response.data;
   },
 
-  deleteUser: async (id: number): Promise<ApiResponse<null>> => {
+  deleteUser: async (id?: number): Promise<ApiResponse<null>> => {
     const response = await api.delete(`/user/${id}`);
     return response.data;
   },
+
+  createUser: async (user: Omit<User, "id">): Promise<ApiResponse<User>> => {
+    const response = await api.post("/user", user);
+    return response.data;
+  },
 };
+
+export default userApi;

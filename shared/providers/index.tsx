@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { SessionProvider } from "next-auth/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./theme-provider";
 import { QueryParamProvider } from "use-query-params";
 import NextAdapterApp from "next-query-params/app";
-
-const queryClient = new QueryClient();
+import { queryClient } from "../utils/query-client";
 
 export function Providers({
   children,

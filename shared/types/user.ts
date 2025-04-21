@@ -1,10 +1,10 @@
 export interface User {
   id?: number;
   name: string;
-  jabatan: string;
-  email: string;
+  jabatan?: string;
+  email?: string;
   username: string;
-  nip: string;
+  nip?: string;
   image?: string;
   organisasi_id?: number;
   organisasi_name?: string;
