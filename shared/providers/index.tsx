@@ -7,6 +7,7 @@ import { ThemeProvider } from "./theme-provider";
 import { QueryParamProvider } from "use-query-params";
 import NextAdapterApp from "next-query-params/app";
 import { queryClient } from "../utils/query-client";
+import { GlobalDialogProvider } from "./global-dialog-provider";
 
 export function Providers({
   children,
@@ -37,6 +38,7 @@ export function Providers({
           )}
         </QueryClientProvider>
       </QueryParamProvider>
+      <GlobalDialogProvider />
     </SessionProvider>
   );
 }

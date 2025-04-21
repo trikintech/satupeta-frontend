@@ -16,6 +16,8 @@ import { User } from "@/shared/types/user";
 import userApi from "@/shared/services/user";
 import FormOrganizationSelect from "@/shared/components/form-organization-select";
 import RoleSelect from "./role-select";
+import { useDialog } from "@/shared/utils/dialog";
+import { redirect } from "next/navigation";
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -54,6 +56,7 @@ type UserFormData = z.infer<typeof formSchema>;
 
 export const UserForm = () => {
   const queryClient = useQueryClient();
+  const { success } = useDialog();
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
@@ -79,7 +82,14 @@ export const UserForm = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      form.reset();
+      success({
+        title: "Berhasil",
+        description: "User berhasil ditambahkan",
+        onConfirm: () => {
+          form.reset();
+          redirect("/admin/users");
+        },
+      });
     },
     onError: (error) => {
       console.error("Submission error:", error);
