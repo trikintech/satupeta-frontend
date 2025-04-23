@@ -1,24 +1,24 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAuthSession } from "@/shared/hooks/use-session";
 import { useRouter } from "next/navigation";
 
 const DashboardPage = () => {
-  const { data: session, status } = useSession();
   const router = useRouter();
+  const { isLoading, isAuthenticated, user } = useAuthSession();
 
-  if (status === "loading") {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!session) {
+  if (!isAuthenticated) {
     router.replace("/admin/login");
     return null;
   }
 
   return (
     <div>
-      <h1>Welcome to the Admin Dashboard, {session.user?.name}</h1>
+      <h1>Welcome to the Admin Dashboard, {user?.name}</h1>
 
       <p>
         This is a protected admin page, visible only to authenticated users.

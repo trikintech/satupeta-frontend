@@ -15,13 +15,13 @@ import { Button } from "@/shared/components/ds/button";
 import { User } from "@/shared/types/user";
 import userApi from "@/shared/services/user";
 import FormOrganizationSelect from "@/shared/components/form-organization-select";
-import RoleSelect from "./role-select";
 import { useDialog } from "@/shared/utils/dialog";
 import { redirect } from "next/navigation";
+import { FormRoleSelect } from "./form-role-select";
 
 const formSchema = z.object({
-  username: z.string().min(3, {
-    message: "Username minimal 3 karakter",
+  username: z.string().min(6, {
+    message: "Username minimal 6 karakter",
   }),
   name: z.string().min(3, {
     message: "Nama minimal 3 karakter",
@@ -175,18 +175,38 @@ export const UserForm = () => {
           )}
         />
 
-        <FormItem>
-          <FormLabel>Role</FormLabel>
-          <RoleSelect name="role" placeholder="Pilih Role" />
-        </FormItem>
+        <FormField
+          name="role"
+          control={form.control}
+          render={({ field }) => (
+            <FormRoleSelect
+              label="Role"
+              description="Pilih role pengguna"
+              placeholder="Pilih Role"
+              field={field}
+              error={form.formState.errors.role}
+            />
+          )}
+        />
 
-        <FormItem>
-          <FormLabel>Organisasi</FormLabel>
-          <FormOrganizationSelect
-            name="organisasi_id"
-            placeholder="Pilih Organisasi"
-          />
-        </FormItem>
+        <FormField
+          name="organisasi_id"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Organisasi</FormLabel>
+              <FormOrganizationSelect
+                field={field}
+                placeholder="Pilih Organisasi"
+              />
+              {form.formState.errors.organisasi_id && (
+                <p className="mt-1 text-sm text-red-500">
+                  {form.formState.errors.organisasi_id.message}
+                </p>
+              )}
+            </FormItem>
+          )}
+        />
 
         <FormField
           name="jabatan"

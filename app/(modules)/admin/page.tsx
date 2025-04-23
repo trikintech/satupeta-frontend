@@ -1,20 +1,20 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAuthSession } from "@/shared/hooks/use-session";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const AdminIndex = () => {
-  const { data: session } = useSession();
   const router = useRouter();
+  const { isAuthenticated } = useAuthSession();
 
   useEffect(() => {
-    if (session) {
+    if (isAuthenticated) {
       router.replace("/admin/dashboard");
     }
-  }, [session, router]);
+  }, [isAuthenticated, router]);
 
-  if (!session) {
+  if (!isAuthenticated) {
     return <div>Loading...</div>;
   }
 

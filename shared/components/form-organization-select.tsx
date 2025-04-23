@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { ControllerRenderProps, FieldValues, Path } from "react-hook-form";
 import organizationApi from "@/shared/services/organization";
 import { cn } from "@/shared/utils/utils";
 import {
@@ -11,25 +14,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import { useFormContext, Controller } from "react-hook-form";
 
-interface FormTopicSelectProps {
-  name: string;
+interface FormOrganizationSelectProps<T extends FieldValues> {
+  field: ControllerRenderProps<T, Path<T>>;
   placeholder?: string;
-  defaultValue?: number;
   className?: string;
   disabled?: boolean;
 }
 
-export const FormTopicSelect: React.FC<FormTopicSelectProps> = ({
-  name,
-  placeholder = "Select a organization",
-  defaultValue,
+export const FormOrganizationSelect = <T extends FieldValues>({
+  field,
+  placeholder = "Pilih Organisasi",
   className,
   disabled = false,
-}) => {
-  const { control } = useFormContext();
-
+}: FormOrganizationSelectProps<T>) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["organizations"],
     queryFn: organizationApi.getOrganizations,
@@ -40,58 +38,43 @@ export const FormTopicSelect: React.FC<FormTopicSelectProps> = ({
   if (error) {
     return (
       <div className="py-2 text-sm text-red-500">
-        Failed to load organizations. Please try again.
+        Gagal memuat organisasi. Silakan coba lagi.
       </div>
     );
   }
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      defaultValue={defaultValue || undefined}
-      render={({ field, fieldState: { error } }) => (
-        <>
-          <Select
-            value={
-              field.value !== undefined && field.value !== null
-                ? field.value.toString()
-                : undefined
-            }
-            onValueChange={(value) => {
-              field.onChange(Number(value));
-            }}
-            disabled={disabled || isLoading}
-          >
-            <SelectTrigger className={cn("w-full", className)}>
-              <SelectValue
-                placeholder={
-                  isLoading ? "Loading organizations..." : placeholder
-                }
-              />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Topics</SelectLabel>
-                {data?.map((organization) => (
-                  <SelectItem
-                    key={organization.id}
-                    value={organization.id.toString()}
-                  >
-                    {organization.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          {error && (
-            <p className="mt-1 text-sm text-red-500">{error.message}</p>
+    <Select
+      value={field.value?.toString()}
+      disabled={disabled || isLoading}
+      onValueChange={(value) => field.onChange(Number(value))}
+    >
+      <SelectTrigger className={cn("w-full", className)}>
+        <SelectValue
+          placeholder={isLoading ? "Memuat organisasi..." : placeholder}
+        />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Organisasi</SelectLabel>
+          {isLoading ? (
+            <SelectItem value="loading" disabled>
+              Memuat...
+            </SelectItem>
+          ) : (
+            data?.map((organization) => (
+              <SelectItem
+                key={organization.id}
+                value={organization.id.toString()}
+              >
+                {organization.name}
+              </SelectItem>
+            ))
           )}
-        </>
-      )}
-    />
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 };
 
-export default FormTopicSelect;
+export default FormOrganizationSelect;

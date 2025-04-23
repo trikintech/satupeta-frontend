@@ -1,16 +1,16 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 export default function AdminRouteGuard({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { status } = useSession();
+  const { isAuthenticated, isLoading } = useAuthSession();
   const router = useRouter();
   const pathname = usePathname();
   const [isAdminRoute, setIsAdminRoute] = useState(false);
@@ -20,14 +20,14 @@ export default function AdminRouteGuard({
   }, [pathname]);
 
   useEffect(() => {
-    if (isAdminRoute && status === "unauthenticated") {
+    if (isAdminRoute && !isAuthenticated) {
       router.push(
         `/auth/admin/login?callbackUrl=${encodeURIComponent(pathname)}`
       );
     }
-  }, [status, isAdminRoute, router, pathname]);
+  }, [isAdminRoute, router, pathname, isAuthenticated]);
 
-  if (isAdminRoute && status === "loading") {
+  if (isAdminRoute && isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />

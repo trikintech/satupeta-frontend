@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -15,9 +14,11 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/shared/components/ui/avatar";
+import { signOut } from "next-auth/react";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 const Header = () => {
-  const { data: session, status } = useSession();
+  const { user, isLoading } = useAuthSession();
 
   const handleLogout = async () => {
     await signOut({ redirect: false });
@@ -25,12 +26,10 @@ const Header = () => {
     window.location.href = "/auth/admin/login";
   };
 
-  const user = session?.user;
-
   // Extract the ternary logic into a variable
   let userContent;
 
-  if (status === "loading") {
+  if (isLoading) {
     userContent = <span className="text-sm text-gray-500">Loading...</span>;
   } else if (user) {
     userContent = (

@@ -24,7 +24,6 @@ interface FormTopicSelectProps {
 export const FormTopicSelect: React.FC<FormTopicSelectProps> = ({
   name,
   placeholder = "Select a topic",
-  defaultValue,
   className,
   disabled = false,
 }) => {
@@ -49,18 +48,10 @@ export const FormTopicSelect: React.FC<FormTopicSelectProps> = ({
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue ?? undefined}
       render={({ field, fieldState: { error } }) => (
         <>
           <Select
-            value={
-              field.value !== undefined && field.value !== null
-                ? field.value.toString()
-                : undefined
-            }
-            onValueChange={(value) => {
-              field.onChange(Number(value));
-            }}
+            value={field.value?.toString()}
             disabled={disabled || isLoading}
           >
             <SelectTrigger className={cn("w-full", className)}>

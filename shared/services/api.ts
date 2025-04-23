@@ -11,13 +11,28 @@ const api = axios.create({
   },
 });
 
-api.interceptors.request.use(async (config) => {
+let cachedToken: string | null = null;
+
+async function getToken() {
+  if (cachedToken) return cachedToken;
+
   const session = await getSession();
-  const token = session?.user.jwt;
+  const token = session?.user?.jwt;
+
+  if (token) {
+    cachedToken = token;
+  }
+
+  return token;
+}
+
+api.interceptors.request.use(async (config) => {
+  const token = await getToken();
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 

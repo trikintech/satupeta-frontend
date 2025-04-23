@@ -2,13 +2,14 @@ import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { User } from "@/shared/types/user";
 import { DataTable } from "../../components/data-table";
+import { useRouter } from "next/navigation";
 
 interface Props {
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
   users: User[];
-  columns: ColumnDef<User>[];
+  columns: (router: ReturnType<typeof useRouter>) => ColumnDef<User>[]; // Pass router to columns
   openDialog: (type: "delete", user: User) => void;
 }
 
@@ -21,6 +22,7 @@ export const TableContent = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   openDialog,
 }: Props) => {
+  const router = useRouter();
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -45,7 +47,7 @@ export const TableContent = ({
 
   return (
     <DataTable
-      columns={columns}
+      columns={columns(router)}
       data={users}
       searchColumn="name"
       searchPlaceholder="Search users..."
