@@ -46,8 +46,10 @@ export const FormOrganizationSelect = <T extends FieldValues>({
   return (
     <Select
       value={field.value?.toString()}
+      onValueChange={(value) => {
+        if (value) field.onChange(value);
+      }}
       disabled={disabled || isLoading}
-      onValueChange={(value) => field.onChange(Number(value))}
     >
       <SelectTrigger className={cn("w-full", className)}>
         <SelectValue

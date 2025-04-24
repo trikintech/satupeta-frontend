@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/shared/utils/utils";
 import {
   Select,
@@ -19,7 +21,6 @@ import Role from "@/shared/enums/role";
 
 interface FormRoleSelectProps {
   label: string;
-  description?: string;
   placeholder?: string;
   disabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,14 +29,14 @@ interface FormRoleSelectProps {
   className?: string;
 }
 
-export const FormRoleSelect: React.FC<FormRoleSelectProps> = ({
+export const FormRoleSelect = ({
   label,
   placeholder = "Pilih Role",
   disabled = false,
   field,
   error,
   className,
-}) => {
+}: FormRoleSelectProps) => {
   const roleOptions = [
     { value: Role.ADMIN, label: "Administrator" },
     { value: Role.WALIDATA, label: "Wali Data" },
@@ -45,11 +46,15 @@ export const FormRoleSelect: React.FC<FormRoleSelectProps> = ({
 
   return (
     <FormItem>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel>
+        {label} {field.value}
+      </FormLabel>
       <FormControl>
         <Select
-          value={field.value}
-          onValueChange={field.onChange}
+          value={field.value?.toString()}
+          onValueChange={(value) => {
+            if (value) field.onChange(value);
+          }}
           disabled={disabled}
         >
           <SelectTrigger className={cn("w-full", className)}>

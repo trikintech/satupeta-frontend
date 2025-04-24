@@ -1,245 +1,91 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/shared/components/ui/form";
-import { FormInput } from "@/shared/components/form-input";
+import { useState, useEffect } from "react";
+import { Form } from "@/shared/components/ui/form";
 import { Button } from "@/shared/components/ds/button";
-import { User } from "@/shared/types/user";
-import userApi from "@/shared/services/user";
-import FormOrganizationSelect from "@/shared/components/form-organization-select";
 import { useDialog } from "@/shared/utils/dialog";
-import { redirect } from "next/navigation";
-import { FormRoleSelect } from "./form-role-select";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import userApi from "@/shared/services/user";
+import { UserFormData, useUserForm } from "../hooks/use-user-form";
+import { UserFormFields } from "./user-form-fields";
 
-const formSchema = z.object({
-  username: z.string().min(6, {
-    message: "Username minimal 6 karakter",
-  }),
-  name: z.string().min(3, {
-    message: "Nama minimal 3 karakter",
-  }),
-  jabatan: z.string().optional(),
-  email: z.string().email({
-    message: "Email tidak valid",
-  }),
-  password: z
-    .string()
-    .min(8, {
-      message: "Password minimal 8 karakter",
-    })
-    .regex(/[A-Z]/, {
-      message: "Password harus mengandung minimal 1 huruf kapital",
-    })
-    .regex(/\d/, {
-      message: "Password harus mengandung minimal 1 angka",
-    })
-    .regex(/[^A-Za-z0-9]/, {
-      message: "Password harus mengandung minimal 1 karakter spesial",
-    }),
-  nip: z.string().optional(),
-  image: z.string().optional(),
-  wilayah_id: z.number({ required_error: "Wilayah tidak boleh kosong" }),
-  organisasi_id: z.number({ required_error: "Organisasi tidak boleh kosong" }),
-  role: z.string({ required_error: "Role tidak boleh kosong" }),
-  is_active: z.boolean().optional(),
-});
-
-type UserFormData = z.infer<typeof formSchema>;
-
-export const UserForm = () => {
+export const UserForm = ({ userId }: { userId?: string }) => {
+  const [isMounted, setIsMounted] = useState(false);
   const queryClient = useQueryClient();
-  const { success } = useDialog();
+  const { success, confirm } = useDialog();
+  const router = useRouter();
 
-  const form = useForm<UserFormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      name: "",
-      jabatan: "",
-      email: "",
-      password: "",
-      nip: "",
-      image: "",
-      wilayah_id: 1,
-      organisasi_id: undefined,
-      role: undefined,
-      is_active: true,
-    },
+  const { data: userData } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () =>
+      userId ? userApi.getUserById(+userId).then((res) => res.data) : null,
+    enabled: !!userId,
   });
 
-  const { mutate, isPending } = useMutation<User, Error, UserFormData>({
-    mutationFn: async (formData) => {
-      const response = await userApi.createUser(formData);
-      return response.data;
+  const form = useUserForm();
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (userData) {
+      form.reset({ ...userData, password: "" });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userData]);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (data: UserFormData) => {
+      return userId
+        ? userApi.updateUser(+userId, data)
+        : userApi.createUser(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       success({
         title: "Berhasil",
-        description: "User berhasil ditambahkan",
-        onConfirm: () => {
-          form.reset();
-          redirect("/admin/users");
-        },
+        description: userId
+          ? "User berhasil diperbarui"
+          : "User berhasil ditambahkan",
+        onConfirm: () => router.push("/admin/users"),
       });
     },
-    onError: (error) => {
-      console.error("Submission error:", error);
-    },
+    onError: (err) =>
+      confirm({
+        title: "Gagal",
+        description: err.message,
+        onConfirm: () => {},
+      }),
   });
 
-  const handleSubmit = (data: UserFormData) => {
-    mutate(data);
-  };
+  if (!isMounted) return null;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <FormField
-          name="username"
-          control={form.control}
-          render={({ field }) => (
-            <FormInput
-              name="username"
-              label="Username"
-              placeholder="alberteinstein"
-              field={field}
-              error={form.formState.errors.username}
-            />
-          )}
-        />
-
-        <FormField
-          name="password"
-          control={form.control}
-          render={({ field }) => (
-            <FormInput
-              name="password"
-              label="Password"
-              type="password"
-              placeholder="Enter your password"
-              field={field}
-              error={form.formState.errors.password}
-            />
-          )}
-        />
-
-        <FormField
-          name="nip"
-          control={form.control}
-          render={({ field }) => (
-            <FormInput
-              name="nip"
-              label="NIP"
-              placeholder="13233XXXX"
-              field={field}
-              error={form.formState.errors.nip}
-            />
-          )}
-        />
-
-        <FormField
-          name="name"
-          control={form.control}
-          render={({ field }) => (
-            <FormInput
-              name="name"
-              label="Nama"
-              placeholder="Albert Einstein"
-              field={field}
-              error={form.formState.errors.name}
-            />
-          )}
-        />
-
-        <FormField
-          name="email"
-          control={form.control}
-          render={({ field }) => (
-            <FormInput
-              name="email"
-              label="Email"
-              type="email"
-              placeholder="alberteinstein@gmail.com"
-              field={field}
-              error={form.formState.errors.email}
-            />
-          )}
-        />
-
-        <FormField
-          name="role"
-          control={form.control}
-          render={({ field }) => (
-            <FormRoleSelect
-              label="Role"
-              description="Pilih role pengguna"
-              placeholder="Pilih Role"
-              field={field}
-              error={form.formState.errors.role}
-            />
-          )}
-        />
-
-        <FormField
-          name="organisasi_id"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Organisasi</FormLabel>
-              <FormOrganizationSelect
-                field={field}
-                placeholder="Pilih Organisasi"
-              />
-              {form.formState.errors.organisasi_id && (
-                <p className="mt-1 text-sm text-red-500">
-                  {form.formState.errors.organisasi_id.message}
-                </p>
-              )}
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          name="jabatan"
-          control={form.control}
-          render={({ field }) => (
-            <FormInput
-              name="jabatan"
-              label="Jabatan"
-              placeholder="Jabatan"
-              field={field}
-              error={form.formState.errors.jabatan}
-            />
-          )}
-        />
-
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Submitting..." : "Submit"}
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            success({
-              title: "Berhasil",
-              description: "User berhasil ditambahkan",
-              onConfirm: () => {
-                form.reset();
-                redirect("/admin/users");
-              },
-            });
-          }}
-        >
-          Cancel
-        </Button>
+      <form
+        onSubmit={form.handleSubmit((data) => {
+          if (userId && !data.password) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { password, ...rest } = data;
+            mutate(rest as UserFormData);
+          } else {
+            mutate(data);
+          }
+        })}
+        className="space-y-6"
+      >
+        <UserFormFields form={form} userId={userId} />
+        <div className="flex gap-4">
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Menyimpan..." : "Simpan"}
+          </Button>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => router.push("/admin/users")}
+          >
+            Batal
+          </Button>
+        </div>
       </form>
     </Form>
   );
