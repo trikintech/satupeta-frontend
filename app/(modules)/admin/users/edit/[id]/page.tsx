@@ -12,7 +12,7 @@ export default function UpdateUserPage() {
       <h1 className="text-3xl font-bold tracking-tight">Users</h1>
       <Card title="User Form" className="w-full">
         <CardContent>
-          <UserForm userId={Number(params.id)} />
+          <UserForm userId={params.id?.toString()} />
         </CardContent>
       </Card>
     </div>

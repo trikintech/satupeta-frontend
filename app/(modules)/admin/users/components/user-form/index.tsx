@@ -7,7 +7,7 @@ import { useDialog } from "@/shared/utils/dialog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import userApi from "@/shared/services/user";
-import { UserFormData, useUserForm } from "../hooks/use-user-form";
+import { UserFormData, useUserForm } from "../../hooks/use-user-form";
 import { UserFormFields } from "./user-form-fields";
 
 export const UserForm = ({ userId }: { userId?: string }) => {

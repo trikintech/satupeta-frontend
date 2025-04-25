@@ -16,11 +16,11 @@ import {
   DropdownMenuSeparator,
 } from "@/shared/components/ui/dropdown-menu";
 import { User } from "@/shared/types/user";
-import { createSortableHeader } from "../../components/data-table";
 import { useRouter } from "next/navigation";
+import { createSortableHeader } from "../../../components/data-table";
 
 export const getUserTableColumns =
-  (openDialog: (type: "delete", user: User) => void) =>
+  (onDelete: (user: User) => void) =>
   (router: ReturnType<typeof useRouter>): ColumnDef<User>[] =>
     [
       {
@@ -95,11 +95,11 @@ export const getUserTableColumns =
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => openDialog("delete", user)}
+                  onClick={() => onDelete(user)}
                   className="text-red-600"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  {user.is_deleted ? "Permanently Delete" : "Deactivate"}
+                  Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

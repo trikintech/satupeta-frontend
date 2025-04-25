@@ -1,8 +1,8 @@
 import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
 import { User } from "@/shared/types/user";
-import { DataTable } from "../../components/data-table";
 import { useRouter } from "next/navigation";
+import { DataTable } from "../../../components/data-table";
 
 interface Props {
   isLoading: boolean;
@@ -10,18 +10,16 @@ interface Props {
   error: Error | null;
   users: User[];
   columns: (router: ReturnType<typeof useRouter>) => ColumnDef<User>[]; // Pass router to columns
-  openDialog: (type: "delete", user: User) => void;
 }
 
-export const TableContent = ({
+export const UserList = ({
   isLoading,
   isError,
   error,
   users,
   columns,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  openDialog,
-}: Props) => {
+}: // eslint-disable-next-line @typescript-eslint/no-unused-vars
+Props) => {
   const router = useRouter();
   if (isLoading) {
     return (

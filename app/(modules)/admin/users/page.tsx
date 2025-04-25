@@ -2,30 +2,17 @@
 
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
+import { Card, CardContent } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { userApi } from "@/shared/services/user";
 import { ApiResponse } from "@/shared/types/api-response";
 import { User } from "@/shared/types/user";
-import { getUserTableColumns } from "./components/table-columns";
-import { TableContent } from "./components/table-content";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
 import Link from "next/link";
+import { getUserTableColumns } from "./components/user-list/table-columns";
+import { UserList } from "./components/user-list";
+import DeleteDialog from "./components/confirmation-dialog";
 
 export default function UsersPage() {
   const queryClient = useQueryClient();
@@ -40,19 +27,17 @@ export default function UsersPage() {
     queryFn: () => userApi.getUsers(),
   });
 
-  const openDialog = (type: "delete", user: User) => {
-    setActionType(type);
+  const onDelete = (user: User) => {
+    setActionType("delete");
     setSelectedUser(user);
     setIsDialogOpen(true);
   };
 
   const users = apiResponse?.data || [];
-  const columns = getUserTableColumns(openDialog);
+  const columns = getUserTableColumns(onDelete);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState<"delete" | "deactivate" | null>(
-    null
-  );
+  const [actionType, setActionType] = useState<"delete" | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const handleAction = async () => {
@@ -61,17 +46,13 @@ export default function UsersPage() {
     try {
       if (actionType === "delete") {
         await userApi.deleteUser(selectedUser.id);
-        toast.success("User permanently deleted");
+        toast.success("User deleted");
       }
 
       await queryClient.invalidateQueries({ queryKey: ["users"] });
     } catch (error) {
       console.error(error);
-      toast.error(
-        `An error occurred while ${
-          actionType === "delete" ? "deleting" : "deactivating"
-        } the user.`
-      );
+      toast.error(`An error occurred while deleting the user.`);
     } finally {
       setIsDialogOpen(false);
     }
@@ -90,46 +71,25 @@ export default function UsersPage() {
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>User Management</CardTitle>
-          <CardDescription>
-            Manage your users and their organization access
-          </CardDescription>
-        </CardHeader>
         <CardContent>
-          <TableContent
+          <UserList
             isLoading={isLoading}
             isError={isError}
             error={error as Error}
             users={users}
             columns={columns}
-            openDialog={openDialog}
           />
         </CardContent>
       </Card>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              Confirm {actionType === "delete" ? "Deletion" : "Deactivation"}
-            </DialogTitle>
-            <DialogDescription>
-              {actionType === "delete"
-                ? "Are you sure you want to permanently delete this user? This action is irreversible."
-                : "Are you sure you want to deactivate this user?"}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleAction}>
-              Confirm
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DeleteDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onConfirm={handleAction}
+        description="Are you sure you want to delete this user? This action cannot be undone."
+        confirmVariant="destructive"
+        confirmLabel="Delete"
+      ></DeleteDialog>
     </div>
   );
 }

@@ -33,7 +33,7 @@ function handleGlobalError(error: unknown) {
       axiosError.response?.status === 429
     ) {
       toast.error("Session expired. Redirecting to login...");
-      signOut({ callbackUrl: "/auth/login" });
+      signOut({ callbackUrl: "/admin/auth/login" });
     }
   }
 }

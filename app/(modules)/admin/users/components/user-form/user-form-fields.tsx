@@ -1,9 +1,9 @@
 import { FormField, FormItem, FormLabel } from "@/shared/components/ui/form";
 import { FormInput } from "@/shared/components/form-input";
-import { FormRoleSelect } from "./form-role-select";
 import FormOrganizationSelect from "@/shared/components/form-organization-select";
-import { UserFormData } from "../hooks/use-user-form";
 import { UseFormReturn } from "react-hook-form";
+import { FormRoleSelect } from "../form-role-select";
+import { UserFormData } from "../../hooks/use-user-form";
 
 interface UserFormFieldsProps {
   form: UseFormReturn<UserFormData>;
