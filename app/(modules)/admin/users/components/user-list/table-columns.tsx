@@ -83,7 +83,7 @@ export const getUserTableColumns =
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuItem
-                  onClick={() => console.log(`View user: ${user.id}`)}
+                  onClick={() => router.push(`/admin/users/detail/${user.id}`)} // Use router here
                 >
                   View details
                 </DropdownMenuItem>
