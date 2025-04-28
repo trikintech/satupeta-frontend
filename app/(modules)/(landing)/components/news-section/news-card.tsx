@@ -23,7 +23,7 @@ export default function NewsCard({
 
   return (
     <div className="gap-4 p-4 border border-[#94A3B8] flex flex-col">
-      <Image src={image} alt="news" width={379} height={379} />
+      <Image src={image} alt="news" width={0} height={379} className="w-full" />
       <div className="relative flex flex-col gap-4 pb-20">
         <div className="text-slate-500 text-sm">{formattedDate}</div>
         <div className="text-slate-600 leading-9 text-3xl ">{title}</div>
