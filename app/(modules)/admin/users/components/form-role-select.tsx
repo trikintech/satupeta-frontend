@@ -17,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/components/ui/form";
-import Role from "@/shared/enums/role";
+import Role from "@/shared/config/role";
 
 interface FormRoleSelectProps {
   label: string;

@@ -1,0 +1,202 @@
+.
+├── app
+│   ├── (modules)
+│   │   ├── (landing)
+│   │   │   └── components
+│   │   │       ├── catalog-section
+│   │   │       ├── hero-section
+│   │   │       ├── layout
+│   │   │       ├── mapset-card.tsx
+│   │   │       ├── news-section
+│   │   │       ├── organization-section
+│   │   │       └── statistic-section.tsx
+│   │   ├── admin
+│   │   │   ├── components
+│   │   │   │   ├── data-table.tsx
+│   │   │   │   ├── footer.tsx
+│   │   │   │   ├── header.tsx
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── sidebar.tsx
+│   │   │   ├── dashboard
+│   │   │   │   └── page.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   ├── state
+│   │   │   │   └── action-type.ts
+│   │   │   └── users
+│   │   │       ├── components
+│   │   │       ├── create
+│   │   │       ├── detail
+│   │   │       ├── edit
+│   │   │       ├── hooks
+│   │   │       └── page.tsx
+│   │   ├── auth
+│   │   │   └── admin
+│   │   │       └── login
+│   │   └── maps
+│   │       ├── components
+│   │       │   ├── cesium-map.tsx
+│   │       │   ├── feature-information
+│   │       │   ├── layer-manager.tsx
+│   │       │   ├── leaflet-map
+│   │       │   ├── map-component.tsx
+│   │       │   ├── map-settings.tsx
+│   │       │   ├── mapset-dialog
+│   │       │   └── sidebar
+│   │       ├── config
+│   │       │   ├── basemap-config.ts
+│   │       │   └── map-config.ts
+│   │       ├── factories
+│   │       │   └── cesium-provider.ts
+│   │       ├── hooks
+│   │       │   ├── useCesiumMap.tsx
+│   │       │   └── useLayerToggle.tsx
+│   │       ├── page.tsx
+│   │       ├── state
+│   │       │   ├── active-basemap.ts
+│   │       │   ├── active-layers.ts
+│   │       │   ├── feature-information.ts
+│   │       │   ├── leaflet-layer-instances.ts
+│   │       │   ├── map-settings.ts
+│   │       │   ├── map-type.ts
+│   │       │   ├── map.ts
+│   │       │   └── mapset-dialog.ts
+│   │       ├── types
+│   │       │   ├── basemap-config.ts
+│   │       │   └── map-config.ts
+│   │       └── utils
+│   │           ├── cesium.ts
+│   │           ├── colors.ts
+│   │           ├── feature-information.ts
+│   │           ├── theme.ts
+│   │           └── wms.ts
+│   ├── api
+│   │   ├── auth
+│   │   │   └── [...nextauth]
+│   │   │       └── route.ts
+│   │   └── mapsets
+│   │       └── route.ts
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── styles
+├── auth.ts
+├── bun.lock
+├── components.json
+├── eslint.config.mjs
+├── middleware.ts
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│   ├── dark-thumb.png
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── illustration-map.png
+│   ├── light-thumb.png
+│   ├── logo_.svg
+│   ├── logo-white_.png
+│   ├── logo-white.png
+│   ├── logo.svg
+│   ├── next.svg
+│   ├── osm-thumb.png
+│   ├── pattern-01.png
+│   ├── satellite-thumb.png
+│   ├── template-news-2.png
+│   ├── template-news.png
+│   ├── template-organization.png
+│   ├── terrain-thumb.png
+│   ├── vercel.svg
+│   └── window.svg
+├── README.md
+├── shared
+│   ├── components
+│   │   ├── auth
+│   │   │   └── admin-route-guard.tsx
+│   │   ├── client-wrapper.tsx
+│   │   ├── ds
+│   │   │   ├── badge.tsx
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── input.tsx
+│   │   │   └── success-dialog.tsx
+│   │   ├── form-input.tsx
+│   │   ├── form-organization-select.tsx
+│   │   ├── form-topic-select.tsx
+│   │   ├── header.tsx
+│   │   ├── preview-map.tsx
+│   │   ├── search-input.tsx
+│   │   └── ui
+│   │       ├── accordion.tsx
+│   │       ├── alert-dialog.tsx
+│   │       ├── avatar.tsx
+│   │       ├── badge.tsx
+│   │       ├── breadcrumb.tsx
+│   │       ├── button.tsx
+│   │       ├── card.tsx
+│   │       ├── command.tsx
+│   │       ├── dialog.tsx
+│   │       ├── dropdown-menu.tsx
+│   │       ├── form.tsx
+│   │       ├── input.tsx
+│   │       ├── label.tsx
+│   │       ├── popover.tsx
+│   │       ├── scroll-area.tsx
+│   │       ├── select.tsx
+│   │       ├── separator.tsx
+│   │       ├── sheet.tsx
+│   │       ├── sidebar.tsx
+│   │       ├── skeleton.tsx
+│   │       ├── slider.tsx
+│   │       ├── sonner.tsx
+│   │       ├── switch.tsx
+│   │       ├── table.tsx
+│   │       └── tooltip.tsx
+│   ├── enums
+│   │   └── role.ts
+│   ├── hooks
+│   │   ├── use-mobile.ts
+│   │   ├── use-session.ts
+│   │   └── use-success-dialog.ts
+│   ├── providers
+│   │   ├── global-dialog-provider.tsx
+│   │   ├── index.tsx
+│   │   └── theme-provider.tsx
+│   ├── services
+│   │   ├── api.ts
+│   │   ├── mapset.ts
+│   │   ├── organization.ts
+│   │   ├── topic.ts
+│   │   └── user.ts
+│   ├── state
+│   │   ├── dialog.ts
+│   │   ├── theme.ts
+│   │   └── user.ts
+│   ├── types
+│   │   ├── api-response.ts
+│   │   ├── attribute-kugi.ts
+│   │   ├── auth-user.ts
+│   │   ├── auth.d.ts
+│   │   ├── global.d.ts
+│   │   ├── history-draft.ts
+│   │   ├── mapset-source.ts
+│   │   ├── mapset-type.ts
+│   │   ├── mapset.ts
+│   │   ├── organization.ts
+│   │   ├── topic.ts
+│   │   ├── user.ts
+│   │   └── wilayah.ts
+│   └── utils
+│       ├── auth-transform.ts
+│       ├── create-theme.ts
+│       ├── dialog.ts
+│       ├── mapsets.ts
+│       ├── query-client.ts
+│       └── utils.ts
+├── structure.txt
+└── tsconfig.json
+
+88 directories, 325 files

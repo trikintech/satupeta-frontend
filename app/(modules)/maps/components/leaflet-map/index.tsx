@@ -11,6 +11,7 @@ import { mapAtom } from "../../state/map";
 import { mapSettingsAtom } from "../../state/map-settings";
 import ZoomControl from "./zoom-control";
 import { LayerManager } from "../layer-manager";
+import MapSettings from "../map-settings";
 
 const LeafletMap: React.FC = () => {
   const activeBasemap = useAtomValue(activeBasemapAtom);
@@ -55,7 +56,10 @@ const LeafletMap: React.FC = () => {
         style={{ height: "100%", width: "100%" }}
       />
       <LayerManager map={map} />
-      <ZoomControl />
+      <div className="absolute top-48 cursor-pointer right-4 z-[403] flex flex-col gap-8">
+        <MapSettings />
+        <ZoomControl />
+      </div>
     </>
   );
 };

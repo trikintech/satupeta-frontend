@@ -7,7 +7,7 @@ export default function ZoomControl() {
   const [map] = useAtom(mapAtom);
 
   return (
-    <div className="absolute top-32 cursor-pointer right-4 z-[403] flex flex-col items-center bg-primary text-primary-foreground rounded-lg shadow-md text-md">
+    <div className="cursor-pointer flex flex-col items-center bg-primary text-primary-foreground rounded-lg shadow-md text-md">
       <button
         id="zoomIn"
         onClick={() => map?.zoomIn()}

@@ -1,5 +1,5 @@
 import { CatalogSection } from "./(modules)/(landing)/components/catalog-section";
-import { Header } from "./(modules)/(landing)/components/layout/header";
+import { Header } from "../shared/components/layout/header";
 import { HeroSection } from "./(modules)/(landing)/components/hero-section";
 import { StatisticsSection } from "./(modules)/(landing)/components/statistic-section";
 import { NewsSection } from "./(modules)/(landing)/components/news-section";
