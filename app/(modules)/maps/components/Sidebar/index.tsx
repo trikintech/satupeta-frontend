@@ -8,6 +8,7 @@ import { useSetAtom } from "jotai";
 import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
 import dynamic from "next/dynamic";
 import { useQueryParam, StringParam } from "use-query-params";
+import { DrawingTools } from "./drawing-tools";
 
 const LayerControls = dynamic(() => import("./layer-controls"), {
   ssr: false,
@@ -43,7 +44,7 @@ export default function Sidebar() {
             isOpen ? "opacity-100 delay-100" : "opacity-0"
           }`}
         >
-          <div className="flex flex-col gap-3 p-8">
+          <div className="flex flex-col gap-3 p-8 border-b border-gray-200">
             <SearchInput
               value={input}
               onChange={(val) => handleChange(val)}
@@ -51,9 +52,12 @@ export default function Sidebar() {
             />
             <Button onClick={() => setIsOpenDialog(true)}>Jelajahi Data</Button>
           </div>
-          <hr />
-
-          <LayerControls />
+          <div className="p-8 border-b border-gray-200">
+            <DrawingTools />
+          </div>
+          <div className="flex flex-col gap-6 p-8">
+            <LayerControls />
+          </div>
           <div className="absolute -right-9">
             <CloseTrigger onClose={() => setIsOpen(false)} />
           </div>
