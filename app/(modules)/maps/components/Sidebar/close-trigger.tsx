@@ -1,5 +1,4 @@
 import { ChevronLeft } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
 
 type CloseTriggerProps = {
   onClose: () => void;
@@ -7,13 +6,11 @@ type CloseTriggerProps = {
 
 export default function CloseTrigger({ onClose }: Readonly<CloseTriggerProps>) {
   return (
-    <Button
-      variant="ghost"
-      size="sm"
+    <button
       onClick={onClose}
-      className="absolute top-2 right-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
+      className="absolute top-2 right-2 w-10 py-2 rounded-full flex items-center justify-center cursor-pointer bg-white hover:bg-none "
     >
       <ChevronLeft className="h-5 w-5 text-gray-700" />
-    </Button>
+    </button>
   );
 }

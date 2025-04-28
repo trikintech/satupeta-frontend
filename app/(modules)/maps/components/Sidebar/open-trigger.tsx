@@ -1,6 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
 import { ChevronRight } from "lucide-react";
-import LogoImage from "./logo-image";
 
 type OpenTriggerProps = {
   onOpen: () => void;
@@ -9,9 +8,6 @@ type OpenTriggerProps = {
 export default function OpenTrigger({ onOpen }: Readonly<OpenTriggerProps>) {
   return (
     <div className="bg-white shadow-lg rounded-lg border border-gray-300 overflow-hidden transition-all hover:shadow-md">
-      <div className="p-3">
-        <LogoImage />
-      </div>
       <Button
         variant="default"
         size="lg"
