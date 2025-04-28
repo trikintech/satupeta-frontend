@@ -3,9 +3,35 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
+import NewsCard from "./news-card";
 
 export function NewsSection() {
+  const news = [
+    {
+      title:
+        "Pemutakhiran Mapset: Satu Peta Tambahkan 50 Dataset Baru di Kuartal Pertama 2025",
+      description: "Berita terbaru tentang pemutakhiran mapset",
+      date: "2025-01-01",
+      link: "/statistik/mapset",
+      image: "/template-news.png",
+    },
+    {
+      title:
+        "Pemutakhiran Mapset: Satu Peta Tambahkan 50 Dataset Baru di Kuartal Pertama 2025",
+      description: "Berita terbaru tentang pemutakhiran mapset",
+      date: "2025-01-01",
+      link: "/statistik/mapset",
+      image: "/template-news.png",
+    },
+    {
+      title:
+        "Pemutakhiran Mapset: Satu Peta Tambahkan 50 Dataset Baru di Kuartal Pertama 2025",
+      description: "Berita terbaru tentang pemutakhiran mapset",
+      date: "2025-01-01",
+      link: "/statistik/mapset",
+      image: "/template-news.png",
+    },
+  ];
   return (
     <section className="py-10">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,53 +56,17 @@ export function NewsSection() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 mb-4 ">
-            <div className="grid grid-cols-2 gap-4 p-4 border border-[#94A3B8]">
-              <Image
-                src={"/template-news.png"}
-                alt="news"
-                width={379}
-                height={379}
+          <div className="grid grid-cols-1 md:grid-cols-3 mb-4 ">
+            {news.map((item, index) => (
+              <NewsCard
+                key={index}
+                title={item.title}
+                description={item.description}
+                date={item.date}
+                link={item.link}
+                image={item.image}
               />
-              <div className="relative flex flex-col gap-4">
-                <div className="text-slate-500 text-xl">category</div>
-                <div className="text-slate-600 leading-9 text-3xl">
-                  Pemutakhiran Mapset: Satu Peta Tambahkan 50 Dataset Baru di
-                  Kuartal Pertama 2025
-                </div>
-
-                <Link
-                  href="/statistik/mapset"
-                  className="absolute left-0 bottom-0 text-primary flex items-center text-sm font-medium hover:underline"
-                >
-                  Lihat selengkapnya
-                  <ArrowRight size={16} className="ml-1" />
-                </Link>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 p-4 border border-[#94A3B8]">
-              <Image
-                src={"/template-news-2.png"}
-                alt="news"
-                width={379}
-                height={379}
-              />
-              <div className="relative flex flex-col gap-4">
-                <div className="text-slate-500 text-xl">category</div>
-                <div className="text-slate-600 leading-9 text-3xl">
-                  Satu Peta Percepat Integrasi Data Geospasial Antar OPD di
-                  Daerah
-                </div>
-
-                <Link
-                  href="/statistik/mapset"
-                  className="absolute left-0 bottom-0 text-primary flex items-center text-sm font-medium hover:underline"
-                >
-                  Lihat selengkapnya
-                  <ArrowRight size={16} className="ml-1" />
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
