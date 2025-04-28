@@ -1,4 +1,3 @@
-import { Instagram, Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -41,13 +40,16 @@ const Footer = () => {
           <p className="font-semibold mb-2">Follow Us</p>
           <ul className="flex flex-col gap-2 text-gray-400">
             <li className="flex items-center gap-2">
-              <Linkedin size={16} /> <Link href={"#"}>Linkedin</Link>
+              <Link href={"#"}>Linkedin</Link>
             </li>
             <li className="flex items-center gap-2">
-              <Instagram size={16} /> <Link href={"#"}>Instagram</Link>
+              <Link href={"#"}>Instagram</Link>
             </li>
             <li className="flex items-center gap-2">
-              <Twitter size={16} /> <Link href={"#"}>X</Link>
+              <Link href={"#"}>Medium</Link>
+            </li>
+            <li className="flex items-center gap-2">
+              <Link href={"#"}>X</Link>
             </li>
           </ul>
         </div>
