@@ -19,22 +19,22 @@ export default function MapsetDialog() {
 
   return (
     <div
-      className={`fixed inset-0 flex items-center justify-center bg-black/50 transition-opacity duration-300 ${
+      className={`absolute inset-0 flex items-center justify-center  transition-opacity duration-300 ${
         isOpenDialog
-          ? "opacity-100 pointer-events-auto z-[404]"
-          : "opacity-0 pointer-events-none"
+          ? "opacity-100 z-[404]"
+          : "z-0 opacity-0 pointer-events-none"
       }`}
     >
       <div
-        className={`bg-gray-50 shadow-lg w-full max-w-5xl h-full max-h-full transform transition-all duration-300 ${
-          isOpenDialog ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        className={` w-full h-full max-h-full transform transition-all duration-300 ${
+          isOpenDialog ? "scale-100 opacity-100" : "z-0 scale-95 opacity-0"
         }`}
       >
-        <div className="flex w-full h-full relative">
-          <div className="w-2/5 rounded-l-lg bg-gray-50 h-full">
+        <div className="flex w-full h-full relative pointer-events-auto">
+          <div className="w-2/5 bg-gray-50 h-full">
             <MapsetList />
           </div>
-          <div className="w-3/5 rounded-r-lg">
+          <div className="w-3/5 bg-gray-50">
             <MainDialog />
           </div>
           <button

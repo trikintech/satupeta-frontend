@@ -14,7 +14,7 @@ const MapComponent: React.FC = () => {
   const [mapType] = useAtom(mapTypeAtom);
 
   return (
-    <div className="absolute inset-0">
+    <div className="absolute inset-0 z-[401]">
       {mapType === "leaflet" ? <LeafletMap /> : <CesiumMap />}
     </div>
   );
