@@ -9,9 +9,12 @@ import { useSetAtom } from "jotai";
 import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
 import dynamic from "next/dynamic";
 import { useQueryParam, StringParam } from "use-query-params";
-import { DrawingTools } from "./drawing-tools";
 
 const LayerControls = dynamic(() => import("./layer-controls"), {
+  ssr: false,
+});
+
+const DrawingTools = dynamic(() => import("./drawing-tools"), {
   ssr: false,
 });
 

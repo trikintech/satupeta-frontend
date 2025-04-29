@@ -8,7 +8,7 @@ import L, { DrawMap } from "leaflet";
 import "leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
 
-export const DrawingTools = () => {
+export default function DrawingTools() {
   const [map] = useAtom(mapAtom);
   const [activeTab, setActiveTab] = useState<
     "location" | "edit" | "expand" | null
@@ -273,4 +273,4 @@ export const DrawingTools = () => {
       </button>
     </div>
   );
-};
+}
