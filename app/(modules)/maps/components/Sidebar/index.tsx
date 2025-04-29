@@ -37,7 +37,7 @@ export default function Sidebar() {
   }, [openCatalog]);
 
   return (
-    <div className="relative h-full z-[403]">
+    <div className="relative h-full z-[403] w-[320px]">
       <div
         className={`relative h-full flex flex-col bg-zinc-50 shadow-lg border border-gray-300 transition-[width] duration-300 ease-out ${
           isOpen ? "w-[320px]" : "w-0 border-0"

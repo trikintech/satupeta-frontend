@@ -7,6 +7,7 @@ import { mapAtom } from "../../../state/map";
 import L, { DrawMap } from "leaflet";
 import "leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
+import * as turf from "@turf/turf";
 
 export default function DrawingTools() {
   const [map] = useAtom(mapAtom);
@@ -88,7 +89,7 @@ export default function DrawingTools() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
 
-  // Fungsi untuk menambahkan popup ke marker
+  // Function to add a popup to a marker
   const addMarkerPopup = (marker: L.Marker) => {
     const latlng = marker.getLatLng();
     marker.bindPopup(`
@@ -100,80 +101,85 @@ export default function DrawingTools() {
     `);
   };
 
-  // Fungsi untuk menambahkan popup ke polyline
+  // Function to add a popup to a polyline
   const addPolylinePopup = (polyline: L.Polyline) => {
     const latlngs = polyline.getLatLngs() as L.LatLng[];
     const distance = calculateDistance(latlngs);
 
     polyline.bindPopup(`
-      <div class="popup-content">
-        <strong>Garis:</strong><br>
-        Jarak: ${distance.toFixed(3)} km<br>
-        Titik: ${latlngs.length}
-      </div>
-    `);
+    <div class="popup-content">
+      <strong>Garis:</strong><br>
+      Jarak: ${formatDistance(distance)}<br>
+    </div>
+  `);
   };
 
-  // Fungsi untuk menambahkan popup ke polygon
+  // Function to add a popup to a polygon
   const addPolygonPopup = (polygon: L.Polygon) => {
     const latlngs = polygon.getLatLngs()[0] as L.LatLng[];
-    const perimeter = calculateDistance(latlngs);
     const area = calculateArea(latlngs);
 
     polygon.bindPopup(`
-      <div class="popup-content">
-        <strong>Area:</strong><br>
-        Luas: ${area.toFixed(3)} km²<br>
-        Keliling: ${perimeter.toFixed(3)} km<br>
-        Titik: ${latlngs.length}
-      </div>
-    `);
+    <div class="popup-content">
+      <strong>Area:</strong><br>
+      Luas: ${formatArea(area)}<br>
+    </div>
+  `);
   };
 
-  // Fungsi utilitas untuk menghitung jarak dari polyline dalam kilometer
+  // Hitung jarak polyline dalam meter dengan Turf
   const calculateDistance = (latlngs: L.LatLng[]): number => {
-    let totalDistance = 0;
-    for (let i = 0; i < latlngs.length - 1; i++) {
-      totalDistance += latlngs[i].distanceTo(latlngs[i + 1]);
-    }
-    return totalDistance / 1000; // Konversi meter ke kilometer
+    if (latlngs.length < 2) return 0;
+
+    const coords = latlngs.map((p) => [p.lng, p.lat]);
+    const line = turf.lineString(coords);
+    return turf.length(line, { units: "kilometers" }) * 1000; // dalam meter
   };
 
-  // Fungsi utilitas untuk menghitung luas area dari polygon dalam kilometer persegi
+  // Hitung luas polygon dalam meter persegi dengan Turf
   const calculateArea = (latlngs: L.LatLng[]): number => {
-    // Tambahkan titik pertama ke akhir untuk menutup polygon jika perlu
-    const closedLatLngs = [...latlngs];
-    if (latlngs.length > 0 && !latlngs[0].equals(latlngs[latlngs.length - 1])) {
-      closedLatLngs.push(latlngs[0]);
+    if (latlngs.length < 3) return 0;
+
+    const coords = latlngs.map((p) => [p.lng, p.lat]);
+
+    // Tutup polygon jika belum tertutup
+    if (
+      coords[0][0] !== coords[coords.length - 1][0] ||
+      coords[0][1] !== coords[coords.length - 1][1]
+    ) {
+      coords.push(coords[0]);
     }
 
-    let area = 0;
-    const R = 6371; // radius bumi dalam km
+    const polygon = turf.polygon([coords]);
+    return turf.area(polygon); // m²
+  };
 
-    if (closedLatLngs.length < 3) {
-      return 0;
+  // Utility function to format distances
+  const formatDistance = (distance: number): string => {
+    if (distance >= 1000) {
+      // Convert to kilometers, format with commas, and ensure two decimal places
+      return `${new Intl.NumberFormat("id-ID").format(
+        parseFloat((distance / 1000).toFixed(2))
+      )} km`;
     }
+    // Format in meters with commas and ensure two decimal places
+    return `${new Intl.NumberFormat("id-ID").format(
+      parseFloat(distance.toFixed(2))
+    )} meter`;
+  };
 
-    for (let i = 0; i < closedLatLngs.length - 1; i++) {
-      const p1 = closedLatLngs[i];
-      const p2 = closedLatLngs[i + 1];
-
-      const dLon = ((p2.lng - p1.lng) * Math.PI) / 180;
-
-      const lat1 = (p1.lat * Math.PI) / 180;
-      const lat2 = (p2.lat * Math.PI) / 180;
-
-      area +=
-        2 *
-        Math.atan2(
-          Math.sin(dLon) * Math.cos(lat2),
-          Math.cos(lat1) * Math.sin(lat2) -
-            Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon)
-        );
+  // Utility function to format areas
+  const formatArea = (area: number): string => {
+    if (area >= 1000000) {
+      // Convert to square kilometers, format with commas, and ensure two decimal places
+      return `${new Intl.NumberFormat("id-ID").format(
+        parseFloat((area / 1000000).toFixed(2))
+      )} km²`;
     }
-
-    area = Math.abs(area * R * R); // area dalam kilometer persegi
-    return area;
+    // Format in square meters with commas and ensure two decimal places
+    return `${new Intl.NumberFormat("id-ID").format(
+      parseFloat(area.toFixed(2))
+    )} m²`;
   };
 
   // Handler untuk tab click
