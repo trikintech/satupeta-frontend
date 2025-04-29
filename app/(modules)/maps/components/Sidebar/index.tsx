@@ -36,7 +36,7 @@ export default function Sidebar() {
   return (
     <div className="relative h-full z-[403]">
       <div
-        className={`relative h-full flex flex-col bg-white shadow-lg border border-gray-300 transition-[width] duration-300 ease-out ${
+        className={`relative h-full flex flex-col bg-zinc-50 shadow-lg border border-gray-300 transition-[width] duration-300 ease-out ${
           isOpen ? "w-[320px]" : "w-0 border-0"
         }`}
       >
