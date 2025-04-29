@@ -85,6 +85,7 @@ export const DrawingTools = () => {
         }
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
 
   // Fungsi untuk menambahkan popup ke marker

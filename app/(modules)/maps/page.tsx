@@ -12,13 +12,18 @@ export const metadata: Metadata = {
 
 export default function Maps() {
   return (
-    <div className="flex flex-col h-screen">
+    <div className="h-screen overflow-hidden">
       <Header />
-      <Sidebar />
-
-      <MapComponent />
-      <MapsetDialog />
-      <FeatureInformation />
+      <div className="pt-16 flex h-full flex-col">
+        <div className="flex flex-1 overflow-hidden">
+          <div className="relative flex-1 overflow-hidden">
+            <Sidebar />
+            <MapComponent />
+            <MapsetDialog />
+            <FeatureInformation />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

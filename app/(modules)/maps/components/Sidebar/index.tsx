@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import OpenTrigger from "./open-trigger";
 import SearchInput from "@/shared/components/search-input";
@@ -33,18 +34,18 @@ export default function Sidebar() {
   }, [openCatalog]);
 
   return (
-    <div className="absolute top-[61px] left-0 h-[93%] flex items-center z-[403]">
+    <div className="relative h-full z-[403]">
       <div
-        className={`relative h-full my-auto flex flex-col bg-white shadow-lg border border-gray-300 transition-[width] duration-300 ease-out ${
-          isOpen ? "w-100" : "w-0 border-0"
+        className={`relative h-full flex flex-col bg-white shadow-lg border border-gray-300 transition-[width] duration-300 ease-out ${
+          isOpen ? "w-[320px]" : "w-0 border-0"
         }`}
       >
         <div
-          className={`flex flex-col gap-2 transition-opacity duration-200 ${
+          className={`flex flex-col gap-2 h-full transition-opacity duration-200 ${
             isOpen ? "opacity-100 delay-100" : "opacity-0"
           }`}
         >
-          <div className="flex flex-col gap-3 p-8 border-b border-gray-200">
+          <div className="flex flex-col gap-3 p-6 border-b border-gray-200">
             <SearchInput
               value={input}
               onChange={(val) => handleChange(val)}
@@ -52,20 +53,23 @@ export default function Sidebar() {
             />
             <Button onClick={() => setIsOpenDialog(true)}>Jelajahi Data</Button>
           </div>
-          <div className="p-8 border-b border-gray-200">
+          <div className="p-6 border-b border-gray-200 text-sm">
             <DrawingTools />
           </div>
-          <div className="flex flex-col gap-6 p-8">
+          <div className="flex-1 overflow-y-auto p-6">
             <LayerControls />
           </div>
-          <div className="absolute -right-9">
+          <div className="absolute -right-9 top-8">
             <CloseTrigger onClose={() => setIsOpen(false)} />
           </div>
         </div>
       </div>
+      {/* Tombol buka */}
       <div
-        className={`absolute transition-all duration-300 ease-out top-4 ${
-          isOpen ? "opacity-0 -translate-x-4" : "opacity-100 left-4"
+        className={`absolute transition-all duration-300 ease-out top-4 left-4 ${
+          isOpen
+            ? "opacity-0 -translate-x-4 pointer-events-none"
+            : "opacity-100"
         }`}
       >
         <OpenTrigger onOpen={() => setIsOpen(true)} />
