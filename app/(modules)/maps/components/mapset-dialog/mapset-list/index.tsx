@@ -1,12 +1,13 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Map, Layers, Plus, Minus } from "lucide-react";
 import SearchInput from "@/shared/components/search-input";
-import { mapsets as rawMapsets } from "../../../../../shared/utils/mapsets";
+import { mapsets as rawMapsets } from "../../../../../../shared/utils/mapsets";
 import { useAtom } from "jotai";
-import { selectedMapsetAtom } from "../../state/mapset-dialog";
-import { useLayerToggle } from "../../hooks/useLayerToggle";
+import { selectedMapsetAtom } from "../../../state/mapset-dialog";
+import { useLayerToggle } from "../../../hooks/useLayerToggle";
 import { Mapset } from "@/shared/types/mapset";
 import { useQueryParam, StringParam } from "use-query-params";
+import DatasetSection from "./dataset-section";
 
 interface MapsetItemProps {
   mapset: Mapset;
@@ -85,12 +86,6 @@ const MapsetList: React.FC = () => {
   return (
     <div className="p-4 flex flex-col h-full max-w-xl mx-auto bg-white rounded-l-lg shadow-lg">
       <div className="mb-4">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="font-bold text-lg text-gray-800">Map Layers</h2>
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-            {filteredMapsets.length} items
-          </span>
-        </div>
         <SearchInput
           value={searchTerm}
           onChange={handleSearch}
@@ -105,6 +100,10 @@ const MapsetList: React.FC = () => {
         </div>
       ) : (
         <div className="overflow-y-auto h-[65vh] pr-1">
+          <DatasetSection />
+
+          <div className="mb-10"></div>
+
           {filteredMapsets.map((mapset) => (
             <MapsetItem
               key={mapset.id}
@@ -115,12 +114,6 @@ const MapsetList: React.FC = () => {
           ))}
         </div>
       )}
-
-      <div className="mt-4 text-xs text-gray-500 pt-2 border-t flex justify-between">
-        <span>
-          Showing {filteredMapsets.length} of {mapsets.length} available layers
-        </span>
-      </div>
     </div>
   );
 };
