@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import HighlightMapset from "./highlight-mapset";
 import SearchInput from "./search-input";
+import { appsName } from "@/shared/config/apps-name";
 
 export function HeroSection() {
   return (
@@ -19,9 +20,9 @@ export function HeroSection() {
                 <span className="text-primary">Pahami Lebih Dalam</span>
               </h1>
               <p className="text-gray-600 max-w-[550px] text-xl">
-                Portal geospasial resmi Jawa Timur untuk akses data spasial yang
-                akurat, terkini, dan mendukung pengambilan keputusan berbasis
-                lokasi.
+                Portal geospasial resmi {appsName.wilayah} untuk akses data
+                spasial yang akurat, terkini, dan mendukung pengambilan
+                keputusan berbasis lokasi.
               </p>
             </div>
             <SearchInput />

@@ -1,3 +1,4 @@
+import { appsName } from "@/shared/config/apps-name";
 import { CircleAlertIcon } from "lucide-react";
 
 export default function EmptyState() {
@@ -5,7 +6,7 @@ export default function EmptyState() {
     <div className="text-sm leading-5 text-zinc-700 flex flex-col gap-3 ">
       <div>
         Temukan 215 dataset geospasial dari 22organisasi serta data realtime
-        Waze di Satu Peta Jawa Timur
+        Waze di {appsName.name} {appsName.wilayah}.
       </div>
       <div className="bg-white flex flex-col gap-2 p-3">
         <div className="text-red-700 flex items-center gap-2">
