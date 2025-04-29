@@ -32,7 +32,7 @@ export default function MapsetDialog() {
         }`}
       >
         <div className="relative flex w-full  bg-white border-b border-gray-200">
-          <div className="w-2/5 px-3 py-1.5 h-full">
+          <div className="w-[376px] px-3 py-1.5 h-full">
             <TabSwitcher />
           </div>
 
@@ -44,10 +44,10 @@ export default function MapsetDialog() {
           </button>
         </div>
         <div className="flex w-full h-full relative pointer-events-auto">
-          <div className="w-2/5 bg-gray-50 h-full">
+          <div className="w-[376px] bg-gray-50 h-full">
             <MapsetList />
           </div>
-          <div className="w-3/5 bg-gray-50">
+          <div className="flex-1 bg-gray-50">
             <MainDialog />
           </div>
         </div>
