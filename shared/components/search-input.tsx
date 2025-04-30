@@ -12,7 +12,7 @@ export default function SearchInput({
   value,
 }: Readonly<SearchInputProps>) {
   return (
-    <div className="relative text-zinc-600">
+    <div className="relative text-zinc-600 text-sm">
       <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-sm">
         <Search size={16} className="text-muted-foreground" />
       </div>

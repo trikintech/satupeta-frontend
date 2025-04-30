@@ -89,7 +89,7 @@ const MapsetList: React.FC = () => {
         <SearchInput
           value={searchTerm}
           onChange={handleSearch}
-          placeholder="Search layers..."
+          placeholder="Cari dataset"
         />
       </div>
 

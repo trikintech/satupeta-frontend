@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import {
   Tabs,
   TabsList,
@@ -11,10 +11,12 @@ import { cn } from "@/shared/utils/utils";
 
 export function DatasetDetailSidebar({
   open,
-  onClose,
+  onCloseAction,
+  onOpenAction,
 }: {
   open: boolean;
-  onClose: () => void;
+  onCloseAction: () => void;
+  onOpenAction: () => void;
 }) {
   return (
     <div
@@ -23,26 +25,34 @@ export function DatasetDetailSidebar({
         open ? "translate-x-0" : "translate-x-full"
       )}
     >
-      <div className="flex items-center justify-between px-6 py-4 border-b">
+      <div className="relative flex items-center justify-between px-6 py-4 border-b">
         <h2 className="font-semibold text-lg">
           Peta Sebaran Alumni Pelatihan Petugas Pengambil Contoh Pangan
         </h2>
-        <button onClick={onClose}>
-          <X className="w-5 h-5 text-gray-600" />
+
+        <button
+          className="bg-slate-100 border-zinc-400 absolute top-4 w-6 h-6 -left-8 flex rounded-lg items-center justify-center cursor-pointer"
+          onClick={() => (open ? onCloseAction() : onOpenAction())}
+        >
+          {open ? (
+            <Maximize2 className="w-4 h-4 text-sky-900" />
+          ) : (
+            <Minimize2 className="w-4 h-4 text-sky-900" />
+          )}
         </button>
       </div>
 
       <Tabs defaultValue="informasi" className="w-full">
-        <TabsList className="grid grid-cols-2 rounded-none w-full p-0 bg-none border">
+        <TabsList className="grid grid-cols-2 rounded-none w-full p-0 h-auto bg-white border-b border-gray-200">
           <TabsTrigger
             value="informasi"
-            className="data-[state=active]:bg-primary rounded-none p-3 border-b-gray-200  bg-white  data-[state=active]:text-white"
+            className="data-[state=active]:text-white data-[state=active]:bg-primary data-[state=active]:border-t border-primary h-full border-0  rounded-none p-3"
           >
             Informasi Dataset Geospasial
           </TabsTrigger>
           <TabsTrigger
             value="penanggung"
-            className="data-[state=active]:bg-primary data-[state=active]:border-t-gray-200 border-b-gray-200  rounded-none p-3 bg-white  data-[state=active]:text-white"
+            className="data-[state=active]:text-white data-[state=active]:bg-primary h-full  rounded-none p-3"
           >
             Penanggung Jawab
           </TabsTrigger>

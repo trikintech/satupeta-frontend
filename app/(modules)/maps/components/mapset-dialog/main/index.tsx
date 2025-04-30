@@ -29,7 +29,11 @@ export default function MainDialog() {
       {selectedMapset ? (
         <div className="relative h-full">
           <PreviewMap mapset={selectedMapset} />
-          <DatasetDetailSidebar open={open} onClose={() => setOpen(false)} />
+          <DatasetDetailSidebar
+            open={open}
+            onCloseAction={() => setOpen(false)}
+            onOpenAction={() => setOpen(true)}
+          />
         </div>
       ) : (
         <EmptyState />
