@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { Slider } from "@/shared/components/ui/slider";
-import { ZoomIn, Trash2, Info, Triangle, Eye, EyeOff } from "lucide-react";
+import {
+  Trash2,
+  Info,
+  ChevronUp,
+  GripHorizontal,
+  Eye,
+  EyeOff,
+  Download,
+  MousePointer2,
+} from "lucide-react";
 import L from "leaflet";
 import { getLegendUrl } from "../../../utils/wms";
 import Image from "next/image";
@@ -62,8 +71,7 @@ export const LayerControlItem = ({
     }
   };
 
-  const handleToggleVisibility = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleToggleVisibility = () => {
     if (!map) return;
 
     toggleLayer(layer.id);
@@ -77,88 +85,59 @@ export const LayerControlItem = ({
   };
 
   return (
-    <div className="bg-muted p-3 rounded-lg">
-      <div className="cursor-pointer w-full flex items-center justify-between py-2">
+    <div className="bg-muted rounded-lg border border-primary p-3">
+      <div className="cursor-pointer w-full flex items-center justify-between text-sm">
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleToggleVisibility}
-            title={layer.settings.visible ? "Hide layer" : "Show layer"}
-            className="text-gray-600 hover:text-gray-900 p-1"
-          >
-            {layer.settings.visible ? <Eye size={16} /> : <EyeOff size={16} />}
+          <button className="cursor-pointer self-start mt-0.5">
+            <GripHorizontal className="w-4 h-4 text-zinc-950"></GripHorizontal>
           </button>
           <button
             onClick={() => setIsExpanded((prev) => !prev)}
-            className="text-left font-medium text-sm hover:underline focus:underline"
+            className={`text-left text-zinc-700 text-sm cursor-pointer ${
+              !isExpanded && "line-clamp-1"
+            }`}
           >
             {layer.name}
           </button>
         </div>
 
+        {!isExpanded && (
+          <button
+            onClick={handleToggleVisibility}
+            className="cursor-pointer flex items-center justify-center"
+            title={layer.settings.visible ? "Hide layer" : "Show layer"}
+          >
+            {layer.settings.visible ? (
+              <Eye className="h-4 w-4 text-zinc-950" />
+            ) : (
+              <EyeOff className="h-4 w-4 text-zinc-950" />
+            )}
+          </button>
+        )}
+
+        {/* Vertical Line */}
+        {!isExpanded && (
+          <div className="border-l border-gray-300 h-4 mx-2"></div>
+        )}
+
         <button
           onClick={() => setIsExpanded((prev) => !prev)}
-          className="w-6 h-6 flex items-center justify-center shrink-0"
+          className="flex items-center justify-center shrink-0 self-start mt-0.5"
         >
           {isExpanded ? (
-            <Triangle size={12} className="rotate-0 fill-current text-black" />
-          ) : (
-            <Triangle
+            <ChevronUp
               size={12}
-              className="rotate-180 fill-current text-black"
+              className="h-4 w-4 rotate-0 shrink-0 text-zinc-950"
             />
+          ) : (
+            <ChevronUp size={12} className="rotate-180 h-4 w-4 text-zinc-950" />
           )}
         </button>
       </div>
 
       {isExpanded && (
         <div className="space-y-3 mt-3">
-          <div className="flex justify-between items-center mb-2">
-            <div className="flex space-x-2">
-              {layer.layer.bounds && (
-                <Button
-                  className="text-xs"
-                  size="sm"
-                  onClick={() => onZoom(layer.layer.bounds)}
-                  title="Zoom to layer"
-                >
-                  Ideal Zoom <ZoomIn size={12} />
-                </Button>
-              )}
-
-              <Button
-                className="text-xs"
-                size="sm"
-                onClick={handleInfo}
-                title="About Data"
-              >
-                About Data <Info size={12} />
-              </Button>
-              <Button
-                className="text-xs"
-                size="sm"
-                onClick={() => removeLayer(layer.id)}
-                title="Remove layer"
-              >
-                <Trash2 size={12} />
-              </Button>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Opacity: {Math.round(opacity * 100)}%
-            </label>
-            <Slider
-              value={[opacity]}
-              min={0}
-              max={1}
-              step={0.01}
-              onValueChange={handleOpacityChange}
-            />
-          </div>
-
-          <div className="border-t pt-2 mt-2">
-            <p className="text-sm font-medium mb-1">Legend</p>
+          <div className="pt-2 mt-2">
             <div className="text-xs text-gray-500">
               {layer.layer.url ? (
                 <Image
@@ -177,6 +156,53 @@ export const LayerControlItem = ({
                 <p>No legend available</p>
               )}
             </div>
+          </div>
+          <div className="text-sm flex justify-between items-center border text-zinc-950 border-zinc-200">
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1 hover:bg-transparent font-normal"
+              onClick={() => layer.layer.bounds && onZoom(layer.layer.bounds)}
+            >
+              <MousePointer2 size={24} />
+              <span>Pusatkan</span>
+            </Button>
+            <div className="h-full w-px bg-gray-200" />
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1  hover:bg-transparent font-normal"
+              onClick={handleInfo}
+            >
+              <Info size={24} />
+              <span>Informasi</span>
+            </Button>
+            <div className="h-full w-px bg-gray-200" />
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1  hover:bg-transparent font-normal"
+              onClick={() => removeLayer(layer.id)}
+            >
+              <Trash2 size={24} />
+            </Button>
+            <div className="h-full w-px bg-gray-200" />
+            <Button
+              variant="ghost"
+              className="flex items-center gap-1  hover:bg-transparent font-normal"
+            >
+              <Download size={24} />
+            </Button>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">
+              Opacity: {Math.round(opacity * 100)}%
+            </label>
+            <Slider
+              value={[opacity]}
+              min={0}
+              max={1}
+              step={0.01}
+              onValueChange={handleOpacityChange}
+            />
           </div>
         </div>
       )}

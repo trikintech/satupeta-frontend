@@ -15,7 +15,6 @@ import L from "leaflet";
 import { LayerControlItem } from "./layer-control-item";
 import { useCallback, useRef, useState } from "react";
 import { leafletLayerInstancesAtom } from "../../../state/leaflet-layer-instances";
-import { Button } from "@/shared/components/ui/button";
 import { Eye, EyeOff, Trash2 } from "lucide-react";
 
 const DraggableLayerItem = ({
@@ -123,9 +122,9 @@ export default function LayerControls() {
     <DndProvider backend={HTML5Backend}>
       <div>
         {/* Dataset Count */}
-        <div className="flex flex-col items-start mb-4">
-          <div className="font-semibold flex justify-center items-center">
-            <span className="ml-2">
+        <div className="flex flex-col items-start mb-4 pt-4">
+          <div className="font-medium flex justify-center items-center">
+            <span>
               Dataset{" "}
               <span className="text-xs py-0.5 px-2 rounded bg-primary text-primary-foreground">
                 {activeLayers.length}
@@ -134,10 +133,9 @@ export default function LayerControls() {
           </div>
 
           {/* Buttons Below Dataset Text */}
-          <div className="flex space-x-2 mt-2">
-            <Button
-              variant="ghost"
-              size="sm"
+          <div className="flex space-x-2 mt-2 justify-between w-full text-xs">
+            <button
+              className="px-0 cursor-pointer flex items-center hover:text-primary"
               onClick={toggleAllLayers}
               title={allLayersVisible ? "Hide all layers" : "Show all layers"}
             >
@@ -146,22 +144,21 @@ export default function LayerControls() {
               ) : (
                 <Eye className="h-4 w-4 mr-1" />
               )}
-              {allLayersVisible ? "Sembunyikan" : "Tampilkan"}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
+              {allLayersVisible ? "Sembunyikan Semua" : "Tampilkan Semua"}
+            </button>
+            <button
+              className="px-0 cursor-pointer flex items-center hover:text-primary"
               onClick={removeAllLayers}
-              title="Remove all layers"
+              title={allLayersVisible ? "Hide all layers" : "Show all layers"}
             >
               <Trash2 className="h-4 w-4 mr-1" />
               Hapus Semua
-            </Button>
+            </button>
           </div>
         </div>
 
         {/* Layer List */}
-        <div className="px-4 flex flex-col space-y-4 h-[60vh] overflow-auto">
+        <div className="flex flex-col space-y-4 h-[60vh] overflow-auto">
           {[...activeLayers].reverse().map((layer, i) => {
             const index = activeLayers.length - 1 - i;
             const layerInstance = layerInstances.get(layer.id);
