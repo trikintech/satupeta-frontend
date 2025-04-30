@@ -139,3 +139,7 @@ export const allLayersVisibleAtom = atom((get) =>
 export const anyLayersVisibleAtom = atom((get) =>
   get(activeLayersAtom).some((layer) => layer.settings.visible)
 );
+
+export const removeAllLayersAtom = atom(null, (get, set) => {
+  set(activeLayersAtom, []); // Clear all layers from the activeLayersAtom
+});

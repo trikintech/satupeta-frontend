@@ -59,7 +59,7 @@ export default function Sidebar() {
           <div className="p-6 border-b border-gray-200 text-sm">
             <DrawingTools />
           </div>
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto px-6 py-2 border-b border-gray-200">
             <LayerControls />
           </div>
           <div className="absolute -right-9 top-8">

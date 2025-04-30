@@ -6,6 +6,7 @@ import {
   activeLayersAtom,
   disableAllLayersAtom,
   enableAllLayersAtom,
+  removeAllLayersAtom,
   reorderLayersAtom,
 } from "../../../state/active-layers";
 import EmptyState from "../empty-state";
@@ -15,12 +16,7 @@ import { LayerControlItem } from "./layer-control-item";
 import { useCallback, useRef, useState } from "react";
 import { leafletLayerInstancesAtom } from "../../../state/leaflet-layer-instances";
 import { Button } from "@/shared/components/ui/button";
-import { Eye, EyeOff } from "lucide-react";
-
-interface DragItem {
-  id: string;
-  index: number;
-}
+import { Eye, EyeOff, Trash2 } from "lucide-react";
 
 const DraggableLayerItem = ({
   layer,
@@ -47,7 +43,7 @@ const DraggableLayerItem = ({
 
   const [, drop] = useDrop({
     accept: "LAYER",
-    hover(item: DragItem) {
+    hover(item: { id: string; index: number }) {
       if (!ref.current) return;
       const dragIndex = item.index;
       const hoverIndex = index;
@@ -81,6 +77,7 @@ export default function LayerControls() {
   const [, reorderLayers] = useAtom(reorderLayersAtom);
   const [, enableAllLayers] = useAtom(enableAllLayersAtom);
   const [, disableAllLayers] = useAtom(disableAllLayersAtom);
+  const [, removeAllLayers] = useAtom(removeAllLayersAtom);
   const [map] = useAtom(mapAtom);
   const [layerInstances] = useAtom(leafletLayerInstancesAtom);
   const [allLayersVisible, setAllLayersVisible] = useState(true);
@@ -104,14 +101,12 @@ export default function LayerControls() {
   const toggleAllLayers = () => {
     if (allLayersVisible) {
       disableAllLayers();
-      // Hide all layers from the map
       activeLayers.forEach((layer) => {
         const instance = layerInstances.get(layer.id);
         if (instance) instance.remove();
       });
     } else {
       enableAllLayers();
-      // Show all layers on the map
       activeLayers.forEach((layer) => {
         const instance = layerInstances.get(layer.id);
         if (instance && map) instance.addTo(map);
@@ -127,25 +122,46 @@ export default function LayerControls() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div>
-        <div className="px-4 py-2 flex justify-between items-center">
-          <div className="font-semibold">
-            Active Layers({activeLayers.length})
+        {/* Dataset Count */}
+        <div className="flex flex-col items-start mb-4">
+          <div className="font-semibold flex justify-center items-center">
+            <span className="ml-2">
+              Dataset{" "}
+              <span className="text-xs py-0.5 px-2 rounded bg-primary text-primary-foreground">
+                {activeLayers.length}
+              </span>
+            </span>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={toggleAllLayers}
-            title={allLayersVisible ? "Hide all layers" : "Show all layers"}
-          >
-            {allLayersVisible ? (
-              <EyeOff className="h-4 w-4 mr-1" />
-            ) : (
-              <Eye className="h-4 w-4 mr-1" />
-            )}
-            {allLayersVisible ? "Hide All" : "Show All"}
-          </Button>
+
+          {/* Buttons Below Dataset Text */}
+          <div className="flex space-x-2 mt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleAllLayers}
+              title={allLayersVisible ? "Hide all layers" : "Show all layers"}
+            >
+              {allLayersVisible ? (
+                <EyeOff className="h-4 w-4 mr-1" />
+              ) : (
+                <Eye className="h-4 w-4 mr-1" />
+              )}
+              {allLayersVisible ? "Sembunyikan" : "Tampilkan"}
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={removeAllLayers}
+              title="Remove all layers"
+            >
+              <Trash2 className="h-4 w-4 mr-1" />
+              Hapus Semua
+            </Button>
+          </div>
         </div>
-        <div className="px-4 flex flex-col space-y-4 h-[70vh] overflow-auto">
+
+        {/* Layer List */}
+        <div className="px-4 flex flex-col space-y-4 h-[60vh] overflow-auto">
           {[...activeLayers].reverse().map((layer, i) => {
             const index = activeLayers.length - 1 - i;
             const layerInstance = layerInstances.get(layer.id);
