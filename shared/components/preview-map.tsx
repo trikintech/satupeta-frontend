@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, WMSTileLayer } from "react-leaflet";
-import { mapConfig } from "../../app/(modules)/maps/config/map-config";
-import { parseWmsUrl } from "../../app/(modules)/maps/utils/wms";
+import { mapConfig } from "../config/map-config";
 import { Mapset } from "@/shared/types/mapset";
+import { parseWmsUrl } from "../utils/wms";
 
 export default function PreviewMap({ mapset }: Readonly<{ mapset: Mapset }>) {
   const parsed = parseWmsUrl(mapset?.mapsetservice_url);

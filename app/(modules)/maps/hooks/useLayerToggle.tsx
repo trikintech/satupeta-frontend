@@ -5,7 +5,7 @@ import {
   removeLayerAtom,
 } from "../state/active-layers";
 import { isOpenMapsetDialogAtom } from "../state/mapset-dialog";
-import { parseWmsUrl } from "../utils/wms";
+import { parseWmsUrl } from "../../../../shared/utils/wms";
 import { Mapset } from "@/shared/types/mapset";
 
 export function useLayerToggle(mapset: Mapset) {

@@ -1,9 +1,6 @@
-import MapComponent from "./components/map-component";
-import MapsetDialog from "./components/mapset-dialog";
 import { Metadata } from "next";
-import FeatureInformation from "./components/feature-information";
 import { Header } from "@/shared/components/layout/header";
-import Sidebar from "./components/sidebar";
+import MapsPageClient from "./page.client";
 
 export const metadata: Metadata = {
   title: "Maps Portal",
@@ -17,10 +14,7 @@ export default function Maps() {
       <div className="pt-16 flex h-full flex-col">
         <div className="flex flex-1 overflow-hidden">
           <div className="relative flex-1 overflow-hidden">
-            <Sidebar />
-            <MapComponent />
-            <MapsetDialog />
-            <FeatureInformation />
+            <MapsPageClient />
           </div>
         </div>
       </div>

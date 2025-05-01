@@ -7,30 +7,42 @@ import { useAuthSession } from "@/shared/hooks/use-session";
 
 export default function AdminRouteGuard({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  const { isAuthenticated, isLoading } = useAuthSession();
+}) {
   const router = useRouter();
   const pathname = usePathname();
-  const [isAdminRoute, setIsAdminRoute] = useState(false);
+  const { isAuthenticated, isLoading } = useAuthSession();
+
+  const [canRender, setCanRender] = useState(false);
 
   useEffect(() => {
-    setIsAdminRoute(pathname.startsWith("/admin/dashboard"));
-  }, [pathname]);
+    // Only run this logic on /admin routes
+    const isAdminRoute = pathname.startsWith("/admin");
 
-  useEffect(() => {
-    if (isAdminRoute && !isAuthenticated) {
-      router.push(
-        `/auth/admin/login?callbackUrl=${encodeURIComponent(pathname)}`
-      );
+    if (isAdminRoute) {
+      if (!isAuthenticated && !isLoading) {
+        // redirect if unauthenticated
+        router.push(
+          `/auth/admin/login?callbackUrl=${encodeURIComponent(pathname)}`
+        );
+        return;
+      }
+
+      // once auth is loaded and user is authenticated (or route doesn't need redirect)
+      if (isAuthenticated || !isLoading) {
+        setCanRender(true);
+      }
+    } else {
+      // non-admin routes always render
+      setCanRender(true);
     }
-  }, [isAdminRoute, router, pathname, isAuthenticated]);
+  }, [pathname, isAuthenticated, isLoading, router]);
 
-  if (isAdminRoute && isLoading) {
+  if (!canRender) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader2 className="w-6 h-6 animate-spin" />
       </div>
     );
   }

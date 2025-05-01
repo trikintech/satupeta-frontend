@@ -2,11 +2,11 @@
 
 import { useAtom } from "jotai";
 import { featureInformationAtom } from "../../state/feature-information";
-import { DataTable } from "@/app/(modules)/admin/components/data-table";
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { ColumnDef, RowData } from "@tanstack/react-table";
+import { DataTable } from "@/shared/components/data-table";
 
 export default function FeatureInformation() {
   const [featureInformation] = useAtom(featureInformationAtom);

@@ -12,7 +12,7 @@ import {
   MousePointer2,
 } from "lucide-react";
 import L from "leaflet";
-import { getLegendUrl } from "../../../utils/wms";
+import { getLegendUrl } from "../../../../../../shared/utils/wms";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import {
