@@ -25,7 +25,7 @@ export default function MainDialog() {
   }, [selectedMapset]);
 
   return (
-    <div className="h-full">
+    <>
       {selectedMapset ? (
         <div className="relative h-full">
           <PreviewMap mapset={selectedMapset} />
@@ -38,6 +38,6 @@ export default function MainDialog() {
       ) : (
         <EmptyState />
       )}
-    </div>
+    </>
   );
 }

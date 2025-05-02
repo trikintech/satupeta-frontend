@@ -20,14 +20,14 @@ export default function MapsetDialog() {
 
   return (
     <div
-      className={`absolute inset-0 flex items-center justify-center  transition-opacity duration-300 ${
+      className={`absolute inset-0  transition-opacity duration-300 ${
         isOpenDialog
           ? "opacity-100 z-[404]"
           : "z-0 opacity-0 pointer-events-none"
       }`}
     >
       <div
-        className={` w-full h-full max-h-full transform transition-all duration-300 ${
+        className={`h-full flex flex-col w-full transform transition-all duration-300 ${
           isOpenDialog ? "scale-100 opacity-100" : "z-0 scale-95 opacity-0"
         }`}
       >
@@ -43,8 +43,9 @@ export default function MapsetDialog() {
             <XIcon />
           </button>
         </div>
-        <div className="flex w-full h-full relative pointer-events-auto">
-          <div className="w-[376px] bg-gray-50 h-full">
+
+        <div className="flex h-[calc(100vh-117px)] w-full pointer-events-auto">
+          <div className="w-[376px] bg-white">
             <MapsetList />
           </div>
           <div className="flex-1 bg-gray-50">

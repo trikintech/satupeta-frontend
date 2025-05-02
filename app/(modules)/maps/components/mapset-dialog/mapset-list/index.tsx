@@ -84,7 +84,7 @@ const MapsetList: React.FC = () => {
   );
 
   return (
-    <div className="p-4 flex flex-col h-full max-w-xl mx-auto bg-white rounded-l-lg shadow-lg">
+    <div className="p-4 h-full flex flex-col max-w-xl mx-auto rounded-l-lg">
       <div className="mb-4">
         <SearchInput
           value={searchTerm}
@@ -94,16 +94,22 @@ const MapsetList: React.FC = () => {
       </div>
 
       {filteredMapsets.length === 0 ? (
-        <div className="flex h-[65vh] flex-col items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
+        <div className="flex flex-1 flex-col items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
           <Layers size={48} className="mb-2 opacity-50" />
           <p>No layers found matching &quot;{searchTerm}&quot;</p>
         </div>
       ) : (
-        <div className="overflow-y-auto h-[65vh] pr-1">
+        <div className="overflow-y-auto pr-1">
           <DatasetSection />
-
           <div className="mb-10"></div>
-
+          {filteredMapsets.map((mapset) => (
+            <MapsetItem
+              key={mapset.id}
+              mapset={mapset}
+              onClick={handleAddLayer}
+              isSelected={mapset.id === selectedMapset?.id}
+            />
+          ))}{" "}
           {filteredMapsets.map((mapset) => (
             <MapsetItem
               key={mapset.id}
