@@ -1,20 +1,36 @@
+import { PaginatedResponse } from "../types/api-response";
 import { Mapset } from "../types/mapset";
 
-export async function getMapsets(): Promise<Mapset[]> {
-  const res = await fetch("/api/mapsets");
-  if (!res.ok) throw new Error("Failed to fetch mapsets");
-  return res.json();
-}
+import api from "./api";
 
-export async function createMapset(data: Omit<Mapset, "id">): Promise<Mapset> {
-  const res = await fetch("/api/mapsets", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+export const mapsetApi = {
+  getMapsets: async (filters?: {
+    filter?: string[];
+  }): Promise<PaginatedResponse<Mapset[]>> => {
+    const encodedFilters = filters?.filter
+      ? { filter: JSON.stringify(filters.filter) }
+      : undefined;
 
-  if (!res.ok) throw new Error("Failed to create mapset");
-  return res.json();
-}
+    const response = await api.get("/mapsets", {
+      params: encodedFilters,
+    });
+    return response.data;
+  },
+
+  getMapsetById: async (id: number): Promise<Mapset> => {
+    const response = await api.get(`/mapsets/${id}`);
+    return response.data;
+  },
+
+  deleteMapset: async (id?: number): Promise<PaginatedResponse<null>> => {
+    const response = await api.delete(`/mapsets/${id}`);
+    return response.data;
+  },
+
+  createMapset: async (mapset: Omit<Mapset, "id">): Promise<Mapset> => {
+    const response = await api.post("/mapsets", mapset);
+    return response.data;
+  },
+};
+
+export default mapsetApi;

@@ -32,7 +32,7 @@ export const FormOrganizationSelect = <T extends FieldValues>({
     queryKey: ["organizations"],
     queryFn: organizationApi.getOrganizations,
     refetchOnWindowFocus: false,
-    select: (data) => data.data,
+    select: (data) => data.items,
   });
 
   if (error) {

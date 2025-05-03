@@ -2,7 +2,6 @@ import { AttributeKugi } from "./attribute-kugi";
 import { HistoryDraft } from "./history-draft";
 import { MapsetSource } from "./mapset-source";
 import { MapsetType } from "./mapset-type";
-import { Organization } from "./organization";
 import { Topic } from "./topic";
 import { User } from "./user";
 
@@ -23,7 +22,6 @@ export type Mapset = {
   klasifikasi: string;
   validate: string;
   topik: Topic;
-  organisasi: Organization;
   mapsetservice_url: string;
   metadata_xml: string;
   mapset_type: MapsetType;

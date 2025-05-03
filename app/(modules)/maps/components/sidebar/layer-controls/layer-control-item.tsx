@@ -20,13 +20,13 @@ import {
   selectedMapsetAtom,
 } from "../../../state/mapset-dialog";
 import { useQuery } from "@tanstack/react-query";
-import { getMapsets } from "@/shared/services/mapset";
 import {
   ActiveLayer,
   removeLayerAtom,
   toggleLayerAtom,
 } from "../../../state/active-layers";
 import { mapAtom } from "../../../state/map";
+import mapsetApi from "@/shared/services/mapset";
 
 interface LayerControlItemProps {
   layer: ActiveLayer;
@@ -47,7 +47,10 @@ export const LayerControlItem = ({
   const [, toggleLayer] = useAtom(toggleLayerAtom);
   const { data: mapsets } = useQuery({
     queryKey: ["mapsets"],
-    queryFn: getMapsets,
+    queryFn: () =>
+      mapsetApi.getMapsets().then((res) => {
+        return res.items;
+      }),
   });
   const [map] = useAtom(mapAtom);
 

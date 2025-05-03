@@ -18,8 +18,7 @@ export const UserList = ({
   error,
   users,
   columns,
-}: // eslint-disable-next-line @typescript-eslint/no-unused-vars
-Props) => {
+}: Props) => {
   const router = useRouter();
   if (isLoading) {
     return (

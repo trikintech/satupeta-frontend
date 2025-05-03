@@ -14,3 +14,10 @@ export interface Pagination {
   has_next: boolean;
   has_previous: boolean;
 }
+
+export interface PaginatedResponse<T> {
+  items: T;
+  total: number;
+  limit: number;
+  has_more: boolean;
+}

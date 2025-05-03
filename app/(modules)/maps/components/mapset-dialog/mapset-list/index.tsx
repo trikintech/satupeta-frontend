@@ -1,87 +1,28 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { Map, Layers, Plus, Minus } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Layers } from "lucide-react";
 import SearchInput from "@/shared/components/search-input";
-import { mapsets as rawMapsets } from "@/shared/utils/mapsets";
-import { useAtom } from "jotai";
-import { selectedMapsetAtom } from "../../../state/mapset-dialog";
-import { useLayerToggle } from "../../../hooks/useLayerToggle";
-import { Mapset } from "@/shared/types/mapset";
 import { useQueryParam, StringParam } from "use-query-params";
-import DatasetSection from "./dataset-section";
-
-interface MapsetItemProps {
-  mapset: Mapset;
-  onClick: (mapset: Mapset) => void;
-  isSelected: boolean;
-}
-
-const MapsetItem: React.FC<MapsetItemProps> = ({
-  mapset,
-  onClick,
-  isSelected,
-}) => {
-  const { isActiveLayer, toggleLayer } = useLayerToggle(mapset);
-
-  return (
-    <button
-      className={`text-left bg-muted p-2 w-full rounded-lg flex justify-between items-center transition duration-200 ease-in-out cursor-pointer my-3 ${
-        isSelected ? "border-l-4 border-primary" : "hover:bg-muted/80"
-      }`}
-      onClick={() => onClick(mapset)}
-    >
-      <div className="flex items-center gap-3">
-        <div className="p-2 rounded-md">
-          <Map size={18} className="text-primary" />
-        </div>
-        <div>
-          <div className="text-gray-800 text-sm font-semibold tracking-wide">
-            {mapset.name}
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center space-x-3">
-        {isActiveLayer ? (
-          <Minus size={18} className="text-gray-400" onClick={toggleLayer} />
-        ) : (
-          <Plus size={18} className="text-gray-400" onClick={toggleLayer} />
-        )}
-      </div>
-    </button>
-  );
-};
-
-MapsetItem.displayName = "MapsetItem";
+import GroupMapset from "./group-mapset";
+import { useQuery } from "@tanstack/react-query";
+import organizationApi from "@/shared/services/organization";
 
 const MapsetList: React.FC = () => {
-  const [query, setQuery] = useQueryParam("query", StringParam);
+  const [query] = useQueryParam("query", StringParam);
   const [searchTerm, setSearchTerm] = useState(query || "");
+
+  const organizations = useQuery({
+    queryKey: ["organizations"],
+    queryFn: () =>
+      organizationApi.getOrganizations().then((res) => {
+        return res.items;
+      }),
+  });
 
   useEffect(() => {
     setSearchTerm(query || "");
   }, [query]);
-  const [selectedMapset, setSelectedMapset] = useAtom(selectedMapsetAtom);
 
-  const mapsets = rawMapsets.map((m) => ({
-    ...m,
-    id: m.id,
-  }));
-
-  const handleSearch = useCallback(
-    (value: string) => {
-      setSearchTerm(value);
-      setQuery(value || undefined); // Remove param if input is empty
-    },
-    [setQuery]
-  );
-
-  const handleAddLayer = useCallback((mapset: Mapset) => {
-    setSelectedMapset(mapset);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const filteredMapsets = mapsets.filter((mapset: Mapset) =>
-    mapset.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleSearch = () => {};
 
   return (
     <div className="p-4 h-full flex flex-col max-w-xl mx-auto rounded-l-lg">
@@ -93,30 +34,15 @@ const MapsetList: React.FC = () => {
         />
       </div>
 
-      {filteredMapsets.length === 0 ? (
+      {organizations.data?.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center text-gray-500 bg-gray-50 rounded-lg">
           <Layers size={48} className="mb-2 opacity-50" />
           <p>No layers found matching &quot;{searchTerm}&quot;</p>
         </div>
       ) : (
-        <div className="overflow-y-auto pr-1">
-          <DatasetSection />
-          <div className="mb-10"></div>
-          {filteredMapsets.map((mapset) => (
-            <MapsetItem
-              key={mapset.id}
-              mapset={mapset}
-              onClick={handleAddLayer}
-              isSelected={mapset.id === selectedMapset?.id}
-            />
-          ))}{" "}
-          {filteredMapsets.map((mapset) => (
-            <MapsetItem
-              key={mapset.id}
-              mapset={mapset}
-              onClick={handleAddLayer}
-              isSelected={mapset.id === selectedMapset?.id}
-            />
+        <div className="overflow-y-auto pr-1 flex flex-col space-y-2">
+          {organizations.data?.map((organization) => (
+            <GroupMapset organization={organization} key={organization.id} />
           ))}
         </div>
       )}
