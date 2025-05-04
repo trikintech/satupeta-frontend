@@ -5,14 +5,11 @@ import api from "./api";
 
 export const mapsetApi = {
   getMapsets: async (filters?: {
-    filter?: string[];
+    filter?: string;
+    search?: string;
   }): Promise<PaginatedResponse<Mapset[]>> => {
-    const encodedFilters = filters?.filter
-      ? { filter: JSON.stringify(filters.filter) }
-      : undefined;
-
     const response = await api.get("/mapsets", {
-      params: encodedFilters,
+      params: filters,
     });
     return response.data;
   },
