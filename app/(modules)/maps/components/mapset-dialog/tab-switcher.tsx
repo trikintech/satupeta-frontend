@@ -1,24 +1,23 @@
-import { useState } from "react";
+import { useAtom } from "jotai";
+import { activeTabAtom } from "../../state/active-tab";
 
 const TabSwitcher = () => {
-  const [activeTab, setActiveTab] = useState<"kategori" | "organisasi">(
-    "kategori"
-  );
+  const [activeTab, setActiveTab] = useAtom(activeTabAtom);
 
   return (
     <div className="p-1 bg-gray-100 rounded-lg grid grid-cols-2 w-full text-sm">
       <button
-        onClick={() => setActiveTab("kategori")}
+        onClick={() => setActiveTab("category")}
         className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
-          activeTab === "kategori" ? "bg-white text-blue-500" : "text-gray-700"
+          activeTab === "category" ? "bg-white text-blue-500" : "text-gray-700"
         }`}
       >
         Kategori
       </button>
       <button
-        onClick={() => setActiveTab("organisasi")}
+        onClick={() => setActiveTab("organization")}
         className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
-          activeTab === "organisasi"
+          activeTab === "organization"
             ? "bg-white text-blue-500"
             : "text-gray-700"
         }`}

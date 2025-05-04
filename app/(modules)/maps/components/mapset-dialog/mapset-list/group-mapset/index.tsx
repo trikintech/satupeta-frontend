@@ -5,6 +5,7 @@ import { useCallback, useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import { Organization } from "@/shared/types/organization";
+import { Category } from "@/shared/types/category";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import mapsetApi from "@/shared/services/mapset";
 import { selectedMapsetAtom } from "../../../../state/mapset-dialog";
@@ -12,24 +13,28 @@ import { useAtom } from "jotai";
 import { Mapset } from "@/shared/types/mapset";
 import MapsetItem from "./mapset-item";
 
-export default function GroupMapset({
-  organization,
-  search,
-}: {
-  organization: Organization;
+interface GroupMapsetProps {
+  item: Organization | Category;
+  type: "organization" | "category";
   search: string;
-}) {
+}
+
+export default function GroupMapset({ item, type, search }: GroupMapsetProps) {
   const [open, setOpen] = useState(!!search);
   const [selectedMapset, setSelectedMapset] = useAtom(selectedMapsetAtom);
   const queryClient = useQueryClient();
 
   const qParams = {
-    filter: JSON.stringify([`producer_id=${organization.id}`]),
+    filter: JSON.stringify([
+      type === "organization"
+        ? `producer_id=${item.id}`
+        : `category_id=${item.id}`,
+    ]),
     search,
   };
 
   const { data: mapsets, isLoading } = useQuery({
-    queryKey: ["mapsets", organization.id, search],
+    queryKey: ["mapsets", type, item.id, search],
     queryFn: () =>
       mapsetApi.getMapsets(qParams).then((res) => {
         return res.items;
@@ -39,9 +44,9 @@ export default function GroupMapset({
 
   useEffect(() => {
     queryClient.invalidateQueries({
-      queryKey: ["mapsets", organization.id, search],
+      queryKey: ["mapsets", type, item.id, search],
     });
-  }, [search, organization.id, queryClient]);
+  }, [search, item.id, type, queryClient]);
 
   const handleAddLayer = useCallback((mapset: Mapset) => {
     setSelectedMapset(mapset);
@@ -54,7 +59,7 @@ export default function GroupMapset({
           onClick={() => setOpen(!open)}
           className="flex justify-between items-center w-full text-left font-medium p-2"
         >
-          <span className="text-gray-700">{organization.name}</span>
+          <span className="text-gray-700">{item.name}</span>
           <ChevronDown
             className={cn("h-5 w-5 transition-transform", {
               "rotate-180": open,
@@ -83,7 +88,7 @@ export default function GroupMapset({
         onClick={() => setOpen(!open)}
         className="flex justify-between items-center w-full text-left font-medium p-2"
       >
-        <span className="text-gray-700">{organization.name}</span>
+        <span className="text-gray-700">{item.name}</span>
         <ChevronDown
           className={cn("h-5 w-5 transition-transform", {
             "rotate-180": open,
