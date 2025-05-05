@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import {
   Users,
   LogOut,
@@ -11,41 +10,41 @@ import {
   ChevronsLeft,
   Map,
   FileText,
-  ChevronDown,
-  ChevronRight,
   UserCog,
 } from "lucide-react";
-
 import { Button } from "@/shared/components/ui/button";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { cn } from "@/shared/utils/utils";
 import Image from "next/image";
 
-const menuItems = [
+interface MenuItem {
+  name: string;
+  href: string;
+  icon: React.ReactNode;
+}
+
+const menuItems: MenuItem[] = [
   {
     name: "Manajemen Peta",
-    href: "/maps",
+    href: "/admin/maps",
     icon: <Map className="h-5 w-5" />,
-    hasSubMenu: false,
   },
   {
     name: "Manajemen User",
-    href: "/user",
+    href: "/admin/users",
     icon: <Users className="h-5 w-5" />,
-    hasSubMenu: false,
   },
   {
     name: "Manajemen Konten",
-    href: "/news",
+    href: "/admin/news",
     icon: <FileText className="h-5 w-5" />,
-    hasSubMenu: false,
   },
 ];
 
-const settingsItems = [
+const settingsItems: MenuItem[] = [
   {
     name: "Mapserver & Metadata",
-    href: "/settings/map-source",
+    href: "/admin/map-sources",
     icon: <UserCog className="h-5 w-5" />,
   },
 ];
@@ -53,19 +52,24 @@ const settingsItems = [
 const Sidebar = () => {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
-  const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
 
-  const toggleSubMenu = (menuName: string) => {
-    if (collapsed) {
-      setCollapsed(false);
-      setOpenSubMenus({ [menuName]: true });
-    } else {
-      setOpenSubMenus((prev) => ({
-        ...prev,
-        [menuName]: !prev[menuName],
-      }));
-    }
-  };
+  // Check if current path is active (exact match or starts with path for nested routes)
+  const isActive = useCallback(
+    (href: string) => {
+      // Exact match for main routes
+      if (pathname === href) return true;
+
+      // For nested routes, check if the current pathname starts with the href
+      if (href !== "/" && pathname.startsWith(href)) {
+        // Don't match partial segments - ensure we're matching complete path segments
+        const nextChar = pathname.charAt(href.length);
+        return nextChar === "" || nextChar === "/";
+      }
+
+      return false;
+    },
+    [pathname]
+  );
 
   return (
     <div
@@ -118,50 +122,28 @@ const Sidebar = () => {
           <ul className="space-y-1">
             {menuItems.map((item) => (
               <li key={item.name}>
-                {item.hasSubMenu ? (
-                  <div className="space-y-1">
-                    <button
-                      onClick={() => toggleSubMenu(item.name)}
+                <Link href={item.href} passHref>
+                  <div
+                    className={cn(
+                      "flex items-center px-3 py-2 rounded-lg transition-colors",
+                      isActive(item.href)
+                        ? "bg-blue-50 text-blue-600"
+                        : "text-gray-600 hover:bg-gray-100"
+                    )}
+                  >
+                    <span
                       className={cn(
-                        "w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors",
-                        openSubMenus[item.name]
-                          ? "bg-gray-200"
-                          : "hover:bg-gray-200"
+                        "flex-shrink-0 text-gray-500",
+                        isActive(item.href) && "text-blue-600"
                       )}
                     >
-                      <div className="flex items-center">
-                        <span className="text-gray-500">{item.icon}</span>
-                        {!collapsed && (
-                          <span className="ml-3 text-sm">{item.name}</span>
-                        )}
-                      </div>
-                      {!collapsed &&
-                        (openSubMenus[item.name] ? (
-                          <ChevronDown className="h-4 w-4 text-gray-500" />
-                        ) : (
-                          <ChevronRight className="h-4 w-4 text-gray-500" />
-                        ))}
-                    </button>
+                      {item.icon}
+                    </span>
+                    {!collapsed && (
+                      <span className="ml-3 text-sm">{item.name}</span>
+                    )}
                   </div>
-                ) : (
-                  <Link href={item.href} passHref>
-                    <div
-                      className={cn(
-                        "flex items-center px-3 py-2 rounded-lg transition-colors",
-                        pathname === item.href
-                          ? "bg-blue-50 text-blue-600"
-                          : "text-gray-600 hover:bg-gray-100"
-                      )}
-                    >
-                      <span className="flex-shrink-0 text-gray-500">
-                        {item.icon}
-                      </span>
-                      {!collapsed && (
-                        <span className="ml-3 text-sm">{item.name}</span>
-                      )}
-                    </div>
-                  </Link>
-                )}
+                </Link>
               </li>
             ))}
           </ul>
@@ -179,12 +161,17 @@ const Sidebar = () => {
                   <div
                     className={cn(
                       "flex items-center px-3 py-2 rounded-lg transition-colors",
-                      pathname === item.href
+                      isActive(item.href)
                         ? "bg-blue-50 text-blue-600"
                         : "text-gray-600 hover:bg-gray-100"
                     )}
                   >
-                    <span className="flex-shrink-0 text-gray-500">
+                    <span
+                      className={cn(
+                        "flex-shrink-0 text-gray-500",
+                        isActive(item.href) && "text-blue-600"
+                      )}
+                    >
                       {item.icon}
                     </span>
                     {!collapsed && (
