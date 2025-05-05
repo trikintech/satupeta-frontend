@@ -30,9 +30,11 @@ export const FormOrganizationSelect = <T extends FieldValues>({
 }: FormOrganizationSelectProps<T>) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["organizations"],
-    queryFn: organizationApi.getOrganizations,
-    refetchOnWindowFocus: false,
-    select: (data) => data.items,
+    queryFn: () =>
+      organizationApi.getOrganizations().then((res) => {
+        return res.items;
+      }),
+    staleTime: 5000,
   });
 
   if (error) {

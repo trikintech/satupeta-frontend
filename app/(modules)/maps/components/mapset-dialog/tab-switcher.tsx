@@ -1,8 +1,20 @@
 import { useAtom } from "jotai";
 import { activeTabAtom } from "../../state/active-tab";
+import { useEffect } from "react";
 
-const TabSwitcher = () => {
+interface TabSwitcherProps {
+  initialTab?: "category" | "organization";
+}
+
+const TabSwitcher = ({ initialTab }: TabSwitcherProps) => {
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
+
+  // Set initial tab if provided
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab, setActiveTab]);
 
   return (
     <div className="p-1 bg-gray-100 rounded-lg grid grid-cols-2 w-full text-sm">

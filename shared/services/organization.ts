@@ -4,8 +4,14 @@ import { Organization } from "../types/organization";
 import api from "./api";
 
 export const organizationApi = {
-  getOrganizations: async (): Promise<PaginatedResponse<Organization[]>> => {
-    const response = await api.get("/organizations");
+  getOrganizations: async (params?: {
+    filter?: string;
+    search?: string;
+    limit?: number;
+  }): Promise<PaginatedResponse<Organization[]>> => {
+    const response = await api.get("/organizations", {
+      params,
+    });
     return response.data;
   },
 

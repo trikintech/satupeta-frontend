@@ -11,6 +11,13 @@ import TabSwitcher from "./tab-switcher";
 export default function MapsetDialog() {
   const [isOpenDialog, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);
   const [openCatalog] = useQueryParam("open-catalog", StringParam);
+  const [tabParam] = useQueryParam("tab", StringParam);
+
+  // Convert the query param to a valid tab type
+  const initialTab =
+    tabParam === "organization" || tabParam === "category"
+      ? tabParam
+      : undefined;
 
   useEffect(() => {
     if (openCatalog === "true") {
@@ -20,7 +27,7 @@ export default function MapsetDialog() {
 
   return (
     <div
-      className={`absolute inset-0  transition-opacity duration-300 ${
+      className={`absolute inset-0 transition-opacity duration-300 ${
         isOpenDialog
           ? "opacity-100 z-[404]"
           : "z-0 opacity-0 pointer-events-none"
@@ -31,9 +38,9 @@ export default function MapsetDialog() {
           isOpenDialog ? "scale-100 opacity-100" : "z-0 scale-95 opacity-0"
         }`}
       >
-        <div className="relative flex w-full  bg-white border-b border-gray-200">
+        <div className="relative flex w-full bg-white border-b border-gray-200">
           <div className="w-[376px] px-3 py-1.5 h-full">
-            <TabSwitcher />
+            <TabSwitcher initialTab={initialTab} />
           </div>
 
           <button
