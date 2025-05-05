@@ -1,6 +1,7 @@
+// app/(dashboard)/manajemen-peta/components/manajemen-peta-client.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { FilterIcon, PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -16,12 +17,35 @@ export default function MapsPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
 
   // Dapatkan parameter dari URL
   const page = Number(searchParams.get("page") || "1");
   const perPage = Number(searchParams.get("per_page") || "10");
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "";
+
+  // Initialize searchValue from URL
+  useEffect(() => {
+    setSearchValue(search);
+  }, [search]);
+
+  // Update the debounced value after a delay
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchValue(searchValue);
+    }, 500); // Adjust the delay as needed
+
+    return () => {
+      clearTimeout(handler); // Clear the timeout if the user types again
+    };
+  }, [searchValue]);
+
+  // Trigger the search when the debounced value changes
+  useEffect(() => {
+    updateSearchParams({ search: debouncedSearchValue, page: "1" });
+  }, [debouncedSearchValue]);
 
   // Buat parameter query
   const queryParams = {
@@ -52,9 +76,10 @@ export default function MapsPageClient() {
     router.push(`?${newParams.toString()}`);
   };
 
-  // Fungsi untuk handle search
-  const handleSearch = (value: string) => {
-    updateSearchParams({ search: value, page: "1" });
+  // Handle search input change
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value); // Update the local state immediately
   };
 
   if (isLoading) {
@@ -84,8 +109,8 @@ export default function MapsPageClient() {
       <div className="flex items-center justify-between">
         <SearchInput
           placeholder="Masukkan kata kunci"
-          value={search}
-          onChange={(e) => handleSearch(e.target.value)}
+          value={searchValue}
+          onChange={handleSearchInputChange}
           className="w-full max-w-sm"
         />
 
@@ -115,7 +140,7 @@ export default function MapsPageClient() {
         <EmptyState
           icon={
             <div className="h-16 w-16 text-gray-400 mx-auto mb-4">
-              <img src="/empty-box.svg" alt="Dataset tidak ditemukan" />
+              <img src="/empty-box.png" alt="Dataset tidak ditemukan" />
             </div>
           }
           title="Dataset tidak ditemukan"
