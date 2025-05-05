@@ -21,7 +21,7 @@ export function MapsetCard({ mapset }: Readonly<{ mapset: Mapset }>) {
         <CardContent className="flex flex-col justify-between py-3 px-4 h-full">
           <div className="space-y-2">
             <span className="bg-yellow-400 text-black text-xs px-2 py-1 rounded">
-              Categories
+              {mapset?.category?.name}
             </span>
             <div
               className="line-clamp-4 hover:text-primary mt-2 font-medium lg:line-clamp-2 xl:line-clamp-3

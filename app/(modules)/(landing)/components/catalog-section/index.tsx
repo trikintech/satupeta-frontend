@@ -5,9 +5,23 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { MainMapsetCard } from "./main-mapset-card";
 import { MapsetCard } from "../mapset-card";
-import { mapsets } from "@/shared/utils/mapsets";
+import { useQuery } from "@tanstack/react-query";
+import mapsetApi from "@/shared/services/mapset";
 
 export function CatalogSection() {
+  const { data: mapsets, isLoading } = useQuery({
+    queryKey: ["mapsets-catalog"],
+    queryFn: () =>
+      mapsetApi
+        .getMapsets({
+          limit: 5,
+        })
+        .then((res) => {
+          return res.items;
+        }),
+    staleTime: 5000,
+  });
+
   return (
     <section className="py-10 bg-gray-50">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,17 +47,39 @@ export function CatalogSection() {
             </Link>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-8">
-            <div className="w-full md:w-1/3">
-              <MainMapsetCard mapset={mapsets[0]} key={mapsets[0].id} />
-            </div>
+          {(() => {
+            if (isLoading) {
+              return (
+                <div className="flex justify-center items-center h-64">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+                </div>
+              );
+            }
 
-            <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-8">
-              {mapsets.slice(1, 5).map((mapset) => (
-                <MapsetCard key={mapset.id} mapset={mapset} />
-              ))}
-            </div>
-          </div>
+            if (mapsets && mapsets.length > 0) {
+              return (
+                <div className="flex flex-col md:flex-row gap-8">
+                  <div className="w-full md:w-1/3">
+                    {mapsets[0] && (
+                      <MainMapsetCard mapset={mapsets[0]} key={mapsets[0].id} />
+                    )}
+                  </div>
+
+                  <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    {mapsets.slice(1, 5).map((mapset) => (
+                      <MapsetCard key={mapset.id} mapset={mapset} />
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <div className="flex justify-center items-center h-64 text-gray-500">
+                Tidak ada data mapset
+              </div>
+            );
+          })()}
         </div>
       </div>
     </section>

@@ -4,12 +4,13 @@ import { Mapset } from "../types/mapset";
 import api from "./api";
 
 export const mapsetApi = {
-  getMapsets: async (filters?: {
+  getMapsets: async (params?: {
     filter?: string;
     search?: string;
+    limit?: number;
   }): Promise<PaginatedResponse<Mapset[]>> => {
     const response = await api.get("/mapsets", {
-      params: filters,
+      params,
     });
     return response.data;
   },

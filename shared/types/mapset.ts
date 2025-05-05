@@ -1,4 +1,5 @@
 import { AttributeKugi } from "./attribute-kugi";
+import { Category } from "./category";
 import { HistoryDraft } from "./history-draft";
 import { MapsetSource } from "./mapset-source";
 import { MapsetType } from "./mapset-type";
@@ -23,6 +24,7 @@ export type Mapset = {
   validate: string;
   topik: Topic;
   mapsetservice_url: string;
+  layer_url: string;
   metadata_xml: string;
   mapset_type: MapsetType;
   mapset_source: MapsetSource;
@@ -45,4 +47,5 @@ export type Mapset = {
   cdate: string;
   muid: number;
   mdate: string;
+  category: Category;
 };
