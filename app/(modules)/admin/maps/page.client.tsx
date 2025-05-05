@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FilterIcon, PlusIcon, RefreshCwIcon } from "lucide-react";
+import { PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EmptyState } from "./components/empty-state";
 import { Button } from "@/shared/components/ui/button";
@@ -115,7 +115,7 @@ export default function MapsPageClient() {
         />
 
         <div className="flex items-center gap-2">
-          <Button
+          {/* <Button
             variant="outline"
             size="sm"
             onClick={() => setIsFilterOpen(true)}
@@ -127,7 +127,7 @@ export default function MapsPageClient() {
           <Button variant="outline" size="sm">
             <RefreshCwIcon className="h-4 w-4 mr-2" />
             Non-aktif Mapset
-          </Button>
+          </Button> */}
 
           <Button size="sm">
             <PlusIcon className="h-4 w-4 mr-2" />
