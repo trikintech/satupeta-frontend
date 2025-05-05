@@ -1,32 +1,59 @@
 import "next-auth";
 
+import { Role } from "./role";
+
+// Extend the built-in session types
 declare module "next-auth" {
+  /**
+   * Penambahan property untuk User
+   */
   interface User {
-    id: number;
-    name: string;
-    jabatan: string;
-    email: string;
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
     username: string;
-    nip: string;
-    image: string;
-    organisasi_name: string;
-    organisasi_slug: string;
-    nama_wilayah: string;
-    kode_wilayah: string;
-    role: string;
-    jwt: string;
+    role: Role;
+    access_token: string;
+    refresh_token: string;
+    accessTokenExpires: number;
   }
 
+  /**
+   * Penambahan property untuk Session
+   */
   interface Session {
-    user: User;
-    accessToken: string;
+    access_token: string;
+    refresh_token: string;
+    error?: string;
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      username: string;
+      role: string;
+    };
   }
 }
 
+// Extend JWT untuk menyimpan data token
 declare module "next-auth/jwt" {
+  /**
+   * Extends the built-in JWT type
+   */
   interface JWT {
-    id: string;
-    username: string;
-    accessToken: string;
+    access_token: string;
+    refresh_token: string;
+    accessTokenExpires: number;
+    error?: string;
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      username: string;
+      role: Role;
+    };
   }
 }

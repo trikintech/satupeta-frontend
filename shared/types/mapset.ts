@@ -4,7 +4,7 @@ import { HistoryDraft } from "./history-draft";
 import { MapsetSource } from "./mapset-source";
 import { MapsetType } from "./mapset-type";
 import { Topic } from "./topic";
-import { User } from "./user";
+import { UserResponse } from "./user";
 
 export type Mapset = {
   id: number;
@@ -42,7 +42,7 @@ export type Mapset = {
   is_popular: boolean;
   is_active: boolean;
   is_deleted: boolean;
-  user?: User;
+  user?: UserResponse;
   cuid: number;
   cdate: string;
   muid: number;

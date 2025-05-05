@@ -1,7 +1,7 @@
 import { PaginatedResponse } from "../types/api-response";
 import { Mapset } from "../types/mapset";
 
-import api from "./api";
+import { api } from "./api";
 
 export const mapsetApi = {
   getMapsets: async (params?: {

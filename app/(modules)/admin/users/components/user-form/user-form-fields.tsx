@@ -46,7 +46,7 @@ export const UserFormFields = ({ form, userId }: UserFormFieldsProps) => {
       />
 
       <FormField
-        name="nip"
+        name="employee_id"
         control={form.control}
         render={({ field }) => (
           <FormInput
@@ -54,7 +54,7 @@ export const UserFormFields = ({ form, userId }: UserFormFieldsProps) => {
             label="NIP"
             placeholder="13233XXXX"
             field={field}
-            error={form.formState.errors.nip}
+            error={form.formState.errors.employee_id}
           />
         )}
       />
@@ -89,28 +89,28 @@ export const UserFormFields = ({ form, userId }: UserFormFieldsProps) => {
       />
 
       <FormField
-        name="jabatan"
+        name="position"
         control={form.control}
         render={({ field }) => (
           <FormInput
-            name="jabatan"
+            name="position"
             label="Jabatan"
             placeholder="Jabatan"
             field={field}
-            error={form.formState.errors.jabatan}
+            error={form.formState.errors.position}
           />
         )}
       />
 
       <FormField
         control={form.control}
-        name="role"
+        name="role_id"
         render={({ field }) => (
           <FormRoleSelect
             label="Role"
             placeholder="Pilih Role"
             field={field}
-            error={form.formState.errors.role}
+            error={form.formState.errors.role_id}
           />
         )}
       />

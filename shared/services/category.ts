@@ -1,7 +1,7 @@
 import { PaginatedResponse } from "../types/api-response";
 import { Category } from "../types/category";
 
-import api from "./api";
+import { api } from "./api";
 
 export const categoryApi = {
   getCategories: async (): Promise<PaginatedResponse<Category[]>> => {

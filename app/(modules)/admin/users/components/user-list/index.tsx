@@ -1,6 +1,6 @@
 import React from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { User } from "@/shared/types/user";
+import { UserResponse } from "@/shared/types/user";
 import { useRouter } from "next/navigation";
 import { DataTable } from "../../../components/data-table";
 
@@ -8,8 +8,8 @@ interface Props {
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
-  users: User[];
-  columns: (router: ReturnType<typeof useRouter>) => ColumnDef<User>[]; // Pass router to columns
+  users: UserResponse[];
+  columns: (router: ReturnType<typeof useRouter>) => ColumnDef<UserResponse>[]; // Pass router to columns
 }
 
 export const UserList = ({

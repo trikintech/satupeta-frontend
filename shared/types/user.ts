@@ -1,25 +1,29 @@
-export interface User {
-  id?: number;
+import { Organization } from "./organization";
+import { Role } from "./role";
+
+export interface UserResponse {
+  id: string;
   name: string;
-  jabatan?: string;
-  email?: string;
+  email: string;
+  profile_picture: string;
   username: string;
-  nip?: string;
-  image?: string;
-  organisasi_id?: number;
-  organisasi_name?: string;
-  organisasi_slug?: string;
-  organisasi_deskripsi?: string;
-  organisasi_notelp?: string;
-  organisasi_alamat?: string;
-  organisasi_website?: string;
-  organisasi_email?: string;
-  wilayah_id?: number;
-  nama_wilayah?: string;
-  kode_wilayah?: string;
-  wilayah_notes?: unknown;
-  wilayah_image?: string;
-  role?: string;
+  position: string;
+  role: Role;
+  employee_id: string;
+  organization: Organization;
+  is_active: boolean;
+}
+
+export interface UserRequest {
+  id?: string;
+  name?: string;
+  password?: string;
+  email?: string;
+  profile_picture?: string;
+  username?: string;
+  position?: string;
+  role_id?: string;
+  employee_id?: string;
+  organization_id?: string;
   is_active?: boolean;
-  is_deleted?: boolean;
 }

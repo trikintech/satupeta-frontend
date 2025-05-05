@@ -49,15 +49,15 @@ export default function UserDetailPage() {
             </div>
             <div>
               <h2 className="text-lg font-semibold">Role</h2>
-              <p>{userData.role}</p>
+              <p>{userData.role.name}</p>
             </div>
             <div>
               <h2 className="text-lg font-semibold">Jabatan</h2>
-              <p>{userData.jabatan || "N/A"}</p>
+              <p>{userData.position || "N/A"}</p>
             </div>
             <div>
               <h2 className="text-lg font-semibold">NIP</h2>
-              <p>{userData.nip || "N/A"}</p>
+              <p>{userData.employee_id || "N/A"}</p>
             </div>
             <div>
               <h2 className="text-lg font-semibold">Status</h2>

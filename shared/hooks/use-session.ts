@@ -7,7 +7,7 @@ export function useAuthSession() {
   return {
     user: session?.user,
     username: session?.user?.username,
-    accessToken: session?.accessToken,
+    accessToken: session?.access_token,
     isLoading: status === "loading",
     isAuthenticated: status === "authenticated",
   };

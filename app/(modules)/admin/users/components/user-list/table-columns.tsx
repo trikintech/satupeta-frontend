@@ -15,13 +15,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/shared/components/ui/dropdown-menu";
-import { User } from "@/shared/types/user";
+import { UserResponse } from "@/shared/types/user";
 import { useRouter } from "next/navigation";
 import { createSortableHeader } from "../../../components/data-table";
 
 export const getUserTableColumns =
-  (onDelete: (user: User) => void) =>
-  (router: ReturnType<typeof useRouter>): ColumnDef<User>[] =>
+  (onDelete: (user: UserResponse) => void) =>
+  (router: ReturnType<typeof useRouter>): ColumnDef<UserResponse>[] =>
     [
       {
         accessorKey: "name",
@@ -31,7 +31,7 @@ export const getUserTableColumns =
           return (
             <div className="flex items-center gap-3">
               <Avatar className="h-9 w-9">
-                <AvatarImage src={user.image} alt={user.name} />
+                <AvatarImage src={user.profile_picture} alt={user.name} />
                 <AvatarFallback>
                   {user.name.slice(0, 2).toUpperCase()}
                 </AvatarFallback>

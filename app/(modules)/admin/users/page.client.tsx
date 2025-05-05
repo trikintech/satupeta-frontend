@@ -11,7 +11,7 @@ import { Button } from "@/shared/components/ui/button";
 import { UserPlus } from "lucide-react";
 import { userApi } from "@/shared/services/user";
 import { ApiResponse } from "@/shared/types/api-response";
-import { User } from "@/shared/types/user";
+import { UserResponse } from "@/shared/types/user";
 import { toast } from "sonner";
 import Link from "next/link";
 import { getUserTableColumns } from "./components/user-list/table-columns";
@@ -26,12 +26,12 @@ export default function UsersPageClient() {
     isLoading,
     isError,
     error,
-  } = useQuery<ApiResponse<User[]>>({
+  } = useQuery<ApiResponse<UserResponse[]>>({
     queryKey: ["users"],
     queryFn: () => userApi.getUsers(),
   });
 
-  const onDelete = (user: User) => {
+  const onDelete = (user: UserResponse) => {
     setActionType("delete");
     setSelectedUser(user);
     setIsDialogOpen(true);
@@ -42,7 +42,7 @@ export default function UsersPageClient() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<"delete" | null>(null);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserResponse | null>(null);
 
   const handleAction = async () => {
     if (!selectedUser || !actionType) return;

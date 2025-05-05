@@ -1,7 +1,7 @@
 import { PaginatedResponse } from "../types/api-response";
 import { Organization } from "../types/organization";
 
-import api from "./api";
+import { api } from "./api";
 
 export const organizationApi = {
   getOrganizations: async (params?: {

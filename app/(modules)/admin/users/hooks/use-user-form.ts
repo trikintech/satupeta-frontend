@@ -7,7 +7,6 @@ import * as z from "zod";
 export const formSchema = z.object({
   username: z.string().min(6, { message: "Username minimal 6 karakter" }),
   name: z.string().min(3, { message: "Nama minimal 3 karakter" }),
-  jabatan: z.string().optional(),
   email: z.string().email({ message: "Email tidak valid" }),
   password: z
     .string()
@@ -17,14 +16,13 @@ export const formSchema = z.object({
     .regex(/[^A-Za-z0-9]/, { message: "Harus ada karakter spesial" })
     .optional()
     .or(z.literal("")),
-  nip: z.string().optional(),
-  image: z.string().optional(),
-  wilayah_id: z.number({ required_error: "Wilayah tidak boleh kosong" }),
+  profile_picture: z.string().optional(),
+  position: z.string().optional(),
+  employee_id: z.string().optional(),
   organisasi_id: z.coerce.number({
     required_error: "Organisasi tidak boleh kosong",
-    invalid_type_error: "Organisasi harus angka",
   }),
-  role: z.string(),
+  role_id: z.string().optional(),
   is_active: z.boolean().optional(),
 });
 
@@ -36,14 +34,13 @@ export function useUserForm(defaults: Partial<UserFormData> = {}) {
     defaultValues: {
       username: "",
       name: "",
-      jabatan: "",
+      position: "",
       email: "",
       password: "",
-      nip: "",
-      image: "",
-      wilayah_id: 1,
+      employee_id: "",
+      profile_picture: "",
       organisasi_id: undefined,
-      role: "",
+      role_id: "",
       is_active: true,
       ...defaults,
     },

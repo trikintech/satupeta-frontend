@@ -1,7 +1,7 @@
 import { ApiResponse } from "../types/api-response";
 import { Topic } from "../types/topic";
 
-import api from "./api";
+import { api } from "./api";
 
 export const topicApi = {
   getTopics: async (): Promise<ApiResponse<Topic[]>> => {
