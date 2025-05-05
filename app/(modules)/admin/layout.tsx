@@ -1,7 +1,5 @@
 import React from "react";
 import Sidebar from "./components/sidebar";
-import Footer from "./components/footer";
-import Header from "./components/header";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -9,17 +7,13 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen p-4 space-x-4 overflow-hidden">
       <Sidebar />
 
       <div className="flex flex-col flex-1 overflow-hidden">
-        <Header />
-
         <main className="flex-1 overflow-y-auto p-6 bg-gray-100">
           {children}
         </main>
-
-        <Footer />
       </div>
     </div>
   );

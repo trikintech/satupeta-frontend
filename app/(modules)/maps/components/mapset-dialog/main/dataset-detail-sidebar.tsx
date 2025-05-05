@@ -8,6 +8,8 @@ import {
   TabsContent,
 } from "@/shared/components/ui/tabs";
 import { cn } from "@/shared/utils/utils";
+import { useAtomValue } from "jotai";
+import { selectedMapsetAtom } from "../../../state/mapset-dialog";
 
 export function DatasetDetailSidebar({
   open,
@@ -18,6 +20,8 @@ export function DatasetDetailSidebar({
   onCloseAction: () => void;
   onOpenAction: () => void;
 }) {
+  const selectedMapset = useAtomValue(selectedMapsetAtom);
+
   return (
     <div
       className={cn(
@@ -26,9 +30,7 @@ export function DatasetDetailSidebar({
       )}
     >
       <div className="relative flex items-center justify-between px-6 py-4 border-b">
-        <h2 className="font-semibold text-lg">
-          Peta Sebaran Alumni Pelatihan Petugas Pengambil Contoh Pangan
-        </h2>
+        <h2 className="font-semibold text-lg">{selectedMapset?.name}</h2>
 
         <button
           className="bg-slate-100 border-zinc-400 absolute top-4 w-6 h-6 -left-8 flex rounded-lg items-center justify-center cursor-pointer"
@@ -60,7 +62,7 @@ export function DatasetDetailSidebar({
 
         <TabsContent value="informasi" className="p-6 ">
           <div className="space-y-3 text-sm">
-            <Row label="Klasifikasi" value=":" />
+            <Row label="Klasifikasi" value={`:`} />
             <Row
               label="Deskripsi"
               value=": Berikut adalah data Landuse Citarum Hulu Di Provinsi Jawa Barat. Data ini dipublikasikan oleh Badan Penanggulangan Bencana Daerah."
