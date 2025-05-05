@@ -136,7 +136,7 @@ api.interceptors.response.use(
         isRefreshing = false;
 
         // Redirect ke halaman login
-        window.location.href = "/admin/login?error=session_expired";
+        window.location.href = "/auth/admin/login?error=session_expired";
 
         return Promise.reject(refreshError);
       }

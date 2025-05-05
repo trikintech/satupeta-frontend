@@ -22,7 +22,7 @@ export function useLayerToggle(mapset: Mapset) {
     if (isActiveLayer) {
       removeLayer(isActiveLayer.id);
     } else {
-      const parsed = parseWmsUrl(mapset?.mapsetservice_url);
+      const parsed = parseWmsUrl(mapset?.layer_url);
 
       addLayer({
         id: "db_" + mapset.id,

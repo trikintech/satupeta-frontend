@@ -12,7 +12,7 @@ const DashboardPage = () => {
   }
 
   if (!isAuthenticated) {
-    router.replace("/admin/login");
+    router.replace("/auth/admin/login");
     return null;
   }
 

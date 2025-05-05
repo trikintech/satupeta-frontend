@@ -1,51 +1,89 @@
-import { AttributeKugi } from "./attribute-kugi";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Category } from "./category";
-import { HistoryDraft } from "./history-draft";
-import { MapsetSource } from "./mapset-source";
-import { MapsetType } from "./mapset-type";
-import { Topic } from "./topic";
-import { UserResponse } from "./user";
 
-export type Mapset = {
-  id: number;
+export interface Classification {
+  id: string;
   name: string;
-  slug: string;
+  is_open: boolean;
+  is_limited: boolean;
+  is_secret: boolean;
+}
+
+export interface ProjectionSystem {
+  id: string;
+  name: string;
+}
+
+export interface Producer {
+  id: string;
+  name: string;
   description: string;
-  scale: string;
-  wilayah_id: number | null;
-  owner: string;
-  owner_address: string;
-  owner_telephone: string;
-  owner_email: string;
-  shp: string;
-  update_period: string;
-  revision_date: string;
-  klasifikasi: string;
-  validate: string;
-  topik: Topic;
-  mapsetservice_url: string;
-  layer_url: string;
-  metadata_xml: string;
-  mapset_type: MapsetType;
-  mapset_source: MapsetSource;
-  mapset_program: Record<string, unknown>;
-  mapset_coverage: Record<string, unknown>;
-  count_view_satudata: number;
-  count_view_satupeta: number;
-  count_download_dataset: number;
-  count_download_image: number;
-  count_download_shp: number;
-  count_download_geojson: number;
-  history_draft: HistoryDraft[];
-  attribute_kugi: AttributeKugi[];
-  is_permanent: boolean;
-  is_popular: boolean;
+  thumbnail: string;
+  address: string;
+  phone_number: string;
+  email: string;
+  website: string;
+}
+
+export interface Regional {
+  id: string;
+  code: string;
+  name: string;
+  description: any;
+  thumbnail: any;
+  is_active: boolean;
+}
+
+export interface Source {
+  id: string;
+  name: string;
+  description: string;
+  credential: Credential;
   is_active: boolean;
   is_deleted: boolean;
-  user?: UserResponse;
-  cuid: number;
-  cdate: string;
-  muid: number;
-  mdate: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Credential {
+  id: string;
+  name: string;
+  description: string;
+  credential_type: string;
+  credential_metadata: CredentialMetadata;
+  is_default: boolean;
+  is_active: boolean;
+  created_by: string;
+  updated_by: string;
+  created_at: string;
+  updated_at: string;
+  last_used_at: any;
+  last_used_by: any;
+}
+
+export interface CredentialMetadata {
+  environment: string;
+  version: string;
+}
+
+export type Mapset = {
+  id: string;
+  name: string;
+  description: string;
+  scale: string;
+  layer_url: string;
+  status_validation: string;
+  classification: Classification;
+  data_status: string;
+  data_update_period: string;
+  data_version: string;
   category: Category;
+  projection_system: ProjectionSystem;
+  producer: Producer;
+  regional: Regional;
+  source: Source;
+  is_popular: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 };
