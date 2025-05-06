@@ -11,7 +11,7 @@ import { signIn } from "next-auth/react";
 export default function LoginPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin/maps";
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin/mapset";
 
   const {
     register,

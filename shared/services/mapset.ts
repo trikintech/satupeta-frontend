@@ -16,7 +16,7 @@ export const mapsetApi = {
     return response.data;
   },
 
-  getMapsetById: async (id: number): Promise<Mapset> => {
+  getMapsetById: async (id: string): Promise<Mapset> => {
     const response = await api.get(`/mapsets/${id}`);
     return response.data;
   },

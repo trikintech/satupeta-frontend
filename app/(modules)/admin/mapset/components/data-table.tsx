@@ -57,6 +57,7 @@ export function DataTable<TData, TValue>({
         pageSize,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIndex, pageSize]);
 
   const table = useReactTable({

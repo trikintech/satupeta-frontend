@@ -32,7 +32,7 @@ declare module "next-auth" {
       email?: string | null;
       image?: string | null;
       username: string;
-      role: string;
+      role: Role;
     };
   }
 }

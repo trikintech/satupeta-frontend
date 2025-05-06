@@ -1,7 +1,7 @@
 // app/(dashboard)/manajemen-peta/components/manajemen-peta-client.tsx
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -13,6 +13,7 @@ import { columns } from "./components/column";
 import { FilterDrawer } from "./components/filter-drawer";
 import mapsetApi from "@/shared/services/mapset";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function MapsPageClient() {
   const router = useRouter();
@@ -71,12 +72,15 @@ export default function MapsPageClient() {
   }, [debouncedSearchValue]);
 
   // Buat parameter query dengan limit dan offset
-  const queryParams = {
-    limit,
-    offset,
-    search: search || undefined,
-    filter: filter || undefined,
-  };
+  const queryParams = useMemo(
+    () => ({
+      limit,
+      offset,
+      search: search || undefined,
+      filter: filter || undefined,
+    }),
+    [limit, offset, search, filter]
+  );
 
   // Query untuk mengambil data dengan optimasi React Query
   const { data, isLoading, isError, refetch } = useQuery({
@@ -166,7 +170,7 @@ export default function MapsPageClient() {
         />
 
         <div className="flex items-center gap-2">
-          <Link href="/admin/maps/add">
+          <Link href="/admin/mapset/add">
             <Button size="sm">
               <PlusIcon className="h-4 w-4 mr-2" />
               Tambah Mapset
@@ -179,7 +183,12 @@ export default function MapsPageClient() {
         <EmptyState
           icon={
             <div className="h-16 w-16 text-gray-400 mx-auto mb-4">
-              <img src="/empty-box.png" alt="Dataset tidak ditemukan" />
+              <Image
+                src="/empty-box.png"
+                alt="Dataset tidak ditemukan"
+                width={16}
+                height={16}
+              />
             </div>
           }
           title="Dataset tidak ditemukan"

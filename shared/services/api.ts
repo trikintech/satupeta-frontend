@@ -71,7 +71,7 @@ async function refreshToken() {
   } catch (error) {
     console.error("Error refreshing token:", error);
     // Logout jika refresh token gagal
-    await signOut({ callbackUrl: "/admin/login?error=session_expired" });
+    await signOut({ callbackUrl: "/auth/admin/login?error=session_expired" });
     throw error;
   }
 }

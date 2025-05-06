@@ -211,7 +211,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     maxAge: 30 * 24 * 60 * 60, // 30 hari
   },
   pages: {
-    signIn: "/admin/login",
-    error: "/admin/login/error",
+    signIn: "/auth/admin/login",
+    error: "/auth/admin/login/error",
   },
 });

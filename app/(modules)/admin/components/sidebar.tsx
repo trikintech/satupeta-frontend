@@ -26,7 +26,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   {
     name: "Manajemen Peta",
-    href: "/admin/maps",
+    href: "/admin/mapset",
     icon: <Map className="h-5 w-5" />,
   },
   {
