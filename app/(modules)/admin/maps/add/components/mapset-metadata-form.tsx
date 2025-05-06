@@ -7,10 +7,8 @@ import { z } from "zod";
 
 // Skema validasi untuk form metadata
 const metadataSchema = z.object({
-  metadata_name: z.string().min(1, "Nama metadata harus diisi"),
-  data_source: z.string().min(1, "Sumber data harus diisi"),
-  map_server_id: z.string().min(1, "MapServer harus dipilih"),
-  server_link: z.string().min(1, "Link MapServer harus diisi"),
+  source_id: z.string().min(1, "MapServer harus dipilih"),
+  layer_url: z.string().min(1, "Link MapServer harus diisi"),
 });
 
 type MetadataFormValues = z.infer<typeof metadataSchema>;
@@ -40,10 +38,8 @@ export const MapsetMetadataForm = ({
   } = useForm<MetadataFormValues>({
     resolver: zodResolver(metadataSchema),
     defaultValues: {
-      metadata_name: initialData.metadata_name || "",
-      data_source: initialData.data_source || "",
-      map_server_id: initialData.map_server_id || "",
-      server_link: initialData.server_link || "",
+      source_id: initialData.source_id || "",
+      layer_url: initialData.layer_url || "",
     },
   });
 
@@ -53,54 +49,14 @@ export const MapsetMetadataForm = ({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6 space-y-6">
-      {/* Nama Metadata */}
-      <div className="space-y-1">
-        <label htmlFor="metadata_name" className="text-sm font-medium">
-          Nama Metadata (File Identifier)<span className="text-red-500">*</span>
-        </label>
-        <input
-          id="metadata_name"
-          type="text"
-          {...register("metadata_name")}
-          className="w-full p-2 border rounded-md"
-          placeholder="Masukkan nama unik atau ID untuk metadata ini"
-        />
-        {errors.metadata_name && (
-          <p className="text-sm text-red-500">{errors.metadata_name.message}</p>
-        )}
-        <p className="text-xs text-gray-500">
-          Masukkan nama unik atau ID untuk metadata ini.
-        </p>
-      </div>
-
-      {/* Sumber Data */}
-      <div className="space-y-1">
-        <label htmlFor="data_source" className="text-sm font-medium">
-          Sumber Data<span className="text-red-500">*</span>
-        </label>
-        <input
-          id="data_source"
-          type="text"
-          {...register("data_source")}
-          className="w-full p-2 border rounded-md"
-          placeholder="Cantumkan sumber atau instansi penyedia data"
-        />
-        {errors.data_source && (
-          <p className="text-sm text-red-500">{errors.data_source.message}</p>
-        )}
-        <p className="text-xs text-gray-500">
-          Cantumkan sumber atau instansi penyedia data.
-        </p>
-      </div>
-
       {/* Pilih MapServer */}
       <div className="space-y-1">
-        <label htmlFor="map_server_id" className="text-sm font-medium">
+        <label htmlFor="source_id" className="text-sm font-medium">
           Pilih MapServer<span className="text-red-500">*</span>
         </label>
         <select
-          id="map_server_id"
-          {...register("map_server_id")}
+          id="source_id"
+          {...register("source_id")}
           className="w-full p-2 border rounded-md"
         >
           <option value="">Pilih server untuk menyimpan data</option>
@@ -110,8 +66,8 @@ export const MapsetMetadataForm = ({
             </option>
           ))}
         </select>
-        {errors.map_server_id && (
-          <p className="text-sm text-red-500">{errors.map_server_id.message}</p>
+        {errors.source_id && (
+          <p className="text-sm text-red-500">{errors.source_id.message}</p>
         )}
         <p className="text-xs text-gray-500">
           Pilih server tempat data mapset disimpan. Pilih &quot;Lainnya&quot;
@@ -121,18 +77,18 @@ export const MapsetMetadataForm = ({
 
       {/* Masukan Link */}
       <div className="space-y-1">
-        <label htmlFor="server_link" className="text-sm font-medium">
+        <label htmlFor="layer_url" className="text-sm font-medium">
           Masukan Link<span className="text-red-500">*</span>
         </label>
         <input
-          id="server_link"
+          id="layer_url"
           type="text"
-          {...register("server_link")}
+          {...register("layer_url")}
           className="w-full p-2 border rounded-md"
           placeholder="Masukkan URL atau link ke server"
         />
-        {errors.server_link && (
-          <p className="text-sm text-red-500">{errors.server_link.message}</p>
+        {errors.layer_url && (
+          <p className="text-sm text-red-500">{errors.layer_url.message}</p>
         )}
         <p className="text-xs text-gray-500">
           Masukan link MapServer yang akan Anda tampilkan.

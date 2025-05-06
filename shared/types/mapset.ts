@@ -87,3 +87,22 @@ export type Mapset = {
   created_at: string;
   updated_at: string;
 };
+
+export interface MapsetSubmitPayload {
+  name: string;
+  description: string;
+  scale: string;
+  data_status: string;
+  data_update_period: string;
+  data_version: string;
+  category_id: string;
+  projection_system_id: string;
+  producer_id: string;
+  source_id: string;
+  is_popular: boolean;
+  is_active: boolean;
+  layer_url: string;
+  regional_id: string;
+  classification_id: string;
+  status_validation: string;
+}

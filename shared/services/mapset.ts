@@ -1,5 +1,5 @@
 import { PaginatedResponse } from "../types/api-response";
-import { Mapset } from "../types/mapset";
+import { Mapset, MapsetSubmitPayload } from "../types/mapset";
 
 import { api } from "./api";
 
@@ -25,7 +25,9 @@ export const mapsetApi = {
     return response.data;
   },
 
-  createMapset: async (mapset: Omit<Mapset, "id">): Promise<Mapset> => {
+  createMapset: async (
+    mapset: Omit<MapsetSubmitPayload, "id">
+  ): Promise<Mapset> => {
     const response = await api.post("/mapsets", mapset);
     return response.data;
   },
