@@ -75,7 +75,6 @@ export function DataTable<TData, TValue>({
       const newPagination =
         typeof updater === "function" ? updater(pagination) : updater;
 
-      // Jangan update state jika tidak ada perubahan
       if (
         pagination.pageIndex !== newPagination.pageIndex ||
         pagination.pageSize !== newPagination.pageSize

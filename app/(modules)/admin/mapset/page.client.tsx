@@ -9,7 +9,7 @@ import { EmptyState } from "./components/empty-state";
 import { Button } from "@/shared/components/ui/button";
 import { SearchInput } from "./components/search-input";
 import { DataTable } from "./components/data-table";
-import { columns } from "./components/column";
+import { useMapsetColumns } from "./components/column";
 import { FilterDrawer } from "./components/filter-drawer";
 import mapsetApi from "@/shared/services/mapset";
 import Link from "next/link";
@@ -22,6 +22,7 @@ export default function MapsPageClient() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
+  const columns = useMapsetColumns();
 
   // Dapatkan parameter dari URL dengan nilai default
   const limit = Number(searchParams.get("limit") || "10");

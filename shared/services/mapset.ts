@@ -21,7 +21,7 @@ export const mapsetApi = {
     return response.data;
   },
 
-  deleteMapset: async (id?: number): Promise<PaginatedResponse<null>> => {
+  deleteMapset: async (id?: string): Promise<PaginatedResponse<null>> => {
     const response = await api.delete(`/mapsets/${id}`);
     return response.data;
   },
