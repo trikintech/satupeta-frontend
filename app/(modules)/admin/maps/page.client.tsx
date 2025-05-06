@@ -120,10 +120,10 @@ export default function MapsPageClient() {
 
       // Update limit hanya jika berubah, dan pastikan offset selalu valid
       if (pageSize !== limit) {
-        // updateSearchParams({
-        //   offset: "0", // Reset ke awal saat limit berubah
-        //   limit: pageSize.toString(),
-        // });
+        updateSearchParams({
+          offset: "0", // Reset ke awal saat limit berubah
+          limit: pageSize.toString(),
+        });
       } else {
         updateSearchParams({
           offset: newOffset.toString(),
