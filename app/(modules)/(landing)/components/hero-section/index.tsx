@@ -30,7 +30,7 @@ export function HeroSection() {
           <div className="hidden md:flex items-stretch">
             <div className="w-full h-full relative">
               <Image
-                src="/illustration-map.png"
+                src="/illustration-mp.png"
                 alt="Satu Peta Illustration"
                 fill
                 className="object-cover rounded-lg shadow-lg"

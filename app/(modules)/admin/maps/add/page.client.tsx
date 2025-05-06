@@ -12,6 +12,8 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import organizationApi from "@/shared/services/organization";
 import { MapsetOrganizationForm } from "./components/mapset-organization-form";
+import mapSourceApi from "@/shared/services/map-source";
+import { MapsetMetadataForm } from "./components/mapset-metadata-form";
 
 // Interface untuk struktur PaginatedResponse
 export interface PaginatedResponse<T> {
@@ -54,7 +56,12 @@ interface MapsetFormState {
     phone_number: string;
   };
   // Tab 3: Metadata
-  metadata: Record<string, any>;
+  metadata: {
+    metadata_name: string;
+    data_source: string;
+    map_server_id: string;
+    server_link: string;
+  };
   // Tab 4: Klasifikasi Wilayah
   classification: Record<string, any>;
   // Tab 5: Informasi Versi
@@ -76,7 +83,12 @@ const initialFormState: MapsetFormState = {
     organization_id: "",
     phone_number: "",
   },
-  metadata: {},
+  metadata: {
+    metadata_name: "",
+    data_source: "",
+    map_server_id: "",
+    server_link: "",
+  },
   classification: {},
   version: {},
 };
@@ -120,12 +132,20 @@ export default function AddMapsPageClient() {
       queryFn: () => organizationApi.getOrganizations(),
     });
 
+  const { data: mapSourcesResponse, isLoading: isLoadingMapSources } = useQuery(
+    {
+      queryKey: ["map-sources"],
+      queryFn: () => mapSourceApi.getMapSources(),
+    }
+  );
+
   // Status loading gabungan
   const isLoading =
     isLoadingProjections ||
     isLoadingCategories ||
     isLoadingClassifications ||
-    isLoadingOrganizations;
+    isLoadingOrganizations ||
+    isLoadingMapSources;
 
   // Ekstrak dan transformasi data untuk dikirim ke form
   const mapDataToOptions = <T extends { id: string; name: string }>(
@@ -139,6 +159,7 @@ export default function AddMapsPageClient() {
   const categoryOptions = mapDataToOptions(categoriesResponse);
   const classificationOptions = mapDataToOptions(classificationsResponse);
   const organizationOptions = mapDataToOptions(organizationsResponse);
+  const mapSourceOptions = mapDataToOptions(mapSourcesResponse);
 
   // Handler untuk update form data
   const updateFormData = (tabKey: keyof MapsetFormState, data: any) => {
@@ -248,27 +269,15 @@ export default function AddMapsPageClient() {
           />
         )}
         {activeTab === MapsetFormTab.METADATA && (
-          <div className="p-6">
-            <h3 className="text-lg font-medium mb-4">Metadata</h3>
-            {/* Form metadata akan diimplementasikan di sini */}
-            <div className="flex space-x-4 mt-6">
-              <button
-                onClick={handlePrevious}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
-              >
-                Kembali
-              </button>
-              <button
-                onClick={() => {
-                  updateFormData("metadata", { completed: true });
-                  handleContinue();
-                }}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              >
-                Lanjutkan
-              </button>
-            </div>
-          </div>
+          <MapsetMetadataForm
+            initialData={formState.metadata}
+            mapSources={mapSourceOptions}
+            onSubmit={(data) => {
+              updateFormData("metadata", data);
+              handleContinue();
+            }}
+            onPrevious={handlePrevious}
+          />
         )}
         {activeTab === MapsetFormTab.CLASSIFICATION && (
           <div className="p-6">

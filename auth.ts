@@ -138,8 +138,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           const userData = (await userResponse.json()) as UserResponse;
 
-          console.log(userData);
-
           if (!userResponse.ok) {
             throw new Error("Failed to fetch user data");
           }
