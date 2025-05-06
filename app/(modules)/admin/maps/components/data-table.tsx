@@ -1,7 +1,7 @@
 // app/(dashboard)/manajemen-peta/components/data-table.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -46,12 +46,26 @@ export function DataTable<TData, TValue>({
     pageSize,
   });
 
+  // Memperbarui state pagination internal ketika props berubah
+  useEffect(() => {
+    if (
+      pagination.pageIndex !== pageIndex ||
+      pagination.pageSize !== pageSize
+    ) {
+      setPagination({
+        pageIndex,
+        pageSize,
+      });
+    }
+  }, [pageIndex, pageSize]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination,
     pageCount,
+    rowCount,
     state: {
       pagination,
       rowSelection,
@@ -59,8 +73,15 @@ export function DataTable<TData, TValue>({
     onPaginationChange: (updater) => {
       const newPagination =
         typeof updater === "function" ? updater(pagination) : updater;
-      setPagination(newPagination);
-      onPaginationChange(newPagination);
+
+      // Jangan update state jika tidak ada perubahan
+      if (
+        pagination.pageIndex !== newPagination.pageIndex ||
+        pagination.pageSize !== newPagination.pageSize
+      ) {
+        setPagination(newPagination);
+        onPaginationChange(newPagination);
+      }
     },
     onRowSelectionChange: setRowSelection,
   });
@@ -86,41 +107,52 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length
-              ? table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              : null}
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Tidak ada data
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
 
       <div className="flex items-center justify-between">
         <div className="text-sm text-gray-500">
-          {Object.keys(rowSelection).length} of {rowCount} row(s) selected.
+          {Object.keys(rowSelection).length} dari {rowCount} baris dipilih.
         </div>
         <Pagination
           totalPages={pageCount}
           currentPage={pageIndex + 1}
-          onPageChange={(page: number) =>
-            setPagination((prev) => ({ ...prev, pageIndex: page - 1 }))
-          }
+          onPageChange={(page: number) => {
+            // Gunakan API table untuk mengubah halaman
+            table.setPageIndex(page - 1);
+          }}
           perPage={pageSize}
-          onPerPageChange={(perPage: number) =>
-            setPagination((prev) => ({ ...prev, pageSize: perPage }))
-          }
+          onPerPageChange={(perPage: number) => {
+            // Gunakan API table untuk mengubah ukuran halaman
+            table.setPageSize(perPage);
+          }}
         />
       </div>
     </div>

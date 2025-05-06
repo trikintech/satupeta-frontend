@@ -8,6 +8,7 @@ export const mapsetApi = {
     filter?: string;
     search?: string;
     limit?: number;
+    offset?: number;
   }): Promise<PaginatedResponse<Mapset[]>> => {
     const response = await api.get("/mapsets", {
       params,

@@ -1,8 +1,8 @@
 // app/(dashboard)/manajemen-peta/components/manajemen-peta-client.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EmptyState } from "./components/empty-state";
@@ -17,13 +17,16 @@ import Link from "next/link";
 export default function MapsPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
 
-  // Dapatkan parameter dari URL
-  const page = Number(searchParams.get("page") || "1");
-  const perPage = Number(searchParams.get("per_page") || "10");
+  // Dapatkan parameter dari URL dengan nilai default
+  const limit = Number(searchParams.get("limit") || "10");
+  // Pastikan offset adalah kelipatan dari limit atau 0
+  const offset = Number(searchParams.get("offset") || "0");
+
   const search = searchParams.get("search") || "";
   const filter = searchParams.get("filter") || "";
 
@@ -36,52 +39,100 @@ export default function MapsPageClient() {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchValue(searchValue);
-    }, 500); // Adjust the delay as needed
+    }, 500);
 
     return () => {
-      clearTimeout(handler); // Clear the timeout if the user types again
+      clearTimeout(handler);
     };
   }, [searchValue]);
 
+  // Membuat fungsi updateSearchParams yang memoized dengan useCallback
+  const updateSearchParams = useCallback(
+    (params: Record<string, string>) => {
+      const newParams = new URLSearchParams(searchParams.toString());
+
+      Object.entries(params).forEach(([key, value]) => {
+        if (value) {
+          newParams.set(key, value);
+        } else {
+          newParams.delete(key);
+        }
+      });
+
+      router.push(`?${newParams.toString()}`);
+    },
+    [router, searchParams]
+  );
+
   // Trigger the search when the debounced value changes
   useEffect(() => {
-    updateSearchParams({ search: debouncedSearchValue, page: "1" });
+    updateSearchParams({ search: debouncedSearchValue, offset: "0" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchValue]);
 
-  // Buat parameter query
+  // Buat parameter query dengan limit dan offset
   const queryParams = {
-    limit: perPage,
+    limit,
+    offset,
     search: search || undefined,
     filter: filter || undefined,
   };
 
-  // Query untuk mengambil data
+  // Query untuk mengambil data dengan optimasi React Query
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["mapsets", page, perPage, search, filter],
+    queryKey: ["mapsets", limit, offset, search, filter],
     queryFn: () => mapsetApi.getMapsets(queryParams),
-    staleTime: 5000,
+    staleTime: 30000,
+    retry: 1,
   });
 
-  // Fungsi untuk update parameter URL
-  const updateSearchParams = (params: Record<string, string>) => {
-    const newParams = new URLSearchParams(searchParams.toString());
-
-    Object.entries(params).forEach(([key, value]) => {
-      if (value) {
-        newParams.set(key, value);
-      } else {
-        newParams.delete(key);
-      }
-    });
-
-    router.push(`?${newParams.toString()}`);
-  };
+  // Prefetch halaman selanjutnya untuk UX yang lebih baik
+  useEffect(() => {
+    if (data?.has_more) {
+      const nextOffset = offset + limit;
+      queryClient.prefetchQuery({
+        queryKey: ["mapsets", limit, nextOffset, search, filter],
+        queryFn: () =>
+          mapsetApi.getMapsets({
+            ...queryParams,
+            offset: nextOffset,
+          }),
+        staleTime: 30000,
+      });
+    }
+  }, [data, limit, offset, search, filter, queryClient, queryParams]);
 
   // Handle search input change
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchValue(value); // Update the local state immediately
+    setSearchValue(e.target.value);
   };
+
+  // Menghitung pageIndex dan pageCount dari limit dan offset dengan benar
+  const pageIndex = Math.floor(offset / limit);
+  const totalRows = data?.total || 0;
+  const pageCount = Math.ceil(totalRows / limit);
+
+  // Handle pagination change dengan useCallback untuk mencegah re-render berlebihan
+  const handlePaginationChange = useCallback(
+    ({ pageIndex, pageSize }: { pageIndex: number; pageSize: number }) => {
+      // Hitung offset yang benar berdasarkan pageIndex dan pageSize
+      const newOffset = pageIndex * pageSize;
+
+      // Update limit hanya jika berubah, dan pastikan offset selalu valid
+      if (pageSize !== limit) {
+        // updateSearchParams({
+        //   offset: "0", // Reset ke awal saat limit berubah
+        //   limit: pageSize.toString(),
+        // });
+      } else {
+        updateSearchParams({
+          offset: newOffset.toString(),
+          limit: pageSize.toString(),
+        });
+      }
+    },
+    [updateSearchParams, limit]
+  );
 
   if (isLoading) {
     return (
@@ -103,7 +154,6 @@ export default function MapsPageClient() {
   }
 
   const mapsets = data?.items || [];
-  const totalRows = data?.total || 0;
 
   return (
     <div className="space-y-4">
@@ -116,20 +166,6 @@ export default function MapsPageClient() {
         />
 
         <div className="flex items-center gap-2">
-          {/* <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsFilterOpen(true)}
-          >
-            <FilterIcon className="h-4 w-4 mr-2" />
-            Filter
-          </Button>
-
-          <Button variant="outline" size="sm">
-            <RefreshCwIcon className="h-4 w-4 mr-2" />
-            Non-aktif Mapset
-          </Button> */}
-
           <Link href="/admin/maps/add">
             <Button size="sm">
               <PlusIcon className="h-4 w-4 mr-2" />
@@ -153,15 +189,10 @@ export default function MapsPageClient() {
         <DataTable
           data={mapsets}
           columns={columns}
-          pageCount={Math.ceil(totalRows / perPage)}
-          pageIndex={page - 1}
-          pageSize={perPage}
-          onPaginationChange={({ pageIndex, pageSize }) => {
-            updateSearchParams({
-              page: (pageIndex + 1).toString(),
-              per_page: pageSize.toString(),
-            });
-          }}
+          pageCount={pageCount}
+          pageIndex={pageIndex}
+          pageSize={limit}
+          onPaginationChange={handlePaginationChange}
           manualPagination
           rowCount={totalRows}
         />
@@ -173,7 +204,7 @@ export default function MapsPageClient() {
         onFilter={(filterParams) => {
           updateSearchParams({
             ...filterParams,
-            page: "1",
+            offset: "0",
           });
           setIsFilterOpen(false);
         }}

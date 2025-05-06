@@ -32,17 +32,20 @@ export function Pagination({
   onPerPageChange,
 }: PaginationProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between space-x-4">
       <div className="flex items-center space-x-2">
         <span className="text-sm text-gray-700">Rows per page</span>
         <Select
           value={perPage.toString()}
-          onValueChange={(value) => onPerPageChange(Number(value))}
+          onValueChange={(value) => {
+            onPerPageChange(Number(value));
+          }}
         >
           <SelectTrigger className="h-8 w-16">
             <SelectValue placeholder={perPage} />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="1">1</SelectItem>
             <SelectItem value="5">5</SelectItem>
             <SelectItem value="10">10</SelectItem>
             <SelectItem value="20">20</SelectItem>
