@@ -12,6 +12,7 @@ import { DataTable } from "./components/data-table";
 import { columns } from "./components/column";
 import { FilterDrawer } from "./components/filter-drawer";
 import mapsetApi from "@/shared/services/mapset";
+import Link from "next/link";
 
 export default function MapsPageClient() {
   const router = useRouter();
@@ -129,10 +130,12 @@ export default function MapsPageClient() {
             Non-aktif Mapset
           </Button> */}
 
-          <Button size="sm">
-            <PlusIcon className="h-4 w-4 mr-2" />
-            Tambah Mapset
-          </Button>
+          <Link href="/admin/maps/add">
+            <Button size="sm">
+              <PlusIcon className="h-4 w-4 mr-2" />
+              Tambah Mapset
+            </Button>
+          </Link>
         </div>
       </div>
 
