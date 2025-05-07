@@ -15,7 +15,7 @@ import { ArrowUpDown, Eye, Edit, Trash, MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DeleteMapsetDialog } from "./delete-mapset-dialog";
+import { DeleteMapsetDialog } from "../delete-mapset-dialog";
 import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
 

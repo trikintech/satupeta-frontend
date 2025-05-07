@@ -4,7 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { hasAdminAccess } from "@/shared/config/access_admin";
+import { hasAdminAccess } from "@/shared/config/access-admin";
 
 export default function AdminRouteGuard({
   children,

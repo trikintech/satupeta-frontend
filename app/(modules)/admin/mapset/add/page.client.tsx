@@ -21,6 +21,7 @@ import { MapsetFormState, MapsetFormTab } from "./types";
 import { PaginatedResponse } from "@/shared/types/api-response";
 import MapsetTab from "./components/mapset-tab";
 import { activeTabAtom, initialFormState, mapsetFormAtom } from "./state";
+import StatusValidation from "@/shared/config/status-validation";
 
 interface SelectOption {
   id: string;
@@ -144,7 +145,7 @@ export default function AddMapsPageClient() {
       is_popular: false,
       is_active: true,
       regional_id: "01968b53-a910-7a67-bd10-975b8923b92e",
-      status_validation: "on_validation",
+      status_validation: StatusValidation.ON_VERIFICATION,
     };
 
     submitMapsetMutation.mutate(payload);

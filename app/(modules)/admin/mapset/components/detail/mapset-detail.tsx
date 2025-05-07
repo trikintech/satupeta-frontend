@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 // import { MapsetClassificationSection } from "./mapset-classification-section";
 import mapsetApi from "@/shared/services/mapset";
 import { MapsetStatus } from "./mapset-status";
+import { Button } from "@/shared/components/ds/button";
+import { Check } from "lucide-react";
 
 interface MapsetDetailProps {
   id: string;
@@ -32,31 +34,31 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
       <div className="flex items-center gap-4 mb-6">
         <MapsetStatus mapset={mapset} />
         <div className="border-l h-6 border-gray-200" />
+        <Button variant={"primary"}>
+          <Check className="w-5 h-5 mr-2" /> Validasi Mapset
+        </Button>
+        <div className="ml-auto flex justify-between items-center">
+          {mapset.is_popular && (
+            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md">
+              Mapset Populer
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
-        {mapset.is_popular && (
-          <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md">
-            Mapset Populer
-          </div>
-        )}
-
-        {/* <MapsetActions id={mapset.id} /> */}
-      </div>
-
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-6">
-          <MapsetInfoSection mapset={mapset} />
-          <MapsetOrganizationSection organization={mapset.organization} />
+          {/* <MapsetInfoSection mapset={mapset} /> */}
+          {/* <MapsetOrganizationSection organization={mapset.organization} /> */}
         </div>
         <div className="space-y-6">
-          <MapsetMetadataSection metadata={mapset.metadata} />
-          <MapsetClassificationSection
+          {/* <MapsetMetadataSection metadata={mapset.metadata} /> */}
+          {/* <MapsetClassificationSection
             classification={mapset.classification}
             updates={mapset.updates}
-          />
+          /> */}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
