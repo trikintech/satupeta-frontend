@@ -59,9 +59,9 @@ export default function EditUserPageClient() {
       profile_picture: user.profile_picture,
       username: user.username,
       position: user.position,
-      role_id: user.role_id,
+      role_id: user.role.id,
       employee_id: user.employee_id,
-      organization_id: user.organization_id,
+      organization_id: user.organization.id,
       is_active: user.is_active,
     });
   }, [user, setFormState]);
