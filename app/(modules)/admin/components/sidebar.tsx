@@ -42,9 +42,19 @@ const menuItems: MenuItem[] = [
 ];
 
 const settingsItems: MenuItem[] = [
+  // {
+  //   name: "Mapserver & Metadata",
+  //   href: "/admin/map-sources",
+  //   icon: <UserCog className="h-5 w-5" />,
+  // },
   {
-    name: "Mapserver & Metadata",
-    href: "/admin/map-sources",
+    name: "Perangkat Daerah",
+    href: "/admin/organization",
+    icon: <UserCog className="h-5 w-5" />,
+  },
+  {
+    name: "Kategori",
+    href: "/admin/category",
     icon: <UserCog className="h-5 w-5" />,
   },
 ];
