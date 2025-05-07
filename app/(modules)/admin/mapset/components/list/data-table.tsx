@@ -1,13 +1,13 @@
-// app/(dashboard)/manajemen-peta/components/data-table.tsx
 "use client";
 
-import { useState, useEffect } from "react";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
   PaginationState,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -18,6 +18,7 @@ import {
   TableRow,
 } from "@/shared/components/ui/table";
 import { Pagination } from "@/shared/components/ui/pagination";
+import { useState, useEffect } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -28,6 +29,8 @@ interface DataTableProps<TData, TValue> {
   onPaginationChange: (pagination: PaginationState) => void;
   manualPagination?: boolean;
   rowCount: number;
+  sorting: SortingState;
+  onSortingChange: (sorting: SortingState) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -36,6 +39,8 @@ export function DataTable<TData, TValue>({
   pageCount,
   pageIndex,
   pageSize,
+  sorting,
+  onSortingChange,
   onPaginationChange,
   manualPagination = true,
   rowCount,
@@ -46,29 +51,28 @@ export function DataTable<TData, TValue>({
     pageSize,
   });
 
-  // Memperbarui state pagination internal ketika props berubah
+  // Sync internal state with props
   useEffect(() => {
     if (
       pagination.pageIndex !== pageIndex ||
       pagination.pageSize !== pageSize
     ) {
-      setPagination({
-        pageIndex,
-        pageSize,
-      });
+      setPagination({ pageIndex, pageSize });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIndex, pageSize]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     manualPagination,
+    manualSorting: true,
     pageCount,
     rowCount,
     state: {
       pagination,
+      sorting,
       rowSelection,
     },
     onPaginationChange: (updater) => {
@@ -83,6 +87,13 @@ export function DataTable<TData, TValue>({
         onPaginationChange(newPagination);
       }
     },
+    onSortingChange: (updaterOrValue) => {
+      const newSorting =
+        typeof updaterOrValue === "function"
+          ? updaterOrValue(sorting)
+          : updaterOrValue;
+      onSortingChange(newSorting);
+    },
     onRowSelectionChange: setRowSelection,
   });
 
@@ -95,19 +106,17 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                   </TableHead>
                 ))}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
+            {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -144,15 +153,9 @@ export function DataTable<TData, TValue>({
         <Pagination
           totalPages={pageCount}
           currentPage={pageIndex + 1}
-          onPageChange={(page: number) => {
-            // Gunakan API table untuk mengubah halaman
-            table.setPageIndex(page - 1);
-          }}
+          onPageChange={(page: number) => table.setPageIndex(page - 1)}
           perPage={pageSize}
-          onPerPageChange={(perPage: number) => {
-            // Gunakan API table untuk mengubah ukuran halaman
-            table.setPageSize(perPage);
-          }}
+          onPerPageChange={(perPage: number) => table.setPageSize(perPage)}
         />
       </div>
     </div>

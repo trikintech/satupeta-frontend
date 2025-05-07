@@ -8,9 +8,16 @@ export const mapsetApi = {
     filter?: string | string[];
     limit?: number;
     offset?: number;
+    sort?: string;
   }): Promise<PaginatedResponse<Mapset[]>> => {
+    // Remove the `sort` key if it is undefined or empty
+    const filteredParams = { ...params };
+    if (!filteredParams.sort) {
+      delete filteredParams.sort;
+    }
+
     const response = await api.get("/mapsets", {
-      params,
+      params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },

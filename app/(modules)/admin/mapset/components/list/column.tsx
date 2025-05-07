@@ -18,15 +18,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteMapsetDialog } from "../delete-mapset-dialog";
 import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react"; // Import useSession
-import { hasPermission } from "@/shared/config/role"; // Import hasPermission
+import { useSession } from "next-auth/react";
+import { hasPermission } from "@/shared/config/role";
 
 export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
   const router = useRouter();
   const [mapsetToDelete, setMapsetToDelete] = useState<Mapset | null>(null);
   const queryClient = useQueryClient();
-  const { data: session } = useSession(); // Get session data
-  const userRole = session?.user?.role; // Extract role name
+  const { data: session } = useSession();
+  const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
