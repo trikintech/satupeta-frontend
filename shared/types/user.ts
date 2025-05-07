@@ -14,7 +14,7 @@ export interface User {
   is_active: boolean;
 }
 
-export interface UserRequest {
+export interface UserSubmitPayload {
   id?: string;
   name?: string;
   password?: string;
