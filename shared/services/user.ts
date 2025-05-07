@@ -46,7 +46,7 @@ export const userApi = {
     id: string,
     user: UserSubmitPayload
   ): Promise<ApiResponse<User>> => {
-    const response = await api.put(`/users/${id}`, user);
+    const response = await api.patch(`/users/${id}`, user);
     return response.data;
   },
 };

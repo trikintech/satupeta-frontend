@@ -10,10 +10,6 @@ export default function UserDetail({ id }: { id: string }) {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">User Detail</h1>
-      </div>
-
       <div className="p-2 border rounded-[6px] border-zinc-200">
         <div className="py-2 px-4">
           <span className="text-lg font-semibold text-zinc-950">

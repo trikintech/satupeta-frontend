@@ -7,6 +7,7 @@ import AdminRouteGuard from "@/shared/components/auth/admin-route-guard";
 
 import { Providers } from "@/shared/providers";
 import { Toaster } from "@/shared/components/ui/sonner";
+import { appsName } from "@/shared/config/apps-name";
 
 const interSans = Inter({
   variable: "--font-inter-sans",
@@ -38,6 +39,9 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${geistSans.variable} ${interSans.variable} font-sans antialiased`}
       >
+        <head>
+          <title>Satu Peta {appsName.wilayah}</title>
+        </head>
         <Providers>
           <AdminRouteGuard>{children}</AdminRouteGuard>
 

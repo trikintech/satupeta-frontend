@@ -2,6 +2,8 @@ import { Organization } from "./organization";
 import { Role } from "./role";
 
 export interface User {
+  role_id: string;
+  organization_id: string;
   id: string;
   name: string;
   email: string;
@@ -15,15 +17,14 @@ export interface User {
 }
 
 export interface UserSubmitPayload {
-  id?: string;
-  name?: string;
+  name: string;
   password?: string;
-  email?: string;
+  email: string;
   profile_picture?: string;
-  username?: string;
-  position?: string;
-  role_id?: string;
-  employee_id?: string;
-  organization_id?: string;
-  is_active?: boolean;
+  username: string;
+  position: string;
+  role_id: string;
+  employee_id: string;
+  organization_id: string;
+  is_active: boolean;
 }

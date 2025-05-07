@@ -28,6 +28,7 @@ import {
   MapsetFormState,
   MapsetFormTab,
 } from "../../../state/mapset-form";
+import PageHeader from "../../../components/page-header";
 
 interface SelectOption {
   id: string;
@@ -203,7 +204,11 @@ export default function EditMapsPageClient() {
   }
 
   return (
-    <div className="container mx-auto py-4">
+    <div className="container space-y-6">
+      <PageHeader
+        title="Ubah Mapset dan Metadata"
+        description="Ubah mapset dan metadata untuk memperbarui data geospasial di Satu Peta."
+      />
       <MapsetTab
         formState={formState}
         activeTab={activeTab}

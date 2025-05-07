@@ -20,6 +20,7 @@ const userSchema = z.object({
   role_id: z.string().min(1, "Role harus dipilih"),
   organization_id: z.string().min(1, "Organisasi harus dipilih"),
   is_active: z.boolean(),
+  profile_picture: z.string().optional(),
 });
 
 type UserFormValues = z.infer<typeof userSchema>;
