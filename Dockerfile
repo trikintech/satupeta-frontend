@@ -1,14 +1,17 @@
-# Base Image with Bun
-FROM oven/bun:1.1.10-alpine AS base
+# Base image with Node.js and pnpm
+FROM node:20-alpine AS base
 WORKDIR /app
 
-# Add compatibility tools if needed
-RUN apk add --no-cache libc6-compat
+# Install compatibility tools (if needed)
+RUN apk add --no-cache gcompat
 
-# Install dependencies using Bun
+# Install pnpm globally
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Install dependencies
 FROM base AS deps
-COPY bun.lock package.json ./
-RUN bun install --frozen-lockfile
+COPY pnpm-lock.yaml package.json ./
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -22,10 +25,10 @@ ARG DATABASE_URL
 ENV NEXT_PUBLIC_API=$NEXT_PUBLIC_API
 ENV DATABASE_URL=$DATABASE_URL
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN bun run build
+RUN pnpm build
 
 # Production image
-FROM oven/bun:1.1.10-alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Add unprivileged user for security
@@ -42,4 +45,4 @@ ENV HOSTNAME 0.0.0.0
 ENV PORT 4000
 EXPOSE 4000
 
-CMD ["bun", "server.js"]
+CMD ["node", "server.js"]
