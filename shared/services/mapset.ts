@@ -32,6 +32,18 @@ export const mapsetApi = {
     const response = await api.post("/mapsets", mapset);
     return response.data;
   },
+
+  updateMapsetStatus: async (
+    id: string,
+    status: string,
+    layer_url: string
+  ): Promise<Mapset> => {
+    const response = await api.patch(`/mapsets/${id}`, {
+      status_validation: status,
+      layer_url,
+    });
+    return response.data;
+  },
 };
 
 export default mapsetApi;

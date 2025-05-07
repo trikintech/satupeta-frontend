@@ -14,22 +14,24 @@ export default function MapsetMetadataSection({ mapset }: { mapset: Mapset }) {
         </div>
         <div className="text-sm text-zinc-800">{mapset.source.name}</div>
       </div>
-      <div className="py-2 px-4">
-        <div className="text-sm font-medium text-zinc-950 mb-1">Tautan</div>
-        <div className="text-sm text-zinc-800">
-          <Link
-            href={mapset.layer_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
-          >
-            <div className="inline-flex text-sm items-center space-x-1 bg-slate-100 p-1 rounded">
-              <div>View Layer</div>
-              <ExternalLink width={14} height={14} />
-            </div>
-          </Link>
+      {mapset?.layer_url && (
+        <div className="py-2 px-4">
+          <div className="text-sm font-medium text-zinc-950 mb-1">Tautan</div>
+          <div className="text-sm text-zinc-800">
+            <Link
+              href={mapset.layer_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              <div className="inline-flex text-sm items-center space-x-1 bg-slate-100 p-1 rounded">
+                <div>View Layer</div>
+                <ExternalLink width={14} height={14} />
+              </div>
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
