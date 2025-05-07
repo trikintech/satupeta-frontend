@@ -24,7 +24,7 @@ export const userApi = {
     return response.data;
   },
 
-  getUserById: async (id: number): Promise<ApiResponse<User>> => {
+  getUserById: async (id: string): Promise<User> => {
     const response = await api.get(`/users/${id}`);
     return response.data;
   },
@@ -43,7 +43,7 @@ export const userApi = {
   },
 
   updateUser: async (
-    id: number,
+    id: string,
     user: UserSubmitPayload
   ): Promise<ApiResponse<User>> => {
     const response = await api.put(`/users/${id}`, user);
