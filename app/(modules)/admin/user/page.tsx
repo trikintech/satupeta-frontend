@@ -1,13 +1,13 @@
 import { Suspense } from "react";
-import MapsPageClient from "./page.client";
+import UserPageClient from "./page.client";
 import PageHeader from "../components/page-header";
 
-export default function MapsPage() {
+export default function UserPage() {
   return (
     <div className="container space-y-6">
-      <PageHeader title="Manajemen Peta" />
+      <PageHeader title="Manajemen User" />
       <Suspense>
-        <MapsPageClient />
+        <UserPageClient />
       </Suspense>
     </div>
   );

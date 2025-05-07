@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import PageHeader from "../components/page-header";
+import PageHeader from "../../components/page-header";
 import AddMapsPageClient from "./page.client";
 
 export default function AddMapsPage() {

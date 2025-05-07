@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 
 import { jwtDecode } from "jwt-decode";
 
-import { UserResponse } from "./shared/types/user";
+import { User } from "./shared/types/user";
 
 // Tipe untuk response dari API
 interface LoginResponse {
@@ -136,7 +136,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             }
           );
 
-          const userData = (await userResponse.json()) as UserResponse;
+          const userData = (await userResponse.json()) as User;
 
           if (!userResponse.ok) {
             throw new Error("Failed to fetch user data");

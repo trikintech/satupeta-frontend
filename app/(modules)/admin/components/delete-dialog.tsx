@@ -10,30 +10,29 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { Mapset } from "@/shared/types/mapset";
 
-interface DeleteMapsetDialogProps {
-  mapset: Mapset;
+interface DeleteDialogProps {
+  name: string;
   isDeleting: boolean;
   onDelete: () => void;
   onCancel: () => void;
   open: boolean;
 }
 
-export const DeleteMapsetDialog = ({
-  mapset,
+export const DeleteDialog = ({
+  name,
   isDeleting,
   onDelete,
   onCancel,
   open,
-}: DeleteMapsetDialogProps) => {
+}: DeleteDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onCancel()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Hapus Mapset</DialogTitle>
+          <DialogTitle>Hapus </DialogTitle>
           <DialogDescription>
-            Apakah Anda yakin ingin menghapus mapset &quot;{mapset.name}&quot;?
+            Apakah Anda yakin ingin menghapus mapset &quot;{name}&quot;?
             Tindakan ini tidak dapat dibatalkan.
           </DialogDescription>
         </DialogHeader>

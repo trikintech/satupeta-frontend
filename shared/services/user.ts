@@ -1,15 +1,30 @@
-import { ApiResponse } from "../types/api-response";
-import { UserRequest, UserResponse } from "../types/user";
+import { ApiResponse, PaginatedResponse } from "../types/api-response";
+import { UserRequest, User } from "../types/user";
 
 import { api } from "./api";
 
 export const userApi = {
-  getUsers: async (): Promise<ApiResponse<UserResponse[]>> => {
-    const response = await api.get("/user");
+  getUsers: async (params?: {
+    filter?: string | string[];
+    limit?: number;
+    offset?: number;
+    sort?: string;
+  }): Promise<PaginatedResponse<User[]>> => {
+    const filteredParams = { ...params };
+    if (!filteredParams.sort) {
+      delete filteredParams.sort;
+    }
+
+    const response = await api.get("/users", {
+      params: filteredParams,
+      paramsSerializer: {
+        indexes: null, // This allows multiple params with the same name
+      },
+    });
     return response.data;
   },
 
-  getUserById: async (id: number): Promise<ApiResponse<UserResponse>> => {
+  getUserById: async (id: number): Promise<ApiResponse<User>> => {
     const response = await api.get(`/user/${id}`);
     return response.data;
   },
@@ -21,7 +36,7 @@ export const userApi = {
 
   createUser: async (
     user: Omit<UserRequest, "id">
-  ): Promise<ApiResponse<UserResponse>> => {
+  ): Promise<ApiResponse<User>> => {
     const response = await api.post("/user", user);
     return response.data;
   },
@@ -29,7 +44,7 @@ export const userApi = {
   updateUser: async (
     id: number,
     user: UserRequest
-  ): Promise<ApiResponse<UserResponse>> => {
+  ): Promise<ApiResponse<User>> => {
     const response = await api.put(`/user/${id}`, user);
     return response.data;
   },

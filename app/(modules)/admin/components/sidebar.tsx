@@ -31,7 +31,7 @@ const menuItems: MenuItem[] = [
   },
   {
     name: "Manajemen User",
-    href: "/admin/users",
+    href: "/admin/user",
     icon: <Users className="h-5 w-5" />,
   },
   {

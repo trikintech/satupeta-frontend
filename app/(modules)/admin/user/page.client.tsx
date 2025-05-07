@@ -5,16 +5,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { PlusIcon, RefreshCwIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
-import { SearchInput } from "../components/search-input";
 import { DataTable } from "../components/data-table";
-import { TabNavigation } from "./components/list/tab-navigation";
-import { useTabState } from "../hooks/use-tab";
-import mapsetApi from "@/shared/services/mapset";
+import { useUserColumns } from "./components/list/column";
+import userApi from "@/shared/services/user";
 import Link from "next/link";
 import Image from "next/image";
 import { SortingState } from "@tanstack/react-table";
 import { EmptyState } from "../components/empty-state";
-import { useMapsetColumns } from "./components/list/column";
+import { SearchInput } from "../components/search-input";
 
 // Constants
 const DEFAULT_LIMIT = 10;
@@ -30,12 +28,11 @@ interface QueryParams {
   sort: string;
 }
 
-export default function MapsPageClient() {
+export default function UserPageClient() {
   // Hooks
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
-  const { currentTab } = useTabState();
 
   // State
   const [searchValue, setSearchValue] = useState("");
@@ -57,7 +54,7 @@ export default function MapsPageClient() {
     }, [searchParams]);
 
   // Columns for the data table
-  const columns = useMapsetColumns();
+  const columns = useUserColumns();
 
   // Effects
   useEffect(() => {
@@ -86,13 +83,13 @@ export default function MapsPageClient() {
 
   // Data fetching
   const {
-    data: { items: mapsets = [], total = 0, has_more = false } = {},
+    data: { items: users = [], total = 0, has_more = false } = {},
     isLoading,
     isError,
     refetch,
   } = useQuery({
     queryKey: [
-      "mapsets",
+      "users",
       limit,
       offset,
       debouncedSearchValue,
@@ -100,7 +97,7 @@ export default function MapsPageClient() {
       sortBy,
       sortOrder,
     ],
-    queryFn: () => mapsetApi.getMapsets(queryParams),
+    queryFn: () => userApi.getUsers(queryParams),
     staleTime: 30000,
     retry: 1,
   });
@@ -111,7 +108,7 @@ export default function MapsPageClient() {
       const nextOffset = offset + limit;
       queryClient.prefetchQuery({
         queryKey: [
-          "mapsets",
+          "users",
           limit,
           nextOffset,
           debouncedSearchValue,
@@ -120,7 +117,7 @@ export default function MapsPageClient() {
           sortOrder,
         ],
         queryFn: () =>
-          mapsetApi.getMapsets({
+          userApi.getUsers({
             ...queryParams,
             offset: nextOffset,
           }),
@@ -212,10 +209,9 @@ export default function MapsPageClient() {
   }
 
   // Empty state
-  if (mapsets.length === 0) {
+  if (users.length === 0) {
     return (
       <div className="space-y-4">
-        <TabNavigation activeTab={currentTab} />
         <SearchAndActionBar
           searchValue={searchValue}
           onChange={handleSearchInputChange}
@@ -225,13 +221,13 @@ export default function MapsPageClient() {
             <div className="text-gray-400 mx-auto mb-4">
               <Image
                 src="/empty-box.png"
-                alt="Dataset tidak ditemukan"
+                alt="User tidak ditemukan"
                 width={64}
                 height={64}
               />
             </div>
           }
-          title="Dataset tidak ditemukan"
+          title="User tidak ditemukan"
           description=""
         />
       </div>
@@ -241,15 +237,13 @@ export default function MapsPageClient() {
   // Main render
   return (
     <div className="space-y-4">
-      <TabNavigation activeTab={currentTab} />
-
       <SearchAndActionBar
         searchValue={searchValue}
         onChange={handleSearchInputChange}
       />
 
       <DataTable
-        data={mapsets}
+        data={users}
         columns={columns}
         pageCount={pageCount}
         pageIndex={pageIndex}
@@ -292,10 +286,10 @@ const SearchAndActionBar = ({
     />
 
     <div className="flex items-center gap-2">
-      <Link href="/admin/mapset/add">
+      <Link href="/admin/user/add">
         <Button size="sm">
           <PlusIcon className="h-4 w-4 mr-2" />
-          Tambah Mapset
+          Tambah User
         </Button>
       </Link>
     </div>
