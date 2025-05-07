@@ -1,4 +1,4 @@
-import { ApiResponse, PaginatedResponse } from "../types/api-response";
+import { PaginatedResponse } from "../types/api-response";
 import { UserSubmitPayload, User } from "../types/user";
 
 import { api } from "./api";
@@ -29,23 +29,18 @@ export const userApi = {
     return response.data;
   },
 
-  deleteUser: async (id?: string): Promise<ApiResponse<null>> => {
+  deleteUser: async (id?: string): Promise<User> => {
     const response = await api.delete(`/users/${id}`);
     return response.data;
   },
 
-  createUser: async (
-    user: Omit<UserSubmitPayload, "id">
-  ): Promise<ApiResponse<User>> => {
+  createUser: async (user: Omit<UserSubmitPayload, "id">): Promise<User> => {
     console.log(user);
     const response = await api.post("/users", user);
     return response.data;
   },
 
-  updateUser: async (
-    id: string,
-    user: UserSubmitPayload
-  ): Promise<ApiResponse<User>> => {
+  updateUser: async (id: string, user: UserSubmitPayload): Promise<User> => {
     const response = await api.patch(`/users/${id}`, user);
     return response.data;
   },
