@@ -61,10 +61,10 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ghcr.io/trikinteh/satupeta-frontend:main
+            docker pull ghcr.io/trikintech/satupeta-frontend:main
             docker stop satupeta-frontend-main || true
             docker rm satupeta-frontend-main || true
             docker run -d \
               --name satupeta-frontend-main \
               -p 4000:4000 \
-              ghcr.io/trikinteh/satupeta-frontend:main
+              ghcr.io/trikintech/satupeta-frontend:main
