@@ -5,13 +5,15 @@ import { api } from "./api";
 
 export const mapsetApi = {
   getMapsets: async (params?: {
-    filter?: string;
-    search?: string;
+    filter?: string | string[];
     limit?: number;
     offset?: number;
   }): Promise<PaginatedResponse<Mapset[]>> => {
     const response = await api.get("/mapsets", {
       params,
+      paramsSerializer: {
+        indexes: null, // This allows multiple params with the same name
+      },
     });
     return response.data;
   },

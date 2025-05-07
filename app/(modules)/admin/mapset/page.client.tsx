@@ -11,6 +11,8 @@ import { SearchInput } from "./components/list/search-input";
 import { DataTable } from "./components/list/data-table";
 import { useMapsetColumns } from "./components/list/column";
 import { FilterDrawer } from "./components/list/filter-drawer";
+import { TabNavigation } from "./components/list/tab-navigation";
+import { useTabState } from "../hooks/use-tab";
 import mapsetApi from "@/shared/services/mapset";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,18 +21,25 @@ export default function MapsPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const { currentTab } = useTabState();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
   const columns = useMapsetColumns();
 
-  // Dapatkan parameter dari URL dengan nilai default
+  // Get parameters from URL with default values
   const limit = Number(searchParams.get("limit") || "10");
-  // Pastikan offset adalah kelipatan dari limit atau 0
   const offset = Number(searchParams.get("offset") || "0");
-
   const search = searchParams.get("search") || "";
-  const filter = searchParams.get("filter") || "";
+
+  // Get all filter parameters (can be multiple with the same name)
+  const filterParams = useMemo(() => {
+    const params: string[] = [];
+    searchParams.getAll("filter").forEach((filter) => {
+      if (filter) params.push(filter);
+    });
+    return params;
+  }, [searchParams]);
 
   // Initialize searchValue from URL
   useEffect(() => {
@@ -48,18 +57,23 @@ export default function MapsPageClient() {
     };
   }, [searchValue]);
 
-  // Membuat fungsi updateSearchParams yang memoized dengan useCallback
+  // Create a memoized updateSearchParams function with useCallback
   const updateSearchParams = useCallback(
     (params: Record<string, string>) => {
       const newParams = new URLSearchParams(searchParams.toString());
 
-      Object.entries(params).forEach(([key, value]) => {
-        if (value) {
-          newParams.set(key, value);
-        } else {
-          newParams.delete(key);
-        }
-      });
+      // Handle special case for filter which might be removed
+      if ("filter" in params && params.filter === "") {
+        newParams.delete("filter");
+      } else {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value) {
+            newParams.set(key, value);
+          } else {
+            newParams.delete(key);
+          }
+        });
+      }
 
       router.push(`?${newParams.toString()}`);
     },
@@ -72,31 +86,37 @@ export default function MapsPageClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchValue]);
 
-  // Buat parameter query dengan limit dan offset
+  // Create query parameters with limit and offset
   const queryParams = useMemo(
     () => ({
       limit,
       offset,
       search: search || undefined,
-      filter: filter || undefined,
+      filter: filterParams.length > 0 ? filterParams : undefined,
     }),
-    [limit, offset, search, filter]
+    [limit, offset, search, filterParams]
   );
 
-  // Query untuk mengambil data dengan optimasi React Query
+  // Query to fetch data with React Query optimizations
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["mapsets", limit, offset, search, filter],
+    queryKey: ["mapsets", limit, offset, search, filterParams.join("|")],
     queryFn: () => mapsetApi.getMapsets(queryParams),
     staleTime: 30000,
     retry: 1,
   });
 
-  // Prefetch halaman selanjutnya untuk UX yang lebih baik
+  // Prefetch next page for better UX
   useEffect(() => {
     if (data?.has_more) {
       const nextOffset = offset + limit;
       queryClient.prefetchQuery({
-        queryKey: ["mapsets", limit, nextOffset, search, filter],
+        queryKey: [
+          "mapsets",
+          limit,
+          nextOffset,
+          search,
+          filterParams.join("|"),
+        ],
         queryFn: () =>
           mapsetApi.getMapsets({
             ...queryParams,
@@ -105,28 +125,28 @@ export default function MapsPageClient() {
         staleTime: 30000,
       });
     }
-  }, [data, limit, offset, search, filter, queryClient, queryParams]);
+  }, [data, limit, offset, search, filterParams, queryClient, queryParams]);
 
   // Handle search input change
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
-  // Menghitung pageIndex dan pageCount dari limit dan offset dengan benar
+  // Calculate pageIndex and pageCount from limit and offset correctly
   const pageIndex = Math.floor(offset / limit);
   const totalRows = data?.total || 0;
   const pageCount = Math.ceil(totalRows / limit);
 
-  // Handle pagination change dengan useCallback untuk mencegah re-render berlebihan
+  // Handle pagination change with useCallback to prevent excessive re-renders
   const handlePaginationChange = useCallback(
     ({ pageIndex, pageSize }: { pageIndex: number; pageSize: number }) => {
-      // Hitung offset yang benar berdasarkan pageIndex dan pageSize
+      // Calculate correct offset based on pageIndex and pageSize
       const newOffset = pageIndex * pageSize;
 
-      // Update limit hanya jika berubah, dan pastikan offset selalu valid
+      // Update limit only if changed, and ensure offset is always valid
       if (pageSize !== limit) {
         updateSearchParams({
-          offset: "0", // Reset ke awal saat limit berubah
+          offset: "0", // Reset to beginning when limit changes
           limit: pageSize.toString(),
         });
       } else {
@@ -137,6 +157,38 @@ export default function MapsPageClient() {
       }
     },
     [updateSearchParams, limit]
+  );
+
+  // Apply custom filters from filter drawer
+  const handleFilterApply = useCallback(
+    (filterParams: Record<string, string>) => {
+      // Create new URLSearchParams
+      const newParams = new URLSearchParams(searchParams.toString());
+
+      // Remove all existing filter parameters
+      newParams.delete("filter");
+
+      // Reset pagination
+      newParams.set("offset", "0");
+
+      // Build the new URL with filter parameters
+      let url = `?${newParams.toString()}`;
+
+      // Add filter parameters if any
+      if (filterParams.filter) {
+        // Split multiple filters by &filter=
+        const filters = filterParams.filter.split("&filter=");
+        for (const filter of filters) {
+          if (filter) {
+            url += `&filter=${encodeURIComponent(filter)}`;
+          }
+        }
+      }
+
+      router.push(url);
+      setIsFilterOpen(false);
+    },
+    [router, searchParams]
   );
 
   if (isLoading) {
@@ -162,6 +214,8 @@ export default function MapsPageClient() {
 
   return (
     <div className="space-y-4">
+      <TabNavigation activeTab={currentTab} />
+
       <div className="flex items-center justify-between">
         <SearchInput
           placeholder="Masukkan kata kunci"
@@ -183,12 +237,12 @@ export default function MapsPageClient() {
       {mapsets.length === 0 ? (
         <EmptyState
           icon={
-            <div className="h-16 w-16 text-gray-400 mx-auto mb-4">
+            <div className="text-gray-400 mx-auto mb-4">
               <Image
                 src="/empty-box.png"
                 alt="Dataset tidak ditemukan"
-                width={16}
-                height={16}
+                width={64}
+                height={64}
               />
             </div>
           }
@@ -211,15 +265,9 @@ export default function MapsPageClient() {
       <FilterDrawer
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
-        onFilter={(filterParams) => {
-          updateSearchParams({
-            ...filterParams,
-            offset: "0",
-          });
-          setIsFilterOpen(false);
-        }}
+        onFilter={handleFilterApply}
         currentFilters={{
-          filter: filter,
+          filter: filterParams.length > 0 ? filterParams[0] : "",
         }}
       />
     </div>
