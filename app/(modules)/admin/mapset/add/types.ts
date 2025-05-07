@@ -1,8 +1,7 @@
 export enum MapsetFormTab {
   INFO = 0,
-  ORGANIZATION = 1,
-  METADATA = 2,
-  VERSION = 3,
+  METADATA = 1,
+  VERSION = 2,
 }
 
 export interface MapsetFormState {
@@ -14,10 +13,7 @@ export interface MapsetFormState {
     category_id: string;
     data_status: "sementara" | "tetap";
     classification_id: string;
-  };
-  organization: {
     organization_id: string;
-    phone_number: string;
   };
   metadata: {
     source_id: string;

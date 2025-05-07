@@ -1,7 +1,5 @@
 import { cn } from "@/shared/utils/utils";
-import { useAtom } from "jotai";
 import { Circle, CircleCheck } from "lucide-react";
-import { activeTabAtom } from "../../../state/mapset-form";
 import { MapsetFormState, MapsetFormTab } from "../types";
 
 interface TabButtonProps {
@@ -42,13 +40,12 @@ const TabButton = ({
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function MapsetTab({ formState }: any) {
-  const [activeTab, setActiveTab] = useAtom(activeTabAtom);
-
-  const handleTabChange = (tab: MapsetFormTab) => {
-    setActiveTab(tab);
-  };
+export default function MapsetTab({
+  formState,
+  activeTab,
+  handleTabChange,
+}: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+any) {
   const isTabComplete = (tabKey: keyof MapsetFormState): boolean => {
     const data = formState[tabKey];
 
@@ -60,8 +57,6 @@ export default function MapsetTab({ formState }: any) {
             data.category_id &&
             data.classification_id
         );
-      case "organization":
-        return Boolean(data.organization_id);
       case "metadata":
         return Boolean(data.source_id && data.layer_url);
       case "version":
@@ -79,12 +74,6 @@ export default function MapsetTab({ formState }: any) {
           onClick={() => handleTabChange(MapsetFormTab.INFO)}
           label="Informasi Mapset"
           isCompleted={isTabComplete("info")} // Tandai tab sudah diisi
-        />
-        <TabButton
-          isActive={activeTab === MapsetFormTab.ORGANIZATION}
-          onClick={() => handleTabChange(MapsetFormTab.ORGANIZATION)}
-          label="Informasi Organisasi"
-          isCompleted={isTabComplete("organization")}
         />
         <TabButton
           isActive={activeTab === MapsetFormTab.METADATA}

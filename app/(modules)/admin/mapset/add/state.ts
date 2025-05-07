@@ -14,10 +14,7 @@ const initialFormState: MapsetFormState = {
     category_id: "",
     classification_id: "",
     data_status: "sementara",
-  },
-  organization: {
     organization_id: "",
-    phone_number: "",
   },
   metadata: {
     source_id: "",

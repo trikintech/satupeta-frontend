@@ -13,6 +13,7 @@ const mapsetInfoSchema = z.object({
   projection_system_id: z.string().min(1, "Sistem proyeksi harus dipilih"),
   category_id: z.string().min(1, "Kategori harus dipilih"),
   classification_id: z.string().min(1, "Klasifikasi harus dipilih"),
+  organization_id: z.string().min(1, "Organisasi harus dipilih"),
   data_status: z.enum(["sementara", "tetap"], {
     required_error: "Status data harus dipilih",
   }),
@@ -30,6 +31,7 @@ interface MapsetInfoFormProps {
   projectionSystems: SelectOption[];
   categories: SelectOption[];
   classifications: SelectOption[];
+  organizations: SelectOption[];
   onSubmit: (data: MapsetInfoFormValues) => void;
 }
 
@@ -38,6 +40,7 @@ export const MapsetInfoForm = ({
   projectionSystems,
   categories,
   classifications,
+  organizations,
   onSubmit,
 }: MapsetInfoFormProps) => {
   const {
@@ -54,6 +57,7 @@ export const MapsetInfoForm = ({
       projection_system_id: initialData.projection_system_id || "",
       category_id: initialData.category_id || "",
       classification_id: initialData.classification_id || "",
+      organization_id: initialData.organization_id || "",
       data_status:
         (initialData.data_status as "sementara" | "tetap") || "sementara",
     },
@@ -68,6 +72,7 @@ export const MapsetInfoForm = ({
       projection_system_id: initialData.projection_system_id || "",
       category_id: initialData.category_id || "",
       classification_id: initialData.classification_id || "",
+      organization_id: initialData.organization_id || "",
       data_status:
         (initialData.data_status as "sementara" | "tetap") || "sementara",
     });
@@ -228,6 +233,31 @@ export const MapsetInfoForm = ({
         <p className="text-xs text-gray-500">
           Pilih apakah data ini masih sementara atau sudah bersifat tetap.
         </p>
+      </div>
+
+      <div className="space-y-1">
+        <label htmlFor="organization_id" className="text-sm font-medium">
+          Nama Organisasi<span className="text-red-500">*</span>
+        </label>
+        <select
+          id="organization_id"
+          {...register("organization_id")}
+          className="w-full p-2 border rounded-md"
+        >
+          <option value="">
+            Pilih organisasi yang berkontribusi atas data ini
+          </option>
+          {organizations.map((org) => (
+            <option key={org.id} value={org.id}>
+              {org.name}
+            </option>
+          ))}
+        </select>
+        {errors.organization_id && (
+          <p className="text-sm text-red-500">
+            {errors.organization_id.message}
+          </p>
+        )}
       </div>
 
       {/* Submit Button */}

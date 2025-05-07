@@ -9,7 +9,6 @@ import mapProjectionSystemApi from "@/shared/services/map-projection-system";
 import { MapsetInfoForm } from "./components/mapset-info-form";
 import { Loader2 } from "lucide-react";
 import organizationApi from "@/shared/services/organization";
-import { MapsetOrganizationForm } from "./components/mapset-organization-form";
 import mapSourceApi from "@/shared/services/map-source";
 import { MapsetMetadataForm } from "./components/mapset-metadata-form";
 import { useRouter } from "next/navigation";
@@ -97,7 +96,7 @@ export default function AddMapsPageClient() {
 
   const handleContinue = () => {
     if (activeTab < MapsetFormTab.VERSION) {
-      setActiveTab(activeTab + 1);
+      setActiveTab((prev) => prev + 1);
     }
   };
 
@@ -115,7 +114,7 @@ export default function AddMapsPageClient() {
       queryClient.invalidateQueries({ queryKey: ["mapsets"] });
       setFormState(initialFormState);
       toast.success("Mapset berhasil disimpan!");
-      router.push("/mapsets");
+      router.push("/admin/mapset");
     },
     onError: (error: Error) => {
       console.error("Error creating mapset:", error);
@@ -137,7 +136,7 @@ export default function AddMapsPageClient() {
       category_id: formState.info.category_id,
       data_status: formState.info.data_status,
       classification_id: formState.info.classification_id,
-      producer_id: formState.organization.organization_id,
+      producer_id: formState.info.organization_id,
       source_id: formState.metadata.source_id,
       layer_url: formState.metadata.layer_url,
       data_update_period: versionData.data_update_period,
@@ -164,7 +163,11 @@ export default function AddMapsPageClient() {
   return (
     <div className="container mx-auto py-4">
       {/* Tab Navigation */}
-      <MapsetTab formState={formState} />
+      <MapsetTab
+        formState={formState}
+        activeTab={activeTab}
+        handleTabChange={(e: number) => setActiveTab(e)}
+      />
       {/* Tab Content */}
       <div className="bg-white rounded-md shadow">
         {activeTab === MapsetFormTab.INFO && (
@@ -173,21 +176,11 @@ export default function AddMapsPageClient() {
             projectionSystems={projectionSystemOptions}
             categories={categoryOptions}
             classifications={classificationOptions}
+            organizations={organizationOptions}
             onSubmit={(data) => {
               updateFormData("info", data);
               handleContinue();
             }}
-          />
-        )}
-        {activeTab === MapsetFormTab.ORGANIZATION && (
-          <MapsetOrganizationForm
-            initialData={formState.organization}
-            organizations={organizationOptions}
-            onSubmit={(data) => {
-              updateFormData("organization", data);
-              handleContinue();
-            }}
-            onPrevious={handlePrevious}
           />
         )}
         {activeTab === MapsetFormTab.METADATA && (
