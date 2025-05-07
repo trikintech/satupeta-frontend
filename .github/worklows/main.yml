@@ -65,5 +65,5 @@ jobs:
             docker rm satupeta-frontend-main || true
             docker run -d \
               --name satupeta-frontend-main \
-              -p 3000:3000 \
+              -p 4000:4000 \
               ghcr.io/trikinteh/satupeta-frontend:main
