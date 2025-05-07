@@ -1,14 +1,13 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-// import { MapsetActions } from "./mapset-actions";
-// import { MapsetInfoSection } from "./mapset-info-section";
-// import { MapsetMetadataSection } from "./mapset-metadata-section";
-// import { MapsetOrganizationSection } from "./mapset-organization-section";
-// import { MapsetClassificationSection } from "./mapset-classification-section";
 import mapsetApi from "@/shared/services/mapset";
 import { MapsetStatus } from "./mapset-status";
 import { Button } from "@/shared/components/ds/button";
 import { Check } from "lucide-react";
+import MapsetInfoSection from "./mapset-info-section";
+import MapsetOrganizationSection from "./mapset-organization-section";
+import MapsetMetadataSection from "./mapset-metadata-section";
+import MapsetVersionSection from "./mapset-version-section";
 
 interface MapsetDetailProps {
   id: string;
@@ -48,15 +47,14 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-6">
-          {/* <MapsetInfoSection mapset={mapset} /> */}
-          {/* <MapsetOrganizationSection organization={mapset.organization} /> */}
+          <MapsetInfoSection mapset={mapset} />
+          <MapsetOrganizationSection mapset={mapset} />
         </div>
         <div className="space-y-6">
-          {/* <MapsetMetadataSection metadata={mapset.metadata} /> */}
-          {/* <MapsetClassificationSection
-            classification={mapset.classification}
-            updates={mapset.updates}
-          /> */}
+          <MapsetMetadataSection mapset={mapset} />
+          <MapsetVersionSection
+            mapset={mapset}
+          /> 
         </div>
       </div>
     </div>
