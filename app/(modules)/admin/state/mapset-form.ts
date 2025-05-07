@@ -1,7 +1,6 @@
-// store/mapset-form.ts
 import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-// Interface untuk data form Mapset
 export interface MapsetFormData {
   // Tab 1: Informasi Mapset
   info: {
@@ -14,27 +13,37 @@ export interface MapsetFormData {
     data_status: "Sementara" | "Tetap";
     is_popular: boolean;
   };
-  // Tab 2: Informasi Organisasi
-  organization: {
-    organization_id: "";
-    phone_number: "";
-  };
-  // Tab 3: Metadata
-  // metadata: {
-  //   // properti sesuai kebutuhan
-  // };
-  // // Tab 4: Klasifikasi Wilayah
-  // classification: {
-  //   // properti sesuai kebutuhan
-  // };
-  // // Tab 5: Informasi Versi
-  // version: {
-  //   // properti sesuai kebutuhan
-  // };
+}
+export enum MapsetFormTab {
+  INFO = 0,
+  METADATA = 1,
+  VERSION = 2,
 }
 
-// Default state
-const defaultMapsetFormData: MapsetFormData = {
+export interface MapsetFormState {
+  info: {
+    name: string;
+    description: string;
+    scale: string;
+    projection_system_id: string;
+    category_id: string;
+    data_status: "sementara" | "tetap";
+    classification_id: string;
+    organization_id: string;
+  };
+  metadata: {
+    source_id: string;
+    layer_url: string;
+  };
+  version: {
+    update_period: string;
+    data_version: string;
+  };
+}
+
+const activeTabAtom = atom(MapsetFormTab.INFO);
+
+const initialFormState: MapsetFormState = {
   info: {
     name: "",
     description: "",
@@ -42,20 +51,22 @@ const defaultMapsetFormData: MapsetFormData = {
     projection_system_id: "",
     category_id: "",
     classification_id: "",
-    data_status: "Sementara",
-    is_popular: false,
-  },
-  organization: {
+    data_status: "sementara",
     organization_id: "",
-    phone_number: "",
   },
-  // metadata: {},
-  // classification: {},
-  // version: {},
+  metadata: {
+    source_id: "",
+    layer_url: "",
+  },
+  version: {
+    update_period: "",
+    data_version: "",
+  },
 };
 
-// Atom untuk menyimpan data form
-export const mapsetFormAtom = atom<MapsetFormData>(defaultMapsetFormData);
+const mapsetFormAtom = atomWithStorage<MapsetFormState>(
+  "mapsetForm",
+  initialFormState
+);
 
-// Atom untuk menyimpan active tab
-export const activeTabAtom = atom<number>(0);
+export { activeTabAtom, mapsetFormAtom, initialFormState };

@@ -1,6 +1,6 @@
 import { cn } from "@/shared/utils/utils";
 import { Circle, CircleCheck } from "lucide-react";
-import { MapsetFormState, MapsetFormTab } from "../types";
+import { MapsetFormState, MapsetFormTab } from "../../../state/mapset-form";
 
 interface TabButtonProps {
   isActive: boolean;
