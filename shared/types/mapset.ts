@@ -74,7 +74,7 @@ export type Mapset = {
   layer_url: string;
   status_validation: string;
   classification: Classification;
-  data_status: string;
+  data_status: "sementara" | "tetap";
   data_update_period: string;
   data_version: string;
   category: Category;

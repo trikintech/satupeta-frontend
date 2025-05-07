@@ -35,6 +35,14 @@ export const mapsetApi = {
     return response.data;
   },
 
+  updateMapset: async (
+    id: string,
+    mapset: Partial<MapsetSubmitPayload>
+  ): Promise<Mapset> => {
+    const response = await api.patch(`/mapsets/${id}`, mapset);
+    return response.data;
+  },
+
   updateMapsetStatus: async (
     id: string,
     status: string,
