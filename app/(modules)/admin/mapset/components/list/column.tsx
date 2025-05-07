@@ -18,23 +18,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteMapsetDialog } from "../delete-mapset-dialog";
 import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react"; // Import useSession
+import { hasPermission } from "@/shared/config/role"; // Import hasPermission
 
 export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
   const router = useRouter();
   const [mapsetToDelete, setMapsetToDelete] = useState<Mapset | null>(null);
   const queryClient = useQueryClient();
+  const { data: session } = useSession(); // Get session data
+  const userRole = session?.user?.role; // Extract role name
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       return await mapsetApi.deleteMapset(id);
     },
     onSuccess: () => {
-      toast.success("berhasil menghapus data");
+      toast.success("Berhasil menghapus data");
       queryClient.invalidateQueries({ queryKey: ["mapsets"] });
       setMapsetToDelete(null);
     },
     onError: (error) => {
-      toast.error("gagal menghapus data");
+      toast.error("Gagal menghapus data");
       console.error("Error deleting mapset:", error);
     },
   });
@@ -145,30 +149,40 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() =>
-                    router.push(`/admin/mapset/detail/${mapset.id}`)
-                  }
-                  className="flex items-center gap-2"
-                >
-                  <Eye className="h-4 w-4" />
-                  Lihat Detail
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => router.push(`/admin/mapset/edit/${mapset.id}`)}
-                  className="flex items-center gap-2"
-                >
-                  <Edit className="h-4 w-4" />
-                  Edit Mapset
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => setMapsetToDelete(mapset)}
-                  className="flex items-center gap-2 text-destructive focus:text-destructive"
-                >
-                  <Trash className="h-4 w-4" />
-                  Hapus Mapset
-                </DropdownMenuItem>
+                {userRole && hasPermission(userRole, "read") && (
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(`/admin/mapset/detail/${mapset.id}`)
+                    }
+                    className="flex items-center gap-2"
+                  >
+                    <Eye className="h-4 w-4" />
+                    Lihat Detail
+                  </DropdownMenuItem>
+                )}
+                {userRole && hasPermission(userRole, "update") && (
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(`/admin/mapset/edit/${mapset.id}`)
+                    }
+                    className="flex items-center gap-2"
+                  >
+                    <Edit className="h-4 w-4" />
+                    Edit Mapset
+                  </DropdownMenuItem>
+                )}
+                {userRole && hasPermission(userRole, "delete") && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => setMapsetToDelete(mapset)}
+                      className="flex items-center gap-2 text-destructive focus:text-destructive"
+                    >
+                      <Trash className="h-4 w-4" />
+                      Hapus Mapset
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
 
