@@ -27,7 +27,7 @@ export default function UserPageClient() {
     setSorting,
   } = useTableState<User>({
     resourceName: "users",
-    fetchFunction: userApi.getUsers,
+    fetchAction: userApi.getUsers,
     defaultLimit: 10,
     defaultSort: { id: "name", desc: false },
   });

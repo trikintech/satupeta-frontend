@@ -27,7 +27,7 @@ export default function OrganizationPageClient() {
     setSorting,
   } = useTableState<Organization>({
     resourceName: "organizations",
-    fetchFunction: organizationApi.getOrganizations,
+    fetchAction: organizationApi.getOrganizations,
     defaultLimit: 10,
     defaultSort: { id: "name", desc: false },
   });

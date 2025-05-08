@@ -9,7 +9,7 @@ interface TableStateOptions<T> {
   defaultLimit?: number;
   defaultSort?: { id: string; desc: boolean };
   resourceName: string;
-  fetchFunction: (params: QueryParams) => Promise<{
+  fetchAction: (params: QueryParams) => Promise<{
     items: T[];
     total: number;
     has_more: boolean;
@@ -29,7 +29,7 @@ export function useTableState<T>({
   defaultLimit = 10,
   defaultSort = { id: "name", desc: false },
   resourceName,
-  fetchFunction,
+  fetchAction,
   staleTime = 30000,
 }: TableStateOptions<T>) {
   const router = useRouter();
@@ -92,7 +92,7 @@ export function useTableState<T>({
     refetch,
   } = useQuery({
     queryKey,
-    queryFn: () => fetchFunction(queryParams),
+    queryFn: () => fetchAction(queryParams),
     staleTime,
     retry: 1,
   });
@@ -111,7 +111,7 @@ export function useTableState<T>({
           sortOrder,
         ],
         queryFn: () =>
-          fetchFunction({
+          fetchAction({
             ...queryParams,
             offset: nextOffset,
           }),
@@ -129,7 +129,7 @@ export function useTableState<T>({
     resourceName,
     sortBy,
     sortOrder,
-    fetchFunction,
+    fetchAction,
     staleTime,
   ]);
 

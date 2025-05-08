@@ -29,7 +29,7 @@ export default function MapsetPageClient() {
     setSorting,
   } = useTableState<Mapset>({
     resourceName: "mapsets",
-    fetchFunction: mapsetApi.getMapsets,
+    fetchAction: mapsetApi.getMapsets,
     defaultLimit: 10,
     defaultSort: { id: "name", desc: false },
   });

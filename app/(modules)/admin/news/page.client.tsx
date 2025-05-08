@@ -27,7 +27,7 @@ export default function NewsPageClient() {
     setSorting,
   } = useTableState<News>({
     resourceName: "newss",
-    fetchFunction: newsApi.getAllNews,
+    fetchAction: newsApi.getAllNews,
     defaultLimit: 10,
     defaultSort: { id: "name", desc: false },
   });
