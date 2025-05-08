@@ -31,6 +31,10 @@ export const roles: Record<string, RolePermission> = {
   },
 };
 
+export function getRoleLabelById(roleId: string): string | undefined {
+  return roles[roleId]?.label;
+}
+
 export function hasPermission(role: Role, permission: Permission): boolean {
   const rolePermission = roles[role.name];
   return rolePermission?.permissions.includes(permission) || false;

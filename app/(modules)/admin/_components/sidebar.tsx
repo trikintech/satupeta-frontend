@@ -16,6 +16,9 @@ import { Button } from "@/shared/components/ui/button";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { cn } from "@/shared/utils/utils";
 import Image from "next/image";
+import { useAuthSession } from "@/shared/hooks/use-session";
+import { getRoleLabelById } from "@/shared/config/role";
+import { signOut } from "next-auth/react";
 
 interface MenuItem {
   name: string;
@@ -62,6 +65,7 @@ const settingsItems: MenuItem[] = [
 const Sidebar = () => {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const { session } = useAuthSession();
 
   // Check if current path is active (exact match or starts with path for nested routes)
   const isActive = useCallback(
@@ -103,7 +107,9 @@ const Sidebar = () => {
             />
             <div className="flex-1">
               <div className="font-semibold text-sm">Satu Peta</div>
-              <div className="text-xs text-gray-500">Walidata</div>
+              <div className="text-xs text-gray-500">
+                {getRoleLabelById(session?.user.role.name ?? "")}
+              </div>
             </div>
           </>
         )}
@@ -203,8 +209,7 @@ const Sidebar = () => {
           </div>
           {!collapsed && (
             <div className="ml-3">
-              <p className="text-sm font-medium">Admin</p>
-              <p className="text-xs text-gray-500">a@example.com</p>
+              <p className="text-sm font-medium">{session?.user?.name}</p>
             </div>
           )}
         </div>
@@ -214,6 +219,7 @@ const Sidebar = () => {
             "w-full flex items-center justify-start text-gray-600 hover:bg-gray-200 mt-1",
             collapsed ? "justify-center px-2" : "justify-start"
           )}
+          onClick={() => signOut()}
         >
           <LogOut className="h-5 w-5" />
           {!collapsed && <span className="ml-3 text-sm">Logout</span>}
