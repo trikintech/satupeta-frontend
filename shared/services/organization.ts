@@ -1,3 +1,4 @@
+import { OrganizationFormValues } from "../schemas/organization";
 import { PaginatedResponse } from "../types/api-response";
 import { Organization } from "../types/organization";
 
@@ -35,7 +36,7 @@ export const organizationApi = {
   },
 
   createOrganization: async (
-    organization: Omit<Organization, "id">
+    organization: Omit<OrganizationFormValues, "id">
   ): Promise<Organization> => {
     console.log(organization);
     const response = await api.post("/organizations", organization);
@@ -44,7 +45,7 @@ export const organizationApi = {
 
   updateOrganization: async (
     id: string,
-    organization: Organization
+    organization: OrganizationFormValues
   ): Promise<Organization> => {
     const response = await api.patch(`/organizations/${id}`, organization);
     return response.data;

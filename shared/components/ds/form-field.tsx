@@ -15,7 +15,7 @@ interface FormFieldProps<TFormValues extends FieldValues> {
   error?: FieldError;
   required?: boolean;
   placeholder?: string;
-  type?: "text" | "email" | "password" | "select" | "checkbox";
+  type?: "text" | "email" | "password" | "select" | "checkbox" | "number";
   options?: { id: string; name: string }[];
   className?: string;
   disabled?: boolean;

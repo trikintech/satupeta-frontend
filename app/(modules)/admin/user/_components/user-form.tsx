@@ -2,13 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  SelectOption,
-  UserFormValues,
-  userSchema,
-} from "@/shared/schemas/user";
+import { UserFormValues, userSchema } from "@/shared/schemas/user";
 import { FormField } from "@/shared/components/ds/form-field";
 import { FormButton } from "@/shared/components/ds/form-button";
+import { SelectOption } from "@/shared/types/select-option";
 
 interface UserFormProps {
   initialData: Partial<UserFormValues> & { id?: string };
@@ -51,7 +48,6 @@ export function UserForm({
     if (!submitData.password) {
       delete submitData.password;
     }
-    console.log(submitData);
     onSubmitAction(submitData);
   };
 

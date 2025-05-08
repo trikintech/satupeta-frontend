@@ -18,8 +18,3 @@ export const userSchema = z.object({
 });
 
 export type UserFormValues = z.infer<typeof userSchema>;
-
-export interface SelectOption {
-  id: string;
-  name: string;
-}
