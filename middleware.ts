@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
-  const publicRoutes = ["/maps"];
-
+  // Add '/' to publicRoutes
+  const publicRoutes = ["/", "/maps"]; // <-- Added root path here
   const adminRoutes = ["/admin"];
 
   const isPublicRoute = publicRoutes.some((route) =>

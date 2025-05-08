@@ -40,7 +40,7 @@ export default function RootLayout({
         className={`${geistMono.variable} ${geistSans.variable} ${interSans.variable} font-sans antialiased`}
       >
         <head>
-          <title>Satu Peta {appsName.wilayah}</title>
+          <title>{`Satu Peta ${appsName.wilayah}`}</title>
         </head>
         <Providers>
           <AdminRouteGuard>{children}</AdminRouteGuard>
