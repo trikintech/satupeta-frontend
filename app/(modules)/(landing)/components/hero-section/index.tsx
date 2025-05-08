@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import HighlightMapset from "./highlight-mapset";
 import SearchInput from "./search-input";
-import { appsName } from "@/shared/config/apps-name";
+import { appsName } from "@/shared/config/app-config";
 
 export function HeroSection() {
   return (

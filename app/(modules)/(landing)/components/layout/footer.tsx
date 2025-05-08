@@ -1,4 +1,4 @@
-import { appsName } from "@/shared/config/apps-name";
+import { appsName } from "@/shared/config/app-config";
 import Image from "next/image";
 import Link from "next/link";
 

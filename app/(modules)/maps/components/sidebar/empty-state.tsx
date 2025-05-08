@@ -1,4 +1,4 @@
-import { appsName } from "@/shared/config/apps-name";
+import { appsName } from "@/shared/config/app-config";
 import { CircleAlertIcon } from "lucide-react";
 
 export default function EmptyState() {
