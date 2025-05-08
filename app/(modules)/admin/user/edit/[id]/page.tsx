@@ -14,6 +14,7 @@ import { initialFormState, userFormAtom, UserFormState } from "../../state";
 import { UserForm } from "../../_components/user-form";
 import { useEffect } from "react";
 import PageHeader from "../../../_components/page-header";
+import { roles } from "@/shared/config/role";
 
 interface SelectOption {
   id: string;
@@ -69,7 +70,11 @@ export default function EditUserPageClient() {
   };
 
   const organizationOptions = mapDataToOptions(organizationsResponse);
-  const roleOptions = mapDataToOptions(rolesResponse);
+  const roleOptions: SelectOption[] =
+    rolesResponse?.items.map((role) => ({
+      id: role.id,
+      name: roles[role.name]?.label ?? role.name, // fallback to name if label is not found
+    })) ?? [];
 
   const updateFormData = (updatedData: Partial<UserFormState>) => {
     setFormState((prevState) => ({
