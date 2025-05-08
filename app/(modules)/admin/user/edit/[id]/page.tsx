@@ -11,14 +11,10 @@ import userApi from "@/shared/services/user";
 import { UserSubmitPayload } from "@/shared/types/user";
 import { PaginatedResponse } from "@/shared/types/api-response";
 import roleApi from "@/shared/services/role";
-import {
-  initialFormState,
-  userFormAtom,
-  UserFormState,
-} from "../../../state/user-form";
-import { UserForm } from "../../components/user-form";
+import { initialFormState, userFormAtom, UserFormState } from "../../state";
+import { UserForm } from "../../_components/user-form";
 import { useEffect } from "react";
-import PageHeader from "../../../components/page-header";
+import PageHeader from "../../../_components/page-header";
 
 interface SelectOption {
   id: string;
@@ -138,11 +134,11 @@ export default function EditUserPageClient() {
       <div className="bg-white rounded-md shadow">
         <UserForm
           initialData={formState}
-          onSubmit={handleSubmitUser}
+          onSubmitAction={handleSubmitUser}
           isSubmitting={updateUserMutation.isPending}
           roles={roleOptions}
           organizations={organizationOptions}
-          onCancel={resetForm}
+          onCancelAction={resetForm}
         />
       </div>
     </div>

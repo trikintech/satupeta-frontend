@@ -8,6 +8,7 @@ import {
   useReactTable,
   PaginationState,
   SortingState,
+  Updater,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -26,11 +27,11 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
   pageIndex: number;
   pageSize: number;
-  onPaginationChange: (pagination: PaginationState) => void;
+  onPaginationChangeAction: (pagination: PaginationState) => void;
   manualPagination?: boolean;
   rowCount: number;
   sorting: SortingState;
-  onSortingChange: (sorting: SortingState) => void;
+  onSortingChangeAction: (sorting: SortingState) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -40,8 +41,8 @@ export function DataTable<TData, TValue>({
   pageIndex,
   pageSize,
   sorting,
-  onSortingChange,
-  onPaginationChange,
+  onSortingChangeAction,
+  onPaginationChangeAction,
   manualPagination = true,
   rowCount,
 }: DataTableProps<TData, TValue>) {
@@ -51,7 +52,6 @@ export function DataTable<TData, TValue>({
     pageSize,
   });
 
-  // Sync internal state with props
   useEffect(() => {
     if (
       pagination.pageIndex !== pageIndex ||
@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
     ) {
       setPagination({ pageIndex, pageSize });
     }
-  }, [pageIndex, pageSize]);
+  }, [pagination.pageIndex, pagination.pageSize, pageIndex, pageSize]);
 
   const table = useReactTable({
     data,
@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
       sorting,
       rowSelection,
     },
-    onPaginationChange: (updater) => {
+    onPaginationChange: (updater: Updater<PaginationState>) => {
       const newPagination =
         typeof updater === "function" ? updater(pagination) : updater;
 
@@ -84,15 +84,15 @@ export function DataTable<TData, TValue>({
         pagination.pageSize !== newPagination.pageSize
       ) {
         setPagination(newPagination);
-        onPaginationChange(newPagination);
+        onPaginationChangeAction(newPagination);
       }
     },
-    onSortingChange: (updaterOrValue) => {
+    onSortingChange: (updaterOrValue: Updater<SortingState>) => {
       const newSorting =
         typeof updaterOrValue === "function"
           ? updaterOrValue(sorting)
           : updaterOrValue;
-      onSortingChange(newSorting);
+      onSortingChangeAction(newSorting);
     },
     onRowSelectionChange: setRowSelection,
   });

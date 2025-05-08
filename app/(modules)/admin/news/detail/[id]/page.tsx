@@ -1,8 +1,8 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import NewsDetail from "../../components/detail";
-import PageHeader from "../../../components/page-header";
+import NewsDetail from "../../_components/detail";
+import PageHeader from "../../../_components/page-header";
 
 export default function NewsDetailPage() {
   const params = useParams();

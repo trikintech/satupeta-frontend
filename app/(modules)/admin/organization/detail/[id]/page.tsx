@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import OrganizationDetail from "../../_components/detail";
-import PageHeader from "../../../components/page-header";
+import PageHeader from "../../../_components/page-header";
 
 export default function OrganizationDetailPage() {
   const params = useParams();

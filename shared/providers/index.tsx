@@ -19,7 +19,7 @@ export function Providers({
   }, []);
 
   return (
-    <SessionProvider>
+    <SessionProvider basePath="/auth">
       {/* <QueryParamProvider adapter={NextAdapterApp}> */}
       <QueryClientProvider client={queryClient}>
         {mounted ? (

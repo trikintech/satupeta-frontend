@@ -1,6 +1,7 @@
 "use client";
 import organizationApi from "@/shared/services/organization";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 export default function OrganizationDetail({ id }: { id: string }) {
   const { data: organization } = useQuery({
@@ -59,10 +60,12 @@ export default function OrganizationDetail({ id }: { id: string }) {
         <div className="py-2 px-4">
           <div className="text-sm font-medium text-zinc-950">Thumbnail</div>
           {organization?.thumbnail ? (
-            <img
+            <Image
               src={organization.thumbnail}
               alt="Thumbnail Organisasi"
               className="w-32 h-32 object-cover rounded"
+              width={32}
+              height={32}
             />
           ) : (
             <div className="text-sm text-zinc-800">Tidak ada thumbnail</div>

@@ -1,10 +1,27 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { mapsetApi } from "@/shared/services/mapset";
 
 export function StatisticsSection() {
+  const [mapsetCount, setMapsetCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchMapsetCount = async () => {
+      try {
+        const response = await mapsetApi.getMapsets();
+        setMapsetCount(response.total);
+      } catch (error) {
+        console.error("Error fetching mapset count:", error);
+      }
+    };
+
+    fetchMapsetCount();
+  }, []);
+
   return (
-    <section className="py-12  bg-gray-50">
+    <section className="py-12  bg-gray-50" id="statistic">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-20">
           <div className="w-1/2">
@@ -22,7 +39,9 @@ export function StatisticsSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 mb-4 border border-[#94A3B8]">
             <div className="bg-primary-light p-4">
               <div className="flex flex-col gap-4 mb-24">
-                <h3 className="text-8xl font-bold text-primary mb-2">303</h3>
+                <h3 className="text-8xl font-bold text-primary mb-2">
+                  {mapsetCount}
+                </h3>
                 <p className="text-slate-600 mb-4 text-2xl">Mapset</p>
               </div>
               <Link

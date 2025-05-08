@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import UserPageClient from "./page.client";
-import PageHeader from "../components/page-header";
+import PageHeader from "../_components/page-header";
 
 export default function UserPage() {
   return (

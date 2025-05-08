@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,12 +9,8 @@ import { toast } from "sonner";
 import userApi from "@/shared/services/user";
 import { UserSubmitPayload } from "@/shared/types/user";
 import { PaginatedResponse } from "@/shared/types/api-response";
-import {
-  initialFormState,
-  userFormAtom,
-  UserFormState,
-} from "../../state/user-form";
-import { UserForm } from "../components/user-form";
+import { initialFormState, userFormAtom, UserFormState } from "../state";
+import { UserForm } from "../_components/user-form";
 import roleApi from "@/shared/services/role";
 
 interface SelectOption {
@@ -114,11 +109,11 @@ export default function AddMapsPageClient() {
       <div className="bg-white rounded-md shadow">
         <UserForm
           initialData={formState}
-          onSubmit={handleSubmitUser}
+          onSubmitAction={handleSubmitUser}
           isSubmitting={submitUserMutation.isPending}
           roles={roleOptions}
           organizations={organizationOptions}
-          onCancel={resetForm}
+          onCancelAction={resetForm}
         />
       </div>
     </div>

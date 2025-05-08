@@ -14,10 +14,10 @@ import organizationApi from "@/shared/services/organization";
 import mapSourceApi from "@/shared/services/map-source";
 import mapsetApi from "@/shared/services/mapset";
 
-import { MapsetInfoForm } from "../../components/form/mapset-info-form";
-import { MapsetMetadataForm } from "../../components/form/mapset-metadata-form";
-import { MapsetVersionForm } from "../../components/form/mapset-version-form";
-import MapsetTab from "../../components/form/mapset-tab";
+import { MapsetInfoForm } from "../../_components/form/mapset-info-form";
+import { MapsetMetadataForm } from "../../_components/form/mapset-metadata-form";
+import { MapsetVersionForm } from "../../_components/form/mapset-version-form";
+import MapsetTab from "../../_components/form/mapset-tab";
 
 import { PaginatedResponse } from "@/shared/types/api-response";
 import { MapsetSubmitPayload } from "@/shared/types/mapset";
@@ -27,8 +27,8 @@ import {
   mapsetFormAtom,
   MapsetFormState,
   MapsetFormTab,
-} from "../../../state/mapset-form";
-import PageHeader from "../../../components/page-header";
+} from "../../state";
+import PageHeader from "../../../_components/page-header";
 
 interface SelectOption {
   id: string;

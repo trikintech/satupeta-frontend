@@ -1,3 +1,4 @@
+import { appsName } from "@/shared/config/app-config";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -59,10 +60,12 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between text-gray-400 text-sm gap-4">
         <div>
           <p>0821-0920 0019</p>
-          <p>xxx</p>
+          <p></p>
         </div>
         <div className="text-right">
-          <p>xxx.</p>
+          <p>
+            {appsName.name} {appsName.wilayah}.
+          </p>
           <p>All rights reserved</p>
         </div>
       </div>

@@ -26,7 +26,7 @@ import userApi from "@/shared/services/user";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
-import { DeleteDialog } from "../../../components/delete-dialog";
+import { DeleteDialog } from "../../_components/delete-dialog";
 
 // Type for column configuration
 interface ColumnConfig {
@@ -141,7 +141,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
     return column;
   });
 
-  // Add actions column if user has any permissions
   if (
     userRole &&
     (hasPermission(userRole, "read") ||
