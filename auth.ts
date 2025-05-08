@@ -76,6 +76,7 @@ async function refreshAccessToken(token: any) {
 }
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  basePath: "/auth",
   providers: [
     Credentials({
       name: "credentials",
@@ -211,7 +212,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     maxAge: 30 * 24 * 60 * 60, // 30 hari
   },
   pages: {
-    signIn: "/auth/admin/login",
-    error: "/auth/admin/login/error",
+    signIn: "admin/login",
+    error: "admin/login/error",
   },
 });

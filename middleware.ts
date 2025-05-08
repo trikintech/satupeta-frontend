@@ -20,7 +20,7 @@ export default auth((req) => {
     isPublicRoute ||
     pathname.startsWith("/_next") ||
     pathname.includes(".") ||
-    pathname.startsWith("/api/auth")
+    pathname.startsWith("/auth")
   ) {
     return NextResponse.next();
   }
