@@ -46,12 +46,6 @@ export default function OrganizationDetail({ id }: { id: string }) {
           <div className="text-sm text-zinc-800">{organization?.address}</div>
         </div>
         <div className="py-2 px-4">
-          <div className="text-sm font-medium text-zinc-950">Jumlah Mapset</div>
-          <div className="text-sm text-zinc-800">
-            {organization?.count_mapset}
-          </div>
-        </div>
-        <div className="py-2 px-4">
           <div className="text-sm font-medium text-zinc-950">Status</div>
           <div className="text-sm text-zinc-800">
             {organization?.is_active ? "Aktif" : "Tidak Aktif"}

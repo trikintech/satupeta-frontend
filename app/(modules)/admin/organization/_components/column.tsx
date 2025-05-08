@@ -58,12 +58,6 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     sortable: false,
   },
   {
-    id: "count_mapset",
-    header: "Jumlah Mapset",
-    accessor: "count_mapset",
-    sortable: true,
-  },
-  {
     id: "is_active",
     header: "Status",
     accessor: "is_active",

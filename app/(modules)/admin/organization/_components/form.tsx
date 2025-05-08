@@ -31,14 +31,13 @@ export function OrganizationForm({
   } = useForm<OrganizationFormValues>({
     resolver: zodResolver(organizationSchema),
     defaultValues: {
-      name: initialData?.name || "",
-      description: initialData?.description || "",
-      thumbnail: initialData?.thumbnail || "",
-      address: initialData?.address || "",
-      phone_number: initialData?.phone_number || "",
-      email: initialData?.email || "",
-      website: initialData?.website || "",
-      count_mapset: initialData?.count_mapset || 0,
+      name: initialData?.name ?? "",
+      description: initialData?.description ?? "",
+      thumbnail: initialData?.thumbnail ?? "",
+      address: initialData?.address ?? "",
+      phone_number: initialData?.phone_number ?? "",
+      email: initialData?.email ?? "",
+      website: initialData?.website ?? "",
       is_active: initialData?.is_active ?? true,
     },
   });
@@ -46,14 +45,13 @@ export function OrganizationForm({
   useEffect(() => {
     if (initialData) {
       reset({
-        name: initialData.name || "",
-        description: initialData.description || "",
-        thumbnail: initialData.thumbnail || "",
-        address: initialData.address || "",
-        phone_number: initialData.phone_number || "",
-        email: initialData.email || "",
-        website: initialData.website || "",
-        count_mapset: initialData.count_mapset || 0,
+        name: initialData.name ?? "",
+        description: initialData.description ?? "",
+        thumbnail: initialData.thumbnail ?? "",
+        address: initialData.address ?? "",
+        phone_number: initialData.phone_number ?? "",
+        email: initialData.email ?? "",
+        website: initialData.website ?? "",
         is_active: initialData.is_active ?? true,
       });
     }
@@ -121,15 +119,6 @@ export function OrganizationForm({
         registerAction={register}
         error={errors.website}
         placeholder="Masukkan URL website"
-      />
-
-      <FormField
-        id="count_mapset"
-        label="Jumlah Mapset"
-        type="number"
-        registerAction={register}
-        error={errors.count_mapset}
-        placeholder="Masukkan jumlah mapset"
       />
 
       <FormField
