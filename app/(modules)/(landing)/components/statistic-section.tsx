@@ -45,7 +45,7 @@ export function StatisticsSection() {
                 <p className="text-slate-600 mb-4 text-2xl">Mapset</p>
               </div>
               <Link
-                href="/statistik/mapset"
+                href="/maps?open-catalog=true"
                 className="flex items-center text-primary text-sm font-medium hover:underline"
               >
                 Lihat selengkapnya
@@ -59,7 +59,7 @@ export function StatisticsSection() {
                 <p className="mb-4 text-2xl">Metadata</p>
               </div>
               <Link
-                href="/statistik/mapset"
+                href="https://geonetwork.jatimrprov.go.id/"
                 className="flex items-center text-sm font-medium hover:underline"
               >
                 Lihat selengkapnya
