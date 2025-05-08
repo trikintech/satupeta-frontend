@@ -96,7 +96,7 @@ export default function EditUserPageClient() {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       queryClient.invalidateQueries({ queryKey: ["user", userId] });
       toast.success("User berhasil diperbarui!");
-      router.push("/admin/mapset");
+      router.push("/admin/user");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Terjadi kesalahan saat memperbarui data");
