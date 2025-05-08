@@ -4,7 +4,12 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "standalone",
   images: {
-    domains: ["example.com", "anotherdomain.com", "satupeta.jatim.prov.go.id"],
+    domains: [
+      "example.com",
+      "anotherdomain.com",
+      "satupeta.jatimprov.go.id",
+      "demo-maps.trikintech.id",
+    ],
   },
 };
 
