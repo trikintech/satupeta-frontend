@@ -25,7 +25,7 @@ import {
   mapsetFormAtom,
   MapsetFormState,
   MapsetFormTab,
-} from "../../_state/mapset-form";
+} from "../state";
 
 interface SelectOption {
   id: string;

@@ -13,8 +13,8 @@ import {
   initialFormState,
   userFormAtom,
   UserFormState,
-} from "../../_state/user-form";
-import { UserForm } from "../_components/user-form";
+} from "../../user/state";
+import { UserForm } from "../_components/form";
 import roleApi from "@/shared/services/role";
 
 interface SelectOption {

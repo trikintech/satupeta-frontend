@@ -1,13 +1,4 @@
-import { Role as RoleType } from "../types/role";
-
-enum Role {
-  ADMIN = "administrator",
-  WALIDATA = "walidata",
-  OPD_PENGELOLA = "opd-pengelola",
-  OPD_VIEW = "opd-view",
-}
-
-export default Role;
+import { Role } from "../types/role";
 
 export interface RolePermission {
   id: string;
@@ -35,7 +26,7 @@ export const roles: Record<string, RolePermission> = {
   },
 };
 
-export function hasPermission(role: RoleType, permission: Permission): boolean {
+export function hasPermission(role: Role, permission: Permission): boolean {
   const rolePermission = roles[role.name];
   return rolePermission?.permissions.includes(permission) || false;
 }

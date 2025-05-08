@@ -141,7 +141,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
     return column;
   });
 
-  // Add actions column if user has any permissions
   if (
     userRole &&
     (hasPermission(userRole, "read") ||

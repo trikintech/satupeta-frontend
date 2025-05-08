@@ -9,11 +9,7 @@ import { toast } from "sonner";
 import userApi from "@/shared/services/user";
 import { UserSubmitPayload } from "@/shared/types/user";
 import { PaginatedResponse } from "@/shared/types/api-response";
-import {
-  initialFormState,
-  userFormAtom,
-  UserFormState,
-} from "../../_state/user-form";
+import { initialFormState, userFormAtom, UserFormState } from "../state";
 import { UserForm } from "../_components/user-form";
 import roleApi from "@/shared/services/role";
 
@@ -113,11 +109,11 @@ export default function AddMapsPageClient() {
       <div className="bg-white rounded-md shadow">
         <UserForm
           initialData={formState}
-          onSubmit={handleSubmitUser}
+          onSubmitAction={handleSubmitUser}
           isSubmitting={submitUserMutation.isPending}
           roles={roleOptions}
           organizations={organizationOptions}
-          onCancel={resetForm}
+          onCancelAction={resetForm}
         />
       </div>
     </div>

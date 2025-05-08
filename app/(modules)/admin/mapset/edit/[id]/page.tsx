@@ -27,7 +27,7 @@ import {
   mapsetFormAtom,
   MapsetFormState,
   MapsetFormTab,
-} from "../../../_state/mapset-form";
+} from "../../state";
 import PageHeader from "../../../_components/page-header";
 
 interface SelectOption {

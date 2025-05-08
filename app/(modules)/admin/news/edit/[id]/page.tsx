@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import newsApi from "@/shared/services/news";
 import { News } from "@/shared/types/news";
-import { initialFormState, newsFormAtom } from "../../../_state/news-form";
+import { initialFormState, newsFormAtom } from "../../state";
 import { NewsForm } from "../../_components/form";
 import { useEffect } from "react";
 import PageHeader from "../../../_components/page-header";
