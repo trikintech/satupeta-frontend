@@ -1,6 +1,7 @@
 "use client";
 import newsApi from "@/shared/services/news";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 export default function NewsDetail({ id }: { id: string }) {
   const { data: news } = useQuery({
@@ -33,10 +34,12 @@ export default function NewsDetail({ id }: { id: string }) {
         <div className="py-2 px-4">
           <div className="text-sm font-medium text-zinc-950">Thumbnail</div>
           {news?.thumbnail ? (
-            <img
+            <Image
               src={news.thumbnail}
               alt="Thumbnail"
               className="w-32 h-32 object-cover rounded"
+              width={32}
+              height={32}
             />
           ) : (
             <div className="text-sm text-zinc-800">Tidak ada thumbnail</div>

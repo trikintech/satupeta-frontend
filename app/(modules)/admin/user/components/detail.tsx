@@ -1,6 +1,7 @@
 "use client";
 import userApi from "@/shared/services/user";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 export default function UserDetail({ id }: { id: string }) {
   const { data: user } = useQuery({
@@ -55,10 +56,12 @@ export default function UserDetail({ id }: { id: string }) {
         <div className="py-2 px-4">
           <div className="text-sm font-medium text-zinc-950">Foto Profil</div>
           {user?.profile_picture ? (
-            <img
+            <Image
               src={user.profile_picture}
               alt="Foto Profil"
               className="w-16 h-16 rounded-full"
+              width={32}
+              height={32}
             />
           ) : (
             <div className="text-sm text-zinc-800">Tidak ada foto profil</div>
