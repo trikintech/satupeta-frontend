@@ -8,13 +8,12 @@ export default function AddCategoryPage() {
       <PageHeader
         title="Tambah Kategori"
         description="Tambah kategori baru di Satu Peta."
+        className="bg-zinc-50"
       />
       <div className="px-6">
-        <div className="max-w-xl">
-          <Suspense fallback={<div>Memuat form...</div>}>
-            <AddCategoryPageClient />
-          </Suspense>
-        </div>
+        <Suspense fallback={<div>Memuat form...</div>}>
+          <AddCategoryPageClient />
+        </Suspense>
       </div>
     </div>
   );

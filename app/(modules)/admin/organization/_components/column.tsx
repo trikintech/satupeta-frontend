@@ -41,7 +41,7 @@ interface ColumnConfig {
 const COLUMN_CONFIGS: ColumnConfig[] = [
   {
     id: "name",
-    header: "Nama Organisasi",
+    header: "Nama Perangkat Daerah",
     accessor: "name",
     sortable: true,
   },
@@ -181,7 +181,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     className="flex items-center gap-2"
                   >
                     <Edit className="h-4 w-4" />
-                    Edit Organisasi
+                    Edit Perangkat Daerah
                   </DropdownMenuItem>
                 )}
                 {hasPermission(userRole, "delete") && (
@@ -192,7 +192,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
                       <Trash className="h-4 w-4" />
-                      Hapus Organisasi
+                      Hapus Perangkat Daerah
                     </DropdownMenuItem>
                   </>
                 )}

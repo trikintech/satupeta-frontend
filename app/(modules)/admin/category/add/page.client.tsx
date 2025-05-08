@@ -20,10 +20,12 @@ export default function AddCategoryPageClient() {
   }
 
   return (
-    <CategoryForm
-      onSubmitAction={handleSubmitCategory}
-      isSubmitting={isSubmitting}
-      onCancelAction={resetForm}
-    />
+    <div className="max-w-xl">
+      <CategoryForm
+        onSubmitAction={handleSubmitCategory}
+        isSubmitting={isSubmitting}
+        onCancelAction={resetForm}
+      />
+    </div>
   );
 }

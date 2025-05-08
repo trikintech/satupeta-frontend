@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { toast } from "sonner";
+import { queryClient } from "@/shared/utils/query-client";
 
 export function useCategoryForm(defaultValues?: Partial<Category>) {
   const router = useRouter();
@@ -27,6 +28,7 @@ export function useCategoryForm(defaultValues?: Partial<Category>) {
       }
       router.push("/admin/category");
       router.refresh();
+      queryClient.invalidateQueries();
     } catch (error) {
       toast.error(
         isEdit ? "Gagal memperbarui kategori" : "Gagal menambahkan kategori"

@@ -12,6 +12,7 @@ export default function CategoryEditPage() {
       <PageHeader
         title="Ubah Kategori"
         description="Ubah kategori di Satu Peta"
+        className="bg-zinc-50"
       />
       <div className="px-6">
         <div className="max-w-xl">

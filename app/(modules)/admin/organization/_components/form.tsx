@@ -2,151 +2,201 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { organizationSchema } from "@/shared/schemas/organization";
+import { Button } from "@/shared/components/ui/button";
 import {
-  OrganizationFormValues,
-  organizationSchema,
-} from "@/shared/schemas/organization";
-import { FormField } from "@/shared/components/ds/form-field";
-import { FormButton } from "@/shared/components/ds/form-button";
-import { useEffect } from "react";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { Switch } from "@/shared/components/ui/switch";
+import { ImageUpload } from "@/shared/components/image-upload";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { Organization } from "@/shared/types/organization";
+
+type OrganizationFormValues = z.infer<typeof organizationSchema>;
 
 interface OrganizationFormProps {
-  initialData?: Partial<OrganizationFormValues> & { id?: string };
+  defaultValues?: Partial<Organization>;
   onSubmitAction: (data: OrganizationFormValues) => void;
-  onCancelAction: () => void;
-  isSubmitting: boolean;
+  isSubmitting?: boolean;
+  onCancelAction?: () => void;
 }
 
 export function OrganizationForm({
-  initialData,
+  defaultValues,
   onSubmitAction,
-  onCancelAction,
   isSubmitting,
+  onCancelAction,
 }: OrganizationFormProps) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<OrganizationFormValues>({
+  const form = useForm<OrganizationFormValues>({
     resolver: zodResolver(organizationSchema),
     defaultValues: {
-      name: initialData?.name ?? "",
-      description: initialData?.description ?? "",
-      thumbnail: initialData?.thumbnail ?? "",
-      address: initialData?.address ?? "",
-      phone_number: initialData?.phone_number ?? "",
-      email: initialData?.email ?? "",
-      website: initialData?.website ?? "",
-      is_active: initialData?.is_active ?? true,
+      name: defaultValues?.name || "",
+      description: defaultValues?.description || "",
+      thumbnail: defaultValues?.thumbnail || "",
+      address: defaultValues?.address || "",
+      phone_number: defaultValues?.phone_number || "",
+      email: defaultValues?.email || "",
+      website: defaultValues?.website || "",
+      is_active: defaultValues?.is_active ?? true,
     },
   });
 
-  useEffect(() => {
-    if (initialData) {
-      reset({
-        name: initialData.name ?? "",
-        description: initialData.description ?? "",
-        thumbnail: initialData.thumbnail ?? "",
-        address: initialData.address ?? "",
-        phone_number: initialData.phone_number ?? "",
-        email: initialData.email ?? "",
-        website: initialData.website ?? "",
-        is_active: initialData.is_active ?? true,
-      });
-    }
-  }, [initialData, reset]);
-
-  const handleFormSubmit = (data: OrganizationFormValues) => {
-    onSubmitAction(data);
-  };
-
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6 space-y-6">
-      <FormField
-        id="name"
-        label="Nama Organisasi"
-        registerAction={register}
-        error={errors.name}
-        required
-        placeholder="Masukkan nama organisasi"
-      />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmitAction)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nama Organisasi</FormLabel>
+              <FormControl>
+                <Input placeholder="Masukkan nama organisasi" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        id="description"
-        label="Deskripsi"
-        registerAction={register}
-        error={errors.description}
-        placeholder="Masukkan deskripsi organisasi"
-      />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Deskripsi</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Masukkan deskripsi organisasi"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        id="thumbnail"
-        label="Thumbnail URL"
-        registerAction={register}
-        error={errors.thumbnail}
-        placeholder="Masukkan URL thumbnail"
-      />
+        <FormField
+          control={form.control}
+          name="thumbnail"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Thumbnail</FormLabel>
+              <FormControl>
+                <ImageUpload
+                  value={field.value}
+                  onChange={field.onChange}
+                  onRemove={() => field.onChange("")}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        id="address"
-        label="Alamat"
-        registerAction={register}
-        error={errors.address}
-        placeholder="Masukkan alamat organisasi"
-      />
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Alamat</FormLabel>
+              <FormControl>
+                <Input placeholder="Masukkan alamat organisasi" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        id="phone_number"
-        label="Nomor Telepon"
-        registerAction={register}
-        error={errors.phone_number}
-        placeholder="Masukkan nomor telepon"
-      />
+        <FormField
+          control={form.control}
+          name="phone_number"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nomor Telepon</FormLabel>
+              <FormControl>
+                <Input placeholder="Masukkan nomor telepon" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        id="email"
-        label="Email"
-        type="email"
-        registerAction={register}
-        error={errors.email}
-        placeholder="Masukkan alamat email"
-      />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Masukkan alamat email"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        id="website"
-        label="Website"
-        registerAction={register}
-        error={errors.website}
-        placeholder="Masukkan URL website"
-      />
+        <FormField
+          control={form.control}
+          name="website"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Website</FormLabel>
+              <FormControl>
+                <Input placeholder="Masukkan URL website" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <FormField
-        id="is_active"
-        label="Status Aktif"
-        type="checkbox"
-        registerAction={register}
-        error={errors.is_active}
-      >
-        <label htmlFor="is_active" className="ml-2 text-sm font-medium">
-          Aktif
-        </label>
-      </FormField>
+        <FormField
+          control={form.control}
+          name="is_active"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">Status</FormLabel>
+                <div className="text-sm text-muted-foreground">
+                  Aktifkan atau nonaktifkan organisasi
+                </div>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
-      <div className="flex space-x-4 pt-4">
-        <FormButton
-          type="button"
-          onClick={onCancelAction}
-          disabled={isSubmitting}
-          variant="secondary"
-        >
-          Batal
-        </FormButton>
-
-        <FormButton type="submit" isSubmitting={isSubmitting}>
-          Simpan
-        </FormButton>
-      </div>
-    </form>
+        <div className="flex justify-end space-x-4">
+          {onCancelAction && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancelAction}
+              disabled={isSubmitting}
+            >
+              Batal
+            </Button>
+          )}
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Menyimpan..." : "Simpan"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
