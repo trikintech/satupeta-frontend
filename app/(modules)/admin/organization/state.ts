@@ -1,6 +1,6 @@
 import { OrganizationFormValues } from "@/shared/schemas/organization";
 
-import { atomWithStorage } from "jotai/utils";
+import { atom } from "jotai";
 
 const initialFormState: OrganizationFormValues = {
   name: "",
@@ -14,9 +14,6 @@ const initialFormState: OrganizationFormValues = {
   is_active: true,
 };
 
-const organizationFormAtom = atomWithStorage<OrganizationFormValues>(
-  "organizationForm",
-  initialFormState
-);
+const organizationFormAtom = atom<OrganizationFormValues>(initialFormState);
 
 export { organizationFormAtom, initialFormState };
