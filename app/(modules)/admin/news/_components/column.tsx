@@ -24,9 +24,9 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import newsApi from "@/shared/services/news";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
 import { DeleteDialog } from "../../_components/delete-dialog";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 // Type for column configuration
 interface ColumnConfig {
@@ -71,7 +71,8 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
   const router = useRouter();
   const [newsToDelete, setNewsToDelete] = useState<News | null>(null);
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
+  const { session } = useAuthSession();
+
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({

@@ -1,29 +1,25 @@
 import { PaginatedResponse } from "../types/api-response";
 import { MapSource } from "../types/map-source";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const mapSourceApi = {
   getMapSources: async (): Promise<PaginatedResponse<MapSource[]>> => {
-    const response = await api.get("/map_sources");
-    return response.data;
+    return apiHelpers.get("/map_sources");
   },
 
   getMapSourceById: async (id: number): Promise<MapSource> => {
-    const response = await api.get(`/map_sources/${id}`);
-    return response.data;
+    return apiHelpers.get(`/map_sources/${id}`);
   },
 
   deleteMapSource: async (id?: number): Promise<PaginatedResponse<null>> => {
-    const response = await api.delete(`/map_sources/${id}`);
-    return response.data;
+    return apiHelpers.delete(`/map_sources/${id}`);
   },
 
   createMapSource: async (
     mapSource: Omit<MapSource, "id">
   ): Promise<MapSource> => {
-    const response = await api.post("/map_sources", mapSource);
-    return response.data;
+    return apiHelpers.post("/map_sources", mapSource);
   },
 };
 

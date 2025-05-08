@@ -1,29 +1,25 @@
 import { ApiResponse } from "../types/api-response";
 import { Topic } from "../types/topic";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const topicApi = {
   getTopics: async (): Promise<ApiResponse<Topic[]>> => {
-    const response = await api.get("/topik");
-    return response.data;
+    return apiHelpers.get("/topik");
   },
 
   getTopicById: async (id: number): Promise<ApiResponse<Topic>> => {
-    const response = await api.get(`/topik/${id}`);
-    return response.data;
+    return apiHelpers.get(`/topik/${id}`);
   },
 
   deleteTopic: async (id?: number): Promise<ApiResponse<null>> => {
-    const response = await api.delete(`/topik/${id}`);
-    return response.data;
+    return apiHelpers.delete(`/topik/${id}`);
   },
 
   createTopic: async (
     topic: Omit<Topic, "id">
   ): Promise<ApiResponse<Topic>> => {
-    const response = await api.post("/topik", topic);
-    return response.data;
+    return apiHelpers.post("/topik", topic);
   },
 };
 

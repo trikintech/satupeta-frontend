@@ -3,8 +3,8 @@
 import { useRouter, usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
-import { useSession } from "next-auth/react";
 import { hasAdminAccess } from "@/shared/config/access-admin";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 export default function AdminRouteGuard({
   children,
@@ -15,16 +15,7 @@ export default function AdminRouteGuard({
   const pathname = usePathname();
   const isAdminRoute = pathname.startsWith("/admin");
 
-  const { data: session, status } = useSession({
-    required: isAdminRoute,
-    onUnauthenticated() {
-      if (isAdminRoute) {
-        router.push(
-          `/auth/admin/login?callbackUrl=${encodeURIComponent(pathname)}`
-        );
-      }
-    },
-  });
+  const { session, status } = useAuthSession(true);
 
   const hasTokenError = session?.error === "RefreshAccessTokenError";
 

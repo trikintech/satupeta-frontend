@@ -21,7 +21,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthSession();
+  const { session, isAuthenticated } = useAuthSession();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -103,7 +103,9 @@ export function Header() {
           <div className="flex items-center">
             {isAuthenticated ? (
               <div className="flex items-center gap-4">
-                <span className="text-sm font-medium">Hi, {user?.name}</span>
+                <span className="text-sm font-medium">
+                  Hi, {session?.user?.name}
+                </span>
                 <Button variant="outline" size="sm" onClick={handleLogout}>
                   Logout
                 </Button>

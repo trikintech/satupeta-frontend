@@ -1,14 +1,20 @@
-"use client";
-
 import { useSession } from "next-auth/react";
 
-export function useAuthSession() {
+import { redirect } from "next/navigation";
+
+export function useAuthSession(requireAuth = true) {
   const { data: session, status } = useSession();
+  const isLoading = status === "loading";
+  const isAuthenticated = status === "authenticated";
+
+  if (!isLoading && !isAuthenticated && requireAuth) {
+    redirect("/auth/signin");
+  }
+
   return {
-    user: session?.user,
-    username: session?.user?.username,
-    accessToken: session?.access_token,
-    isLoading: status === "loading",
-    isAuthenticated: status === "authenticated",
+    session,
+    isLoading,
+    isAuthenticated,
+    status,
   };
 }

@@ -1,29 +1,25 @@
 import { PaginatedResponse } from "../types/api-response";
 import { Credential } from "../types/credential";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const credentialApi = {
   getCredentials: async (): Promise<PaginatedResponse<Credential[]>> => {
-    const response = await api.get("/credentials");
-    return response.data;
+    return apiHelpers.get("/credentials");
   },
 
   getCredentialById: async (id: number): Promise<Credential> => {
-    const response = await api.get(`/credentials/${id}`);
-    return response.data;
+    return apiHelpers.get(`/credentials/${id}`);
   },
 
   deleteCredential: async (id?: number): Promise<PaginatedResponse<null>> => {
-    const response = await api.delete(`/credentials/${id}`);
-    return response.data;
+    return apiHelpers.delete(`/credentials/${id}`);
   },
 
   createCredential: async (
     credential: Omit<Credential, "id">
   ): Promise<Credential> => {
-    const response = await api.post("/credentials", credential);
-    return response.data;
+    return apiHelpers.post("/credentials", credential);
   },
 };
 

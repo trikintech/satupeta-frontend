@@ -1,7 +1,7 @@
 import { PaginatedResponse } from "../types/api-response";
 import { Mapset, MapsetSubmitPayload } from "../types/mapset";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const mapsetApi = {
   getMapsets: async (params?: {
@@ -16,38 +16,33 @@ export const mapsetApi = {
       delete filteredParams.sort;
     }
 
-    const response = await api.get("/mapsets", {
+    return apiHelpers.get("/mapsets", {
       params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },
     });
-    return response.data;
   },
 
   getMapsetById: async (id: string): Promise<Mapset> => {
-    const response = await api.get(`/mapsets/${id}`);
-    return response.data;
+    return apiHelpers.get(`/mapsets/${id}`);
   },
 
   deleteMapset: async (id?: string): Promise<PaginatedResponse<null>> => {
-    const response = await api.delete(`/mapsets/${id}`);
-    return response.data;
+    return apiHelpers.delete(`/mapsets/${id}`);
   },
 
   createMapset: async (
     mapset: Omit<MapsetSubmitPayload, "id">
   ): Promise<Mapset> => {
-    const response = await api.post("/mapsets", mapset);
-    return response.data;
+    return apiHelpers.post("/mapsets", mapset);
   },
 
   updateMapset: async (
     id: string,
     mapset: Partial<MapsetSubmitPayload>
   ): Promise<Mapset> => {
-    const response = await api.patch(`/mapsets/${id}`, mapset);
-    return response.data;
+    return apiHelpers.put(`/mapsets/${id}`, mapset);
   },
 
   updateMapsetStatus: async (
@@ -55,11 +50,10 @@ export const mapsetApi = {
     status: string,
     layer_url: string
   ): Promise<Mapset> => {
-    const response = await api.patch(`/mapsets/${id}`, {
+    return apiHelpers.put(`/mapsets/${id}`, {
       status_validation: status,
       layer_url,
     });
-    return response.data;
   },
 };
 

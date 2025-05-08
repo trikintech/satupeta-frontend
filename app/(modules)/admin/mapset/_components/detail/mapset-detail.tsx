@@ -8,11 +8,11 @@ import MapsetInfoSection from "./mapset-info-section";
 import MapsetOrganizationSection from "./mapset-organization-section";
 import MapsetMetadataSection from "./mapset-metadata-section";
 import MapsetVersionSection from "./mapset-version-section";
-import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
 import { useState } from "react";
 import { toast } from "sonner";
 import { VerifyMapsetDialog } from "../verify-mapset-dialog";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 interface MapsetDetailProps {
   id: string;
@@ -27,7 +27,7 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
     queryFn: () => mapsetApi.getMapsetById(id),
   });
 
-  const { data: session } = useSession();
+  const { session } = useAuthSession();
   const userRole = session?.user.role;
 
   const updateStatusMutation = useMutation({

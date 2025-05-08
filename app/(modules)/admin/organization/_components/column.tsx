@@ -25,9 +25,9 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import organizationApi from "@/shared/services/organization";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
 import { DeleteDialog } from "../../_components/delete-dialog";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 interface ColumnConfig {
   id: string;
@@ -81,7 +81,8 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
   const [organizationToDelete, setOrganizationToDelete] =
     useState<Organization | null>(null);
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
+  const { session } = useAuthSession();
+
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({
