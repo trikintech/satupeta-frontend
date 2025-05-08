@@ -5,6 +5,7 @@ import { StatisticsSection } from "./(modules)/(landing)/components/statistic-se
 import { NewsSection } from "./(modules)/(landing)/components/news-section";
 import Footer from "./(modules)/(landing)/components/layout/footer";
 import { OrganizationSection } from "./(modules)/(landing)/components/organization-section";
+import { isActiveFeature } from "@/shared/config/app-config";
 
 export default function Home() {
   return (
@@ -15,7 +16,8 @@ export default function Home() {
         <CatalogSection />
         <OrganizationSection />
         <StatisticsSection />
-        <NewsSection />
+
+        {isActiveFeature.news && <NewsSection />}
       </div>
       <Footer />
     </main>

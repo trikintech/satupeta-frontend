@@ -6,18 +6,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/shared/utils/utils";
 import { Button } from "@/shared/components/ds/button";
+import { isActiveFeature } from "@/shared/config/app-config";
+import { useAuthSession } from "@/shared/hooks/use-session";
+import { signOut } from "next-auth/react";
 
 const navigation = [
   { name: "Katalog Mapset", href: "#catalog" },
   { name: "Daftar OPD", href: "#organization" },
   { name: "Statistik Konten", href: "#statistic" },
-  { name: "Berita dan Pengumuman", href: "#news" },
+  isActiveFeature.news && { name: "Berita dan Pengumuman", href: "#news" },
 ];
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { user, isAuthenticated } = useAuthSession();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -52,6 +56,14 @@ export function Header() {
     }
   };
 
+  const handleLogin = () => {
+    router.push("/auth/admin/login?callbackUrl=/");
+  };
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
+
   return (
     <header
       className={cn(
@@ -73,22 +85,34 @@ export function Header() {
             </Link>
             <div className="mx-4 h-8 w-px bg-zinc-200" />
             <nav className="hidden md:ml-10 md:flex md:space-x-8">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => handleNavigation(e, item.href)}
-                  className="text-gray-700 hover:text-primary font-medium text-sm transition-colors"
-                >
-                  {item.name}
-                </a>
-              ))}
+              {navigation.map(
+                (item) =>
+                  item && (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      onClick={(e) => handleNavigation(e, item.href)}
+                      className="text-gray-700 hover:text-primary font-medium text-sm transition-colors"
+                    >
+                      {item.name}
+                    </a>
+                  )
+              )}
             </nav>
           </div>
           <div className="flex items-center">
-            <Button variant="primary" size="sm" className="ml-4">
-              Login
-            </Button>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium">Hi, {user?.name}</span>
+                <Button variant="outline" size="sm" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Button variant="primary" size="sm" onClick={handleLogin}>
+                Login
+              </Button>
+            )}
             <Button variant="outline" size="icon" className="ml-2 md:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

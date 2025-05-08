@@ -39,7 +39,7 @@ export function CatalogSection() {
             </p>
 
             <Link
-              href="/katalog"
+              href="/maps?open-catalog=true"
               className="flex items-center text-primary text-sm font-medium hover:underline"
             >
               Lihat selengkapnya
