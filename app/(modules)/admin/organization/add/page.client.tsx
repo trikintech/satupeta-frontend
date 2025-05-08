@@ -20,14 +20,10 @@ export default function AddOrganizationPageClient() {
   }
 
   return (
-    <div className="container mx-auto py-4">
-      <div className="bg-white rounded-md shadow">
-        <OrganizationForm
-          onSubmitAction={handleSubmitOrganization}
-          isSubmitting={isSubmitting}
-          onCancelAction={resetForm}
-        />
-      </div>
-    </div>
+    <OrganizationForm
+      onSubmitAction={handleSubmitOrganization}
+      isSubmitting={isSubmitting}
+      onCancelAction={resetForm}
+    />
   );
 }

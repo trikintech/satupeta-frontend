@@ -8,6 +8,7 @@ export default function AddMapsPage() {
       <PageHeader
         title="Tambah Perangkat Daerah"
         description="Tambah perangkat daerah di Satu Peta."
+        className="bg-zinc-50"
       />
       <Suspense>
         <Suspense fallback={<div>Memuat form...</div>}>

@@ -1,20 +1,20 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import OrganizationDetail from "../../_components/detail";
+import CategoryDetail from "../../_components/detail";
 import PageHeader from "../../../_components/page-header";
 
-export default function OrganizationDetailPage() {
+export default function CategoryDetailPage() {
   const params = useParams();
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Detail Organization"
-        description="Detail user di Satu Peta."
+        title="Detail Kategori"
+        description="Detail kategori di Satu Peta."
         className="bg-zinc-50"
       />
-      <OrganizationDetail id={params.id?.toString() ?? ""} />
+      <CategoryDetail id={params.id?.toString() ?? ""} />
     </div>
   );
 }
