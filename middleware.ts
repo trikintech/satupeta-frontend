@@ -6,7 +6,7 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   // Add '/' to publicRoutes
-  const publicRoutes = ["/", "/maps"]; // <-- Added root path here
+  const publicRoutes = ["/", "/maps"];
   const adminRoutes = ["/admin"];
 
   const isPublicRoute = publicRoutes.some((route) =>
@@ -15,6 +15,7 @@ export default auth((req) => {
 
   const isAdminRoute = adminRoutes.some((route) => pathname.startsWith(route));
 
+  // Allow access to public routes, static files, and auth endpoints
   if (
     isPublicRoute ||
     pathname.startsWith("/_next") ||
@@ -24,15 +25,12 @@ export default auth((req) => {
     return NextResponse.next();
   }
 
+  // Only redirect to login for admin routes when not authenticated
   if (isAdminRoute && !req.auth) {
-    return NextResponse.redirect(
-      new URL(
-        `/auth/admin/login?callbackUrl=${encodeURIComponent(pathname)}`,
-        req.nextUrl
-      )
-    );
+    return NextResponse.redirect(new URL(`/}`, req.nextUrl));
   }
 
+  // For all other routes, allow access
   return NextResponse.next();
 });
 
