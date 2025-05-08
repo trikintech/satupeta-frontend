@@ -1,20 +1,23 @@
 "use client";
 
 import React from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/shared/utils/utils";
 import { Button } from "@/shared/components/ds/button";
 
 const navigation = [
-  { name: "Katalog Mapset", href: "/katalog" },
-  { name: "Daftar OPD", href: "/opd" },
-  { name: "Statistik Konten", href: "/statistik" },
-  { name: "Berita dan Pengumuman", href: "/berita" },
+  { name: "Katalog Mapset", href: "#catalog" },
+  { name: "Daftar OPD", href: "#organization" },
+  { name: "Statistik Konten", href: "#statistic" },
+  { name: "Berita dan Pengumuman", href: "#news" },
 ];
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +27,30 @@ export function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavigation = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    const fixedHeaderHeight = 64;
+
+    if (pathname === "/") {
+      const targetElement = document.querySelector(href);
+      if (targetElement) {
+        const elementTop =
+          targetElement.getBoundingClientRect().top + window.pageYOffset;
+        const offsetTop = elementTop - fixedHeaderHeight;
+
+        window.scrollTo({
+          top: offsetTop,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      router.push(`/${href}`);
+    }
+  };
 
   return (
     <header
@@ -37,7 +64,7 @@ export function Header() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Image
-                src="/logo.svg"
+                src="/logo.png"
                 alt="Satu Peta"
                 width={120}
                 height={32}
@@ -47,13 +74,14 @@ export function Header() {
             <div className="mx-4 h-8 w-px bg-zinc-200" />
             <nav className="hidden md:ml-10 md:flex md:space-x-8">
               {navigation.map((item) => (
-                <Link
+                <a
                   key={item.name}
                   href={item.href}
+                  onClick={(e) => handleNavigation(e, item.href)}
                   className="text-gray-700 hover:text-primary font-medium text-sm transition-colors"
                 >
                   {item.name}
-                </Link>
+                </a>
               ))}
             </nav>
           </div>
