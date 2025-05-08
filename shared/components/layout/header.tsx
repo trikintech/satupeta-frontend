@@ -61,7 +61,7 @@ export function Header() {
   };
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" });
+    await signOut();
   };
 
   return (

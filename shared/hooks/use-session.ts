@@ -1,15 +1,20 @@
 import { useSession } from "next-auth/react";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export function useAuthSession(requireAuth = true) {
+import { useEffect } from "react";
+
+export function useAuthSession(requireAuth = false) {
   const { data: session, status } = useSession();
+  const router = useRouter();
   const isLoading = status === "loading";
   const isAuthenticated = status === "authenticated";
 
-  if (!isLoading && !isAuthenticated && requireAuth) {
-    redirect("/auth/signin");
-  }
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && requireAuth) {
+      router.push("/auth/signin");
+    }
+  }, [isLoading, isAuthenticated, requireAuth, router]);
 
   return {
     session,

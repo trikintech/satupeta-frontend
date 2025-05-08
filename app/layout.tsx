@@ -3,7 +3,6 @@
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
-import AdminRouteGuard from "@/shared/components/auth/admin-route-guard";
 
 import { Providers } from "@/shared/providers";
 import { Toaster } from "@/shared/components/ui/sonner";
@@ -43,8 +42,7 @@ export default function RootLayout({
           <title>{`Satu Peta ${appsName.wilayah}`}</title>
         </head>
         <Providers>
-          <AdminRouteGuard>{children}</AdminRouteGuard>
-
+          {children}
           <Toaster />
         </Providers>
       </body>

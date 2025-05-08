@@ -39,7 +39,7 @@ export function useAuthApi() {
       },
 
       // Session expired handler
-      () => signOut({ callbackUrl: "/auth/admin/login?error=session_expired" })
+      () => signOut()
     );
   }, [session]);
 
