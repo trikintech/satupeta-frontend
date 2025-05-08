@@ -1,6 +1,6 @@
 "use client";
 
-import { MapsetDetail } from "../../components/detail/mapset-detail";
+import { MapsetDetail } from "../../_components/detail/mapset-detail";
 import { useParams } from "next/navigation";
 
 export default function MapsetDetailPage() {

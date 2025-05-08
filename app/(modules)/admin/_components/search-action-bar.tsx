@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
-import { SearchInput } from "./../components/search-input";
+import { SearchInput } from "./search-input";
 
 interface SearchAndActionBarProps {
   searchValue: string;

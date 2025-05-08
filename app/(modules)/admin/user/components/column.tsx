@@ -26,7 +26,7 @@ import userApi from "@/shared/services/user";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
-import { DeleteDialog } from "../../components/delete-dialog";
+import { DeleteDialog } from "../../_components/delete-dialog";
 
 // Type for column configuration
 interface ColumnConfig {

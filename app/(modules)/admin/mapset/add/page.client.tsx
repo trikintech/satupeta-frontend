@@ -6,18 +6,18 @@ import { useAtom } from "jotai";
 import categoryApi from "@/shared/services/category";
 import classificationApi from "@/shared/services/classification";
 import mapProjectionSystemApi from "@/shared/services/map-projection-system";
-import { MapsetInfoForm } from "../components/form/mapset-info-form";
+import { MapsetInfoForm } from "../_components/form/mapset-info-form";
 import { Loader2 } from "lucide-react";
 import organizationApi from "@/shared/services/organization";
 import mapSourceApi from "@/shared/services/map-source";
-import { MapsetMetadataForm } from "../components/form/mapset-metadata-form";
+import { MapsetMetadataForm } from "../_components/form/mapset-metadata-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { MapsetVersionForm } from "../components/form/mapset-version-form";
+import { MapsetVersionForm } from "../_components/form/mapset-version-form";
 import mapsetApi from "@/shared/services/mapset";
 import { MapsetSubmitPayload } from "@/shared/types/mapset";
 import { PaginatedResponse } from "@/shared/types/api-response";
-import MapsetTab from "../components/form/mapset-tab";
+import MapsetTab from "../_components/form/mapset-tab";
 import StatusValidation from "@/shared/config/status-validation";
 import {
   activeTabAtom,
@@ -25,7 +25,7 @@ import {
   mapsetFormAtom,
   MapsetFormState,
   MapsetFormTab,
-} from "../../state/mapset-form";
+} from "../../_state/mapset-form";
 
 interface SelectOption {
   id: string;

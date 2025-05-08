@@ -1,10 +1,10 @@
 "use client";
 
 import { User } from "@/shared/types/user";
-import { useUserColumns } from "./components/column";
+import { useUserColumns } from "./_components/column";
 import userApi from "@/shared/services/user";
-import { useTableState } from "../hooks/use-table-state";
-import { ResourceTable } from "../components/resource-table";
+import { useTableState } from "../_hooks/use-table-state";
+import { ResourceTable } from "../_components/resource-table";
 import { ColumnDef } from "@tanstack/react-table";
 
 export default function UserPageClient() {

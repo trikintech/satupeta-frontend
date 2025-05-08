@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { Mapset } from "@/shared/types/mapset";
+import { User } from "@/shared/types/user";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDown,
@@ -22,19 +22,19 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DeleteDialog } from "../../../components/delete-dialog";
-import mapsetApi from "@/shared/services/mapset";
+import userApi from "@/shared/services/user";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
+import { DeleteDialog } from "../../_components/delete-dialog";
 
 // Type for column configuration
 interface ColumnConfig {
   id: string;
   header: string;
-  accessor?: keyof Mapset;
+  accessor?: keyof User;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  accessorFn?: (row: Mapset) => any;
+  accessorFn?: (row: User) => any;
   sortable?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cell?: (value: any) => React.ReactNode;
@@ -44,20 +44,20 @@ interface ColumnConfig {
 const COLUMN_CONFIGS: ColumnConfig[] = [
   {
     id: "name",
-    header: "Nama Mapset",
+    header: "Nama User",
     accessor: "name",
     sortable: true,
   },
   {
     id: "classification",
-    header: "Klasifikasi",
-    accessorFn: (row) => row.classification?.name,
+    header: "Role",
+    accessorFn: (row) => row.role?.name,
     sortable: false,
   },
   {
     id: "producer",
     header: "Instansi",
-    accessorFn: (row) => row.producer?.name,
+    accessorFn: (row) => row.organization?.name,
     sortable: false,
   },
   {
@@ -73,25 +73,25 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
   },
 ];
 
-export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
+export const useUserColumns = (): ColumnDef<User>[] => {
   const router = useRouter();
-  const [mapsetToDelete, setMapsetToDelete] = useState<Mapset | null>(null);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await mapsetApi.deleteMapset(id);
+      return await userApi.deleteUser(id);
     },
     onSuccess: () => {
       toast.success("Berhasil menghapus data");
-      queryClient.invalidateQueries({ queryKey: ["mapsets"] });
-      setMapsetToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      setUserToDelete(null);
     },
     onError: (error) => {
       toast.error("Gagal menghapus data");
-      console.error("Error deleting mapset:", error);
+      console.error("Error deleting user:", error);
     },
   });
 
@@ -118,7 +118,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
 
   // Generate base columns from config
   const baseColumns = COLUMN_CONFIGS.map((config) => {
-    const column: ColumnDef<Mapset> = {
+    const column: ColumnDef<User> = {
       id: config.id,
       header: ({ column }) =>
         config.sortable
@@ -152,7 +152,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const mapset = row.original;
+        const user = row.original;
 
         return (
           <>
@@ -167,9 +167,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                 {hasPermission(userRole, "read") && (
                   <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/admin/mapset/detail/${mapset.id}`)
-                    }
+                    onClick={() => router.push(`/admin/user/detail/${user.id}`)}
                     className="flex items-center gap-2"
                   >
                     <Eye className="h-4 w-4" />
@@ -178,36 +176,34 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                 )}
                 {hasPermission(userRole, "update") && (
                   <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/admin/mapset/edit/${mapset.id}`)
-                    }
+                    onClick={() => router.push(`/admin/user/edit/${user.id}`)}
                     className="flex items-center gap-2"
                   >
                     <Edit className="h-4 w-4" />
-                    Edit Mapset
+                    Edit User
                   </DropdownMenuItem>
                 )}
                 {hasPermission(userRole, "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => setMapsetToDelete(mapset)}
+                      onClick={() => setUserToDelete(user)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
                       <Trash className="h-4 w-4" />
-                      Hapus Mapset
+                      Hapus User
                     </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {mapsetToDelete?.id === mapset.id && (
+            {userToDelete?.id === user.id && (
               <DeleteDialog
-                name={mapsetToDelete?.name}
+                name={userToDelete.name}
                 isDeleting={deleteMutation.isPending}
-                onDelete={() => deleteMutation.mutate(mapsetToDelete.id)}
-                onCancel={() => setMapsetToDelete(null)}
+                onDelete={() => deleteMutation.mutate(userToDelete.id)}
+                onCancel={() => setUserToDelete(null)}
                 open={true}
               />
             )}

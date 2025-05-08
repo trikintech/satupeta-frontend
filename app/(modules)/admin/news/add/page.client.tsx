@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import newsApi from "@/shared/services/news";
 import { News } from "@/shared/types/news";
-import { initialFormState, newsFormAtom } from "../../state/news-form";
-import { NewsForm } from "../components/form";
+import { initialFormState, newsFormAtom } from "../../_state/news-form";
+import { NewsForm } from "../_components/form";
 
 export default function AddNewsPageClient() {
   const router = useRouter();

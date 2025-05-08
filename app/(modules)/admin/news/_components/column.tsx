@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/shared/components/ds/badge";
 import { Button } from "@/shared/components/ds/button";
 import {
@@ -9,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { Organization } from "@/shared/types/organization";
+import { News } from "@/shared/types/news";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDown,
@@ -23,45 +22,37 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import organizationApi from "@/shared/services/organization";
+import newsApi from "@/shared/services/news";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
 import { DeleteDialog } from "../../_components/delete-dialog";
 
+// Type for column configuration
 interface ColumnConfig {
   id: string;
   header: string;
-  accessor?: keyof Organization;
-  accessorFn?: (row: Organization) => any;
+  accessor?: keyof News;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  accessorFn?: (row: News) => any;
   sortable?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cell?: (value: any) => React.ReactNode;
 }
 
+// Default column configurations
 const COLUMN_CONFIGS: ColumnConfig[] = [
   {
     id: "name",
-    header: "Nama Organisasi",
+    header: "Judul",
     accessor: "name",
     sortable: true,
   },
   {
-    id: "email",
-    header: "Email",
-    accessor: "email",
-    sortable: true,
-  },
-  {
-    id: "phone_number",
-    header: "Telepon",
-    accessor: "phone_number",
+    id: "thumbnail",
+    header: "Gambar",
+    accessorFn: (row) => row.thumbnail,
     sortable: false,
-  },
-  {
-    id: "count_mapset",
-    header: "Jumlah Mapset",
-    accessor: "count_mapset",
-    sortable: true,
   },
   {
     id: "is_active",
@@ -76,29 +67,29 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
   },
 ];
 
-export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
+export const useNewsColumns = (): ColumnDef<News>[] => {
   const router = useRouter();
-  const [organizationToDelete, setOrganizationToDelete] =
-    useState<Organization | null>(null);
+  const [newsToDelete, setNewsToDelete] = useState<News | null>(null);
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await organizationApi.deleteOrganization(id);
+      return await newsApi.deleteNews(id);
     },
     onSuccess: () => {
       toast.success("Berhasil menghapus data");
-      queryClient.invalidateQueries({ queryKey: ["organizations"] });
-      setOrganizationToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ["newss"] });
+      setNewsToDelete(null);
     },
     onError: (error) => {
       toast.error("Gagal menghapus data");
-      console.error("Error deleting organization:", error);
+      console.error("Error deleting news:", error);
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderSortableHeader = (column: any, label: string) => (
     <Button
       variant="ghost"
@@ -118,8 +109,9 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
     </Button>
   );
 
+  // Generate base columns from config
   const baseColumns = COLUMN_CONFIGS.map((config) => {
-    const column: ColumnDef<Organization> = {
+    const column: ColumnDef<News> = {
       id: config.id,
       header: ({ column }) =>
         config.sortable
@@ -142,6 +134,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
     return column;
   });
 
+  // Add actions column if news has any permissions
   if (
     userRole &&
     (hasPermission(userRole, "read") ||
@@ -152,7 +145,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const organization = row.original;
+        const news = row.original;
 
         return (
           <>
@@ -167,11 +160,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                 {hasPermission(userRole, "read") && (
                   <DropdownMenuItem
-                    onClick={() =>
-                      router.push(
-                        `/admin/organization/detail/${organization.id}`
-                      )
-                    }
+                    onClick={() => router.push(`/admin/news/detail/${news.id}`)}
                     className="flex items-center gap-2"
                   >
                     <Eye className="h-4 w-4" />
@@ -180,36 +169,34 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                 )}
                 {hasPermission(userRole, "update") && (
                   <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/admin/organization/edit/${organization.id}`)
-                    }
+                    onClick={() => router.push(`/admin/news/edit/${news.id}`)}
                     className="flex items-center gap-2"
                   >
                     <Edit className="h-4 w-4" />
-                    Edit Organisasi
+                    Edit News
                   </DropdownMenuItem>
                 )}
                 {hasPermission(userRole, "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => setOrganizationToDelete(organization)}
+                      onClick={() => setNewsToDelete(news)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
                       <Trash className="h-4 w-4" />
-                      Hapus Organisasi
+                      Hapus News
                     </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {organizationToDelete?.id === organization.id && (
+            {newsToDelete?.id === news.id && (
               <DeleteDialog
-                name={organizationToDelete.name}
+                name={newsToDelete?.name ?? ""}
                 isDeleting={deleteMutation.isPending}
-                onDelete={() => deleteMutation.mutate(organizationToDelete.id)}
-                onCancel={() => setOrganizationToDelete(null)}
+                onDelete={() => deleteMutation.mutate(newsToDelete?.id ?? "")}
+                onCancel={() => setNewsToDelete(null)}
                 open={true}
               />
             )}

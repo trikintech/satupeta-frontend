@@ -1,10 +1,10 @@
 "use client";
 
 import { News } from "@/shared/types/news";
-import { useNewsColumns } from "./components/column";
+import { useNewsColumns } from "./_components/column";
 import newsApi from "@/shared/services/news";
-import { useTableState } from "../hooks/use-table-state";
-import { ResourceTable } from "../components/resource-table";
+import { useTableState } from "../_hooks/use-table-state";
+import { ResourceTable } from "../_components/resource-table";
 import { ColumnDef } from "@tanstack/react-table";
 
 export default function NewsPageClient() {

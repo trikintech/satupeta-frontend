@@ -3,8 +3,8 @@
 import { Organization } from "@/shared/types/organization";
 import { useOrganizationColumns } from "./_components/column";
 import organizationApi from "@/shared/services/organization";
-import { useTableState } from "../hooks/use-table-state";
-import { ResourceTable } from "../components/resource-table";
+import { useTableState } from "../_hooks/use-table-state";
+import { ResourceTable } from "../_components/resource-table";
 import { ColumnDef } from "@tanstack/react-table";
 
 export default function OrganizationPageClient() {

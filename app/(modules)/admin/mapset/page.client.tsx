@@ -1,13 +1,13 @@
 "use client";
 
 import { Mapset } from "@/shared/types/mapset";
-import { useMapsetColumns } from "./components/list/column";
+import { useMapsetColumns } from "./_components/list/column";
 import mapsetApi from "@/shared/services/mapset";
-import { useTableState } from "../hooks/use-table-state";
-import { ResourceTable } from "../components/resource-table";
+import { useTableState } from "../_hooks/use-table-state";
+import { ResourceTable } from "../_components/resource-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { TabNavigation } from "./components/list/tab-navigation";
-import { useTabState } from "../hooks/use-tab";
+import { TabNavigation } from "./_components/list/tab-navigation";
+import { useTabState } from "../_hooks/use-tab";
 
 export default function MapsetPageClient() {
   const columns = useMapsetColumns();

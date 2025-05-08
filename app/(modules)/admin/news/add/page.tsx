@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import PageHeader from "../../components/page-header";
+import PageHeader from "../../_components/page-header";
 import AddNewsPageClient from "./page.client";
 
 export default function AddNewsPage() {
