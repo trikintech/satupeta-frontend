@@ -43,7 +43,7 @@ export const organizationApi = {
     id: string,
     organization: OrganizationFormValues
   ): Promise<Organization> => {
-    return apiHelpers.put(`/organizations/${id}`, organization);
+    return apiHelpers.patch(`/organizations/${id}`, organization);
   },
 };
 

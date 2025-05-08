@@ -42,7 +42,7 @@ export const mapsetApi = {
     id: string,
     mapset: Partial<MapsetSubmitPayload>
   ): Promise<Mapset> => {
-    return apiHelpers.put(`/mapsets/${id}`, mapset);
+    return apiHelpers.patch(`/mapsets/${id}`, mapset);
   },
 
   updateMapsetStatus: async (
@@ -50,7 +50,7 @@ export const mapsetApi = {
     status: string,
     layer_url: string
   ): Promise<Mapset> => {
-    return apiHelpers.put(`/mapsets/${id}`, {
+    return apiHelpers.patch(`/mapsets/${id}`, {
       status_validation: status,
       layer_url,
     });

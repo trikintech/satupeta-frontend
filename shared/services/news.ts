@@ -37,7 +37,7 @@ export const newsApi = {
   },
 
   updateNews: async (id: string, news: News): Promise<News> => {
-    return apiHelpers.put(`/news/${id}`, news);
+    return apiHelpers.patch(`/news/${id}`, news);
   },
 };
 

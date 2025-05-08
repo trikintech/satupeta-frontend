@@ -1,15 +1,7 @@
 // lib/api.ts
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-// Base axios instance for refresh token
-const axiosRefresh = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
 
 // Main axios instance
 const api: AxiosInstance = axios.create({
@@ -23,9 +15,11 @@ const api: AxiosInstance = axios.create({
 let isRefreshing = false;
 let failedQueue: {
   resolve: (token: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reject: (error: any) => void;
 }[] = [];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const processQueue = (error: any, token: string | null = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
@@ -56,6 +50,7 @@ export const setupApiInterceptors = (
   api.interceptors.response.use(
     (response) => response,
     async (error: AxiosError) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const originalRequest: any = error.config;
 
       if (
@@ -97,11 +92,14 @@ export const setupApiInterceptors = (
 
 // Helper functions
 export const apiHelpers = {
-  get: <T>(url: string, params = {}) =>
-    api.get<T>(url, { params }).then((res) => res.data),
-  post: <T>(url: string, data = {}) =>
-    api.post<T>(url, data).then((res) => res.data),
-  put: <T>(url: string, data = {}) =>
-    api.put<T>(url, data).then((res) => res.data),
-  delete: <T>(url: string) => api.delete<T>(url).then((res) => res.data),
+  get: <T>(url: string, config?: AxiosRequestConfig) =>
+    api.get<T>(url, config).then((res) => res.data),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  post: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
+    api.post<T>(url, data, config).then((res) => res.data),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  patch: <T>(url: string, data?: any, config?: AxiosRequestConfig) =>
+    api.patch<T>(url, data, config).then((res) => res.data),
+  delete: <T>(url: string, config?: AxiosRequestConfig) =>
+    api.delete<T>(url, config).then((res) => res.data),
 };

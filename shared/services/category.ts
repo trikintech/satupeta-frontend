@@ -43,7 +43,7 @@ export const categoryApi = {
     id: string,
     category: CategoryFormValues
   ): Promise<Category> => {
-    return apiHelpers.put(`/categories/${id}`, category);
+    return apiHelpers.patch(`/categories/${id}`, category);
   },
 };
 

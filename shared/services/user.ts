@@ -37,7 +37,7 @@ export const userApi = {
   },
 
   updateUser: async (id: string, user: UserSubmitPayload): Promise<User> => {
-    return apiHelpers.put(`/users/${id}`, user);
+    return apiHelpers.patch(`/users/${id}`, user);
   },
 };
 
