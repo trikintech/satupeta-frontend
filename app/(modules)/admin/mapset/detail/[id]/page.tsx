@@ -7,7 +7,7 @@ export default function MapsetDetailPage() {
   const params = useParams();
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-6">
       <MapsetDetail id={params.id?.toString() ?? ""} />
     </div>
   );

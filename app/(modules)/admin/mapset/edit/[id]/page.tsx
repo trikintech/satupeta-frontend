@@ -204,7 +204,7 @@ export default function EditMapsPageClient() {
   }
 
   return (
-    <div className="container space-y-6">
+    <div className="space-y-6">
       <PageHeader
         title="Ubah Mapset dan Metadata"
         description="Ubah mapset dan metadata untuk memperbarui data geospasial di Satu Peta."
