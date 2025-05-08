@@ -14,7 +14,7 @@ export default function UserDetail({ id }: { id: string }) {
       <div className="p-2 border rounded-[6px] border-zinc-200">
         <div className="py-2 px-4">
           <span className="text-lg font-semibold text-zinc-950">
-            Informasi Pengguna
+            Informasi User
           </span>
         </div>
         <div className="py-2 px-4">

@@ -17,7 +17,7 @@ export const organizationApi = {
     }
 
     return apiHelpers.get("/organizations", {
-      params: filteredParams,
+      ...filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },

@@ -16,7 +16,7 @@ export const userApi = {
     }
 
     return apiHelpers.get("/users", {
-      params: filteredParams,
+      ...filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },

@@ -51,10 +51,10 @@ export default function UserPageClient() {
       pageSize={limit}
       onPaginationChangeAction={handlePaginationChange}
       emptyStateProps={{
-        title: "Organisasi tidak ditemukan",
+        title: "User tidak ditemukan",
       }}
       actionBarProps={{
-        buttonLabel: "Tambah Organisasi",
+        buttonLabel: "Tambah User",
         buttonLink: "/admin/user/add",
       }}
       refetchAction={refetch}

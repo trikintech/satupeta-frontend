@@ -56,7 +56,7 @@ export default function EditNewsPageClient() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["news"] });
       queryClient.invalidateQueries({ queryKey: ["news", newsId] });
-      toast.success("Berita berhasil diperbarui!");
+      toast.success("Konten berhasil diperbarui!");
       router.push("/admin/news");
     },
     onError: (error: Error) => {
@@ -90,7 +90,7 @@ export default function EditNewsPageClient() {
 
   return (
     <div className="container space-y-6">
-      <PageHeader title="Ubah Berita" description="Ubah berita di sistem." />
+      <PageHeader title="Ubah Berita" description="Ubah konten di sistem." />
       <div className="bg-white rounded-md shadow">
         <NewsForm
           initialData={formState}
