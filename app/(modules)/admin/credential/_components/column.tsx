@@ -155,9 +155,9 @@ export const useCredentialColumns = (): ColumnDef<Credential>[] => {
 
   if (
     userRole &&
-    (hasPermission(userRole, "read") ||
-      hasPermission(userRole, "update") ||
-      hasPermission(userRole, "delete"))
+    (hasPermission(userRole, "credential", "read") ||
+      hasPermission(userRole, "credential", "update") ||
+      hasPermission(userRole, "credential", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
@@ -176,7 +176,7 @@ export const useCredentialColumns = (): ColumnDef<Credential>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "update") && (
+                {hasPermission(userRole, "credential", "update") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/credential/edit/${credential.id}`)
@@ -187,7 +187,7 @@ export const useCredentialColumns = (): ColumnDef<Credential>[] => {
                     Edit Credential
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "delete") && (
+                {hasPermission(userRole, "credential", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

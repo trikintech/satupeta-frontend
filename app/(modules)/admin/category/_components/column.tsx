@@ -153,9 +153,9 @@ export const useCategoryColumns = (): ColumnDef<Category>[] => {
 
   if (
     userRole &&
-    (hasPermission(userRole, "read") ||
-      hasPermission(userRole, "update") ||
-      hasPermission(userRole, "delete"))
+    (hasPermission(userRole, "category", "read") ||
+      hasPermission(userRole, "category", "update") ||
+      hasPermission(userRole, "category", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
@@ -174,7 +174,7 @@ export const useCategoryColumns = (): ColumnDef<Category>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "read") && (
+                {hasPermission(userRole, "category", "read") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/category/detail/${category.id}`)
@@ -185,7 +185,7 @@ export const useCategoryColumns = (): ColumnDef<Category>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "update") && (
+                {hasPermission(userRole, "category", "update") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/category/edit/${category.id}`)
@@ -196,7 +196,7 @@ export const useCategoryColumns = (): ColumnDef<Category>[] => {
                     Edit Kategori
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "delete") && (
+                {hasPermission(userRole, "category", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

@@ -144,9 +144,9 @@ export const useUserColumns = (): ColumnDef<User>[] => {
 
   if (
     userRole &&
-    (hasPermission(userRole, "read") ||
-      hasPermission(userRole, "update") ||
-      hasPermission(userRole, "delete"))
+    (hasPermission(userRole, "user", "read") ||
+      hasPermission(userRole, "user", "update") ||
+      hasPermission(userRole, "user", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
@@ -165,7 +165,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "read") && (
+                {hasPermission(userRole, "user", "read") && (
                   <DropdownMenuItem
                     onClick={() => router.push(`/admin/user/detail/${user.id}`)}
                     className="flex items-center gap-2"
@@ -174,7 +174,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "update") && (
+                {hasPermission(userRole, "user", "update") && (
                   <DropdownMenuItem
                     onClick={() => router.push(`/admin/user/edit/${user.id}`)}
                     className="flex items-center gap-2"
@@ -183,7 +183,7 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                     Edit User
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "delete") && (
+                {hasPermission(userRole, "user", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

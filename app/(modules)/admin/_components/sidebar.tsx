@@ -19,30 +19,34 @@ import { ScrollArea } from "@/shared/components/ui/scroll-area";
 import { cn } from "@/shared/utils/utils";
 import Image from "next/image";
 import { useAuthSession } from "@/shared/hooks/use-session";
-import { getRoleLabelById } from "@/shared/config/role";
+import { getRoleLabelById, hasPermission } from "@/shared/config/role";
 import { signOut } from "next-auth/react";
 
 interface MenuItem {
   name: string;
   href: string;
   icon: React.ReactNode;
+  module: string; // default ke 'read' jika tidak diisi
 }
 
 const menuItems: MenuItem[] = [
   {
     name: "Manajemen Peta",
     href: "/admin/mapset",
+    module: "mapset",
     icon: <Map className="h-5 w-5" />,
   },
   {
     name: "Manajemen User",
     href: "/admin/user",
     icon: <Users className="h-5 w-5" />,
+    module: "user",
   },
   {
     name: "Manajemen Konten",
     href: "/admin/news",
     icon: <FileText className="h-5 w-5" />,
+    module: "news",
   },
 ];
 
@@ -51,16 +55,19 @@ const settingsItems: MenuItem[] = [
     name: "Perangkat Daerah",
     href: "/admin/organization",
     icon: <UserCog className="h-5 w-5" />,
+    module: "organization",
   },
   {
     name: "Kategori",
     href: "/admin/category",
     icon: <ChartBarIncreasing className="h-5 w-5" />,
+    module: "category",
   },
   {
     name: "Kredensial",
     href: "/admin/credential",
     icon: <Key className="h-5 w-5" />,
+    module: "credential",
   },
 ];
 
@@ -68,19 +75,26 @@ const Sidebar = () => {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const { session } = useAuthSession();
+  const userRoleName = session?.user?.role?.name;
+  const userRole = session?.user?.role;
 
   const isActive = useCallback(
     (href: string) => {
       if (pathname === href) return true;
-
       if (href !== "/" && pathname.startsWith(href)) {
         const nextChar = pathname.charAt(href.length);
         return nextChar === "" || nextChar === "/";
       }
-
       return false;
     },
     [pathname]
+  );
+  const filteredMenuItems = menuItems.filter(
+    (item) => userRole && hasPermission(userRole, item.module, "read")
+  );
+
+  const filteredSettingsItems = settingsItems.filter(
+    (item) => userRole && hasPermission(userRole, item.module, "read")
   );
 
   return (
@@ -106,7 +120,7 @@ const Sidebar = () => {
             <div className="flex-1">
               <div className="font-semibold text-sm">Satu Peta</div>
               <div className="text-xs text-gray-500">
-                {getRoleLabelById(session?.user.role.name ?? "")}
+                {getRoleLabelById(userRoleName ?? "")}
               </div>
             </div>
           </>
@@ -128,13 +142,13 @@ const Sidebar = () => {
       <ScrollArea className="flex-1">
         <div className="px-2 py-2">
           {/* Features Section */}
-          {!collapsed && (
+          {filteredMenuItems.length > 0 && !collapsed && (
             <p className="text-xs text-gray-500 font-medium px-2 mb-2">
               FEATURES
             </p>
           )}
           <ul className="space-y-1">
-            {menuItems.map((item) => (
+            {filteredMenuItems.map((item) => (
               <li key={item.name}>
                 <Link href={item.href} passHref>
                   <div
@@ -163,13 +177,13 @@ const Sidebar = () => {
           </ul>
 
           {/* Settings Section */}
-          {!collapsed && (
+          {filteredSettingsItems.length > 0 && !collapsed && (
             <p className="text-xs text-gray-500 font-medium px-2 mt-6 mb-2">
               SETTINGS
             </p>
           )}
           <ul className="space-y-1">
-            {settingsItems.map((item) => (
+            {filteredSettingsItems.map((item) => (
               <li key={item.name}>
                 <Link href={item.href} passHref>
                   <div
@@ -202,7 +216,9 @@ const Sidebar = () => {
       <div className="p-2 border-t border-gray-200">
         <div className="flex items-center px-2 py-3">
           <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
-            <span className="text-sm font-medium">A</span>
+            <span className="text-sm font-medium">
+              {session?.user?.name?.[0] ?? "U"}
+            </span>
           </div>
           {!collapsed && (
             <div className="ml-3">

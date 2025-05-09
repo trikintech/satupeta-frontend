@@ -145,9 +145,9 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
   // Add actions column if user has any permissions
   if (
     userRole &&
-    (hasPermission(userRole, "read") ||
-      hasPermission(userRole, "update") ||
-      hasPermission(userRole, "delete"))
+    (hasPermission(userRole, "mapset", "read") ||
+      hasPermission(userRole, "mapset", "update") ||
+      hasPermission(userRole, "mapset", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
@@ -166,7 +166,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "read") && (
+                {hasPermission(userRole, "mapset", "read") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/mapset/detail/${mapset.id}`)
@@ -177,7 +177,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "update") && (
+                {hasPermission(userRole, "mapset", "update") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/mapset/edit/${mapset.id}`)
@@ -188,7 +188,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     Edit Mapset
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "delete") && (
+                {hasPermission(userRole, "mapset", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
