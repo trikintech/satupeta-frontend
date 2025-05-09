@@ -16,7 +16,7 @@ export const newsApi = {
     }
 
     return apiHelpers.get("/news", {
-      ...filteredParams,
+      params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },

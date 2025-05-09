@@ -17,7 +17,7 @@ export const credentialApi = {
     }
 
     return apiHelpers.get("/credentials", {
-      ...filteredParams,
+      params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },

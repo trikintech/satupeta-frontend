@@ -6,6 +6,7 @@ import { apiHelpers } from "./api";
 
 export const categoryApi = {
   getCategories: async (params?: {
+    search?: string;
     filter?: string | string[];
     limit?: number;
     offset?: number;
@@ -17,7 +18,7 @@ export const categoryApi = {
     }
 
     return apiHelpers.get("/categories", {
-      ...filteredParams,
+      params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },

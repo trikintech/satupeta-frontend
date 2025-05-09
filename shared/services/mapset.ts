@@ -17,7 +17,7 @@ export const mapsetApi = {
     }
 
     return apiHelpers.get("/mapsets", {
-      ...filteredParams,
+      params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },
