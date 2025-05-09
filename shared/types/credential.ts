@@ -17,4 +17,7 @@ export interface Credential {
   updated_at: string;
   last_used_at: string;
   last_used_by: string;
+  decrypted_data: {
+    [key: string]: string;
+  };
 }

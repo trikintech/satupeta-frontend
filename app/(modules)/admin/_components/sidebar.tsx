@@ -11,6 +11,8 @@ import {
   Map,
   FileText,
   UserCog,
+  Key,
+  ChartBarIncreasing,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
@@ -45,11 +47,6 @@ const menuItems: MenuItem[] = [
 ];
 
 const settingsItems: MenuItem[] = [
-  // {
-  //   name: "Mapserver & Metadata",
-  //   href: "/admin/map-sources",
-  //   icon: <UserCog className="h-5 w-5" />,
-  // },
   {
     name: "Perangkat Daerah",
     href: "/admin/organization",
@@ -58,7 +55,12 @@ const settingsItems: MenuItem[] = [
   {
     name: "Kategori",
     href: "/admin/category",
-    icon: <UserCog className="h-5 w-5" />,
+    icon: <ChartBarIncreasing className="h-5 w-5" />,
+  },
+  {
+    name: "Kredensial",
+    href: "/admin/credential",
+    icon: <Key className="h-5 w-5" />,
   },
 ];
 
@@ -67,15 +69,11 @@ const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { session } = useAuthSession();
 
-  // Check if current path is active (exact match or starts with path for nested routes)
   const isActive = useCallback(
     (href: string) => {
-      // Exact match for main routes
       if (pathname === href) return true;
 
-      // For nested routes, check if the current pathname starts with the href
       if (href !== "/" && pathname.startsWith(href)) {
-        // Don't match partial segments - ensure we're matching complete path segments
         const nextChar = pathname.charAt(href.length);
         return nextChar === "" || nextChar === "/";
       }
@@ -201,7 +199,6 @@ const Sidebar = () => {
         </div>
       </ScrollArea>
 
-      {/* User profile dan logout */}
       <div className="p-2 border-t border-gray-200">
         <div className="flex items-center px-2 py-3">
           <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
