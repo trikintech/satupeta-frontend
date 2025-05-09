@@ -10,26 +10,7 @@ import { useState } from "react";
 
 import { toast } from "sonner";
 import { queryClient } from "@/shared/utils/query-client";
-
-const getChangedFields = (
-  original: Partial<Category>,
-  updated: CategoryFormValues
-): Partial<CategoryFormValues> => {
-  const changedFields: Partial<CategoryFormValues> = {};
-
-  (Object.keys(updated) as Array<keyof CategoryFormValues>).forEach((key) => {
-    const updatedValue = updated[key];
-    const originalValue = original[key as keyof Category];
-
-    // Handle undefined cases properly
-    if (updatedValue !== originalValue) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      changedFields[key] = updatedValue as any;
-    }
-  });
-
-  return changedFields;
-};
+import { getChangedFields } from "@/shared/utils/form";
 
 export function useCategoryForm(defaultValues?: Partial<Category>) {
   const router = useRouter();

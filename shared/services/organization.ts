@@ -41,7 +41,7 @@ export const organizationApi = {
 
   updateOrganization: async (
     id: string,
-    organization: OrganizationFormValues
+    organization: Partial<OrganizationFormValues>
   ): Promise<Organization> => {
     return apiHelpers.patch(`/organizations/${id}`, organization);
   },
