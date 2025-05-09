@@ -28,11 +28,13 @@ export default function OrganizationEditPageClient() {
   }
 
   return (
-    <OrganizationForm
-      defaultValues={organization}
-      onSubmitAction={handleSubmitOrganization}
-      isSubmitting={isSubmitting}
-      onCancelAction={resetForm}
-    />
+    <div className="max-w-xl">
+      <OrganizationForm
+        defaultValues={organization}
+        onSubmitAction={handleSubmitOrganization}
+        isSubmitting={isSubmitting}
+        onCancelAction={resetForm}
+      />
+    </div>
   );
 }

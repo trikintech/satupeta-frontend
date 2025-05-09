@@ -4,5 +4,5 @@ export interface Category {
   description: string;
   thumbnail: string;
   count_mapset: number;
-  is_active: boolean;
+  is_active?: boolean | string;
 }

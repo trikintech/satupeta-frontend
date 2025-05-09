@@ -9,11 +9,7 @@ export default function OrganizationDetailPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Detail Organization"
-        description="Detail user di Satu Peta."
-        className="bg-zinc-50"
-      />
+      <PageHeader title="Detail Perangkat Daerah" className="bg-zinc-50" />
       <OrganizationDetail id={params.id?.toString() ?? ""} />
     </div>
   );

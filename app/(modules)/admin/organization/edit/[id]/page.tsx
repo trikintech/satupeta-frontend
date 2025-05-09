@@ -9,12 +9,10 @@ export const metadata = {
 export default function CategoryPage() {
   return (
     <div className="space-y-6">
-      <PageHeader title="Kategori" />
+      <PageHeader title="Ubah Perangkat Daerah" />
       <div className="px-6">
-        <Suspense>
-          <Suspense fallback={<div>Memuat Data...</div>}>
-            <CategoryPageClient />
-          </Suspense>
+        <Suspense fallback={<div>Memuat Data...</div>}>
+          <CategoryPageClient />
         </Suspense>
       </div>
     </div>

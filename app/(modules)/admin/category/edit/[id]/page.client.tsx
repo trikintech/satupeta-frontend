@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import categoryApi from "@/shared/services/category";
 import { CategoryForm } from "../../_components/form";
 import { useCategoryForm } from "../../_hooks/use-category-form";
+import { CategoryFormValues } from "@/shared/schemas/category";
 
 export default function CategoryEditPageClient() {
   const params = useParams();
@@ -28,11 +29,13 @@ export default function CategoryEditPageClient() {
   }
 
   return (
-    <CategoryForm
-      defaultValues={category}
-      onSubmitAction={handleSubmitCategory}
-      isSubmitting={isSubmitting}
-      onCancelAction={resetForm}
-    />
+    <div className="max-w-xl">
+      <CategoryForm
+        defaultValues={category as Partial<CategoryFormValues>}
+        onSubmitAction={handleSubmitCategory}
+        isSubmitting={isSubmitting}
+        onCancelAction={resetForm}
+      />
+    </div>
   );
 }

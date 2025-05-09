@@ -1,6 +1,5 @@
 "use client";
 
-import { Category } from "@/shared/types/category";
 import { Button } from "@/shared/components/ui/button";
 import {
   Form,
@@ -25,7 +24,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 type CategoryFormValues = z.infer<typeof categorySchema>;
 
 interface CategoryFormProps {
-  defaultValues?: Partial<Category>;
+  defaultValues?: Partial<CategoryFormValues>;
   onSubmitAction: (data: CategoryFormValues) => void;
   isSubmitting?: boolean;
   onCancelAction?: () => void;

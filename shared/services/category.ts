@@ -41,7 +41,7 @@ export const categoryApi = {
 
   updateCategory: async (
     id: string,
-    category: CategoryFormValues
+    category: Partial<Category>
   ): Promise<Category> => {
     return apiHelpers.patch(`/categories/${id}`, category);
   },

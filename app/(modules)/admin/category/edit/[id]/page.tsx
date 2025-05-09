@@ -9,17 +9,11 @@ export const metadata = {
 export default function CategoryEditPage() {
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Ubah Kategori"
-        description="Ubah kategori di Satu Peta"
-        className="bg-zinc-50"
-      />
+      <PageHeader title="Ubah Kategori" className="bg-zinc-50" />
       <div className="px-6">
-        <div className="max-w-xl">
-          <Suspense fallback={<div>Memuat form...</div>}>
-            <CategoryEditPageClient />
-          </Suspense>
-        </div>
+        <Suspense fallback={<div>Memuat form...</div>}>
+          <CategoryEditPageClient />
+        </Suspense>
       </div>
     </div>
   );

@@ -9,11 +9,7 @@ export default function CategoryDetailPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Detail Kategori"
-        description="Detail kategori di Satu Peta."
-        className="bg-zinc-50"
-      />
+      <PageHeader title="Detail Kategori" className="bg-zinc-50" />
       <CategoryDetail id={params.id?.toString() ?? ""} />
     </div>
   );
