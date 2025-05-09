@@ -31,11 +31,7 @@ export default function HighlightMapset() {
   }
 
   if (!mapsets || mapsets.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-64 text-gray-500 mt-20">
-        Tidak ada data mapset
-      </div>
-    );
+    return <></>;
   }
 
   return (

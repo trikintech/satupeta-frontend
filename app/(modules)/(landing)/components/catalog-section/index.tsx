@@ -73,12 +73,6 @@ export function CatalogSection() {
                 </div>
               );
             }
-
-            return (
-              <div className="flex justify-center items-center h-64 text-gray-500">
-                Tidak ada data mapset
-              </div>
-            );
           })()}
         </div>
       </div>

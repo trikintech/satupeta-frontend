@@ -1,27 +1,50 @@
+import { CategoryFormValues } from "../schemas/category";
 import { PaginatedResponse } from "../types/api-response";
 import { Category } from "../types/category";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const categoryApi = {
-  getCategories: async (): Promise<PaginatedResponse<Category[]>> => {
-    const response = await api.get("/categories");
-    return response.data;
+  getCategories: async (params?: {
+    search?: string;
+    filter?: string | string[];
+    limit?: number;
+    offset?: number;
+    sort?: string;
+  }): Promise<PaginatedResponse<Category[]>> => {
+    const filteredParams = { ...params };
+    if (!filteredParams.sort) {
+      delete filteredParams.sort;
+    }
+
+    return apiHelpers.get("/categories", {
+      params: filteredParams,
+      paramsSerializer: {
+        indexes: null, // This allows multiple params with the same name
+      },
+    });
   },
 
-  getCategoryById: async (id: number): Promise<Category> => {
-    const response = await api.get(`/categories/${id}`);
-    return response.data;
+  getCategoryById: async (id: string): Promise<Category> => {
+    return apiHelpers.get(`/categories/${id}`);
   },
 
-  deleteCategory: async (id?: number): Promise<PaginatedResponse<null>> => {
-    const response = await api.delete(`/categories/${id}`);
-    return response.data;
+  deleteCategory: async (id?: string): Promise<Category> => {
+    return apiHelpers.delete(`/categories/${id}`);
   },
 
-  createCategory: async (category: Omit<Category, "id">): Promise<Category> => {
-    const response = await api.post("/categories", category);
-    return response.data;
+  createCategory: async (
+    category: Omit<CategoryFormValues, "id">
+  ): Promise<Category> => {
+    console.log(category);
+    return apiHelpers.post("/categories", category);
+  },
+
+  updateCategory: async (
+    id: string,
+    category: Partial<Category>
+  ): Promise<Category> => {
+    return apiHelpers.patch(`/categories/${id}`, category);
   },
 };
 

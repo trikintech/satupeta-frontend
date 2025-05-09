@@ -1,14 +1,25 @@
-"use client";
-
 import { useSession } from "next-auth/react";
 
-export function useAuthSession() {
+import { useRouter } from "next/navigation";
+
+import { useEffect } from "react";
+
+export function useAuthSession(requireAuth = false) {
   const { data: session, status } = useSession();
+  const router = useRouter();
+  const isLoading = status === "loading";
+  const isAuthenticated = status === "authenticated";
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && requireAuth) {
+      router.push("/auth/signin");
+    }
+  }, [isLoading, isAuthenticated, requireAuth, router]);
+
   return {
-    user: session?.user,
-    username: session?.user?.username,
-    accessToken: session?.access_token,
-    isLoading: status === "loading",
-    isAuthenticated: status === "authenticated",
+    session,
+    isLoading,
+    isAuthenticated,
+    status,
   };
 }

@@ -54,7 +54,7 @@ export default function OrganizationPageClient() {
         title: "Organisasi tidak ditemukan",
       }}
       actionBarProps={{
-        buttonLabel: "Tambah Organisasi",
+        buttonLabel: "Tambah Perangkat Daerah",
         buttonLink: "/admin/organization/add",
       }}
       refetchAction={refetch}

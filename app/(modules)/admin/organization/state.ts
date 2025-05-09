@@ -10,7 +10,6 @@ const initialFormState: OrganizationFormValues = {
   phone_number: "",
   email: "",
   website: "",
-  count_mapset: 0,
   is_active: true,
 };
 

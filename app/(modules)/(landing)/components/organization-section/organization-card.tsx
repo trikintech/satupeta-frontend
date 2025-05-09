@@ -2,14 +2,14 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function OrganizationCard({
-  name = "Dinas Komunikasi dan Informatika",
-  link = "/statistik/mapset",
-  totalDataset = 10,
-}: {
+  name,
+  link,
+  totalDataset,
+}: Readonly<{
   name: string;
   link: string;
   totalDataset: number;
-}) {
+}>) {
   return (
     <div className="relative h-full">
       <div

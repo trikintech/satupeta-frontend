@@ -1,8 +1,8 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { OrganizationForm } from "../_components/form";
 import { useOrganizationForm } from "../_hooks/use-organization-form";
+import { OrganizationForm } from "../_components/form";
 
 export default function AddOrganizationPageClient() {
   const { isLoading, handleSubmitOrganization, resetForm, isSubmitting } =
@@ -20,14 +20,12 @@ export default function AddOrganizationPageClient() {
   }
 
   return (
-    <div className="container mx-auto py-4">
-      <div className="bg-white rounded-md shadow">
-        <OrganizationForm
-          onSubmitAction={handleSubmitOrganization}
-          isSubmitting={isSubmitting}
-          onCancelAction={resetForm}
-        />
-      </div>
+    <div className="max-w-xl">
+      <OrganizationForm
+        onSubmitAction={handleSubmitOrganization}
+        isSubmitting={isSubmitting}
+        onCancelAction={resetForm}
+      />
     </div>
   );
 }

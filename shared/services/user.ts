@@ -1,7 +1,7 @@
 import { PaginatedResponse } from "../types/api-response";
 import { UserSubmitPayload, User } from "../types/user";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const userApi = {
   getUsers: async (params?: {
@@ -15,34 +15,29 @@ export const userApi = {
       delete filteredParams.sort;
     }
 
-    const response = await api.get("/users", {
+    return apiHelpers.get("/users", {
       params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },
     });
-    return response.data;
   },
 
   getUserById: async (id: string): Promise<User> => {
-    const response = await api.get(`/users/${id}`);
-    return response.data;
+    return apiHelpers.get(`/users/${id}`);
   },
 
   deleteUser: async (id?: string): Promise<User> => {
-    const response = await api.delete(`/users/${id}`);
-    return response.data;
+    return apiHelpers.delete(`/users/${id}`);
   },
 
   createUser: async (user: Omit<UserSubmitPayload, "id">): Promise<User> => {
     console.log(user);
-    const response = await api.post("/users", user);
-    return response.data;
+    return apiHelpers.post("/users", user);
   },
 
   updateUser: async (id: string, user: UserSubmitPayload): Promise<User> => {
-    const response = await api.patch(`/users/${id}`, user);
-    return response.data;
+    return apiHelpers.patch(`/users/${id}`, user);
   },
 };
 

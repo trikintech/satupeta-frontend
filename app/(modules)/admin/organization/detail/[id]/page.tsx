@@ -8,11 +8,8 @@ export default function OrganizationDetailPage() {
   const params = useParams();
 
   return (
-    <div className="container space-y-6">
-      <PageHeader
-        title="Detail Organization"
-        description="Detail user di Satu Peta."
-      />
+    <div className="space-y-6">
+      <PageHeader title="Detail Perangkat Daerah" className="bg-zinc-50" />
       <OrganizationDetail id={params.id?.toString() ?? ""} />
     </div>
   );

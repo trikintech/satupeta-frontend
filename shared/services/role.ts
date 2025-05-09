@@ -1,7 +1,7 @@
 import { PaginatedResponse } from "../types/api-response";
 import { Role } from "../types/role";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const roleApi = {
   getRoles: async (params?: {
@@ -9,25 +9,19 @@ export const roleApi = {
     search?: string;
     limit?: number;
   }): Promise<PaginatedResponse<Role[]>> => {
-    const response = await api.get("/roles", {
-      params,
-    });
-    return response.data;
+    return apiHelpers.get("/roles", { params });
   },
 
   getRoleById: async (id: number): Promise<Role> => {
-    const response = await api.get(`/roles/${id}`);
-    return response.data;
+    return apiHelpers.get(`/roles/${id}`);
   },
 
   deleteRole: async (id?: number): Promise<PaginatedResponse<null>> => {
-    const response = await api.delete(`/roles/${id}`);
-    return response.data;
+    return apiHelpers.delete(`/roles/${id}`);
   },
 
   createRole: async (role: Omit<Role, "id">): Promise<Role> => {
-    const response = await api.post("/roles", role);
-    return response.data;
+    return apiHelpers.post("/roles", role);
   },
 };
 

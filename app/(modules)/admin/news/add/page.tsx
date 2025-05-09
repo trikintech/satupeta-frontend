@@ -6,8 +6,8 @@ export default function AddNewsPage() {
   return (
     <div className="container space-y-6">
       <PageHeader
-        title="Tambah Berita"
-        description="Tambah berita di Satu Peta."
+        title="Tambah Konten"
+        description="Tambah konten di Satu Peta."
       />
       <Suspense>
         <Suspense fallback={<div>Memuat form...</div>}>

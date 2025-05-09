@@ -36,7 +36,7 @@ export default function AddNewsPageClient() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["news"] });
       setFormState(initialFormState);
-      toast.success("Berita berhasil disimpan!");
+      toast.success("Konten berhasil disimpan!");
       router.push("/admin/news");
     },
     onError: (error: Error) => {

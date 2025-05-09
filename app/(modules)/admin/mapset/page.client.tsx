@@ -56,10 +56,10 @@ export default function MapsetPageClient() {
         pageSize={limit}
         onPaginationChangeAction={handlePaginationChange}
         emptyStateProps={{
-          title: "Organisasi tidak ditemukan",
+          title: "Peta tidak ditemukan",
         }}
         actionBarProps={{
-          buttonLabel: "Tambah Organisasi",
+          buttonLabel: "Tambah Peta",
           buttonLink: "/admin/mapset/add",
         }}
         refetchAction={refetch}

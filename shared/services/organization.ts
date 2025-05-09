@@ -2,7 +2,7 @@ import { OrganizationFormValues } from "../schemas/organization";
 import { PaginatedResponse } from "../types/api-response";
 import { Organization } from "../types/organization";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const organizationApi = {
   getOrganizations: async (params?: {
@@ -16,39 +16,34 @@ export const organizationApi = {
       delete filteredParams.sort;
     }
 
-    const response = await api.get("/organizations", {
+    return apiHelpers.get("/organizations", {
       params: filteredParams,
       paramsSerializer: {
         indexes: null, // This allows multiple params with the same name
       },
     });
-    return response.data;
   },
 
   getOrganizationById: async (id: string): Promise<Organization> => {
-    const response = await api.get(`/organizations/${id}`);
-    return response.data;
+    return apiHelpers.get(`/organizations/${id}`);
   },
 
   deleteOrganization: async (id?: string): Promise<Organization> => {
-    const response = await api.delete(`/organizations/${id}`);
-    return response.data;
+    return apiHelpers.delete(`/organizations/${id}`);
   },
 
   createOrganization: async (
     organization: Omit<OrganizationFormValues, "id">
   ): Promise<Organization> => {
     console.log(organization);
-    const response = await api.post("/organizations", organization);
-    return response.data;
+    return apiHelpers.post("/organizations", organization);
   },
 
   updateOrganization: async (
     id: string,
-    organization: OrganizationFormValues
+    organization: Partial<OrganizationFormValues>
   ): Promise<Organization> => {
-    const response = await api.patch(`/organizations/${id}`, organization);
-    return response.data;
+    return apiHelpers.patch(`/organizations/${id}`, organization);
   },
 };
 

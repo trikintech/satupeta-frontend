@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +14,7 @@ import { initialFormState, userFormAtom, UserFormState } from "../../state";
 import { UserForm } from "../../_components/user-form";
 import { useEffect } from "react";
 import PageHeader from "../../../_components/page-header";
+import { roles } from "@/shared/config/role";
 
 interface SelectOption {
   id: string;
@@ -70,7 +70,11 @@ export default function EditUserPageClient() {
   };
 
   const organizationOptions = mapDataToOptions(organizationsResponse);
-  const roleOptions = mapDataToOptions(rolesResponse);
+  const roleOptions: SelectOption[] =
+    rolesResponse?.items.map((role) => ({
+      id: role.id,
+      name: roles[role.name]?.label ?? role.name, // fallback to name if label is not found
+    })) ?? [];
 
   const updateFormData = (updatedData: Partial<UserFormState>) => {
     setFormState((prevState) => ({
@@ -92,7 +96,7 @@ export default function EditUserPageClient() {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       queryClient.invalidateQueries({ queryKey: ["user", userId] });
       toast.success("User berhasil diperbarui!");
-      router.push("/admin/mapset");
+      router.push("/admin/user");
     },
     onError: (error: Error) => {
       toast.error(error.message || "Terjadi kesalahan saat memperbarui data");

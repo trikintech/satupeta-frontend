@@ -1,29 +1,53 @@
+import { CredentialFormValues } from "../schemas/credential";
 import { PaginatedResponse } from "../types/api-response";
 import { Credential } from "../types/credential";
 
-import { api } from "./api";
+import { apiHelpers } from "./api";
 
 export const credentialApi = {
-  getCredentials: async (): Promise<PaginatedResponse<Credential[]>> => {
-    const response = await api.get("/credentials");
-    return response.data;
+  getCredentials: async (params?: {
+    filter?: string | string[];
+    limit?: number;
+    offset?: number;
+    sort?: string;
+  }): Promise<PaginatedResponse<Credential[]>> => {
+    const filteredParams = { ...params };
+    if (!filteredParams.sort) {
+      delete filteredParams.sort;
+    }
+
+    return apiHelpers.get("/credentials", {
+      params: filteredParams,
+      paramsSerializer: {
+        indexes: null, // This allows multiple params with the same name
+      },
+    });
   },
 
-  getCredentialById: async (id: number): Promise<Credential> => {
-    const response = await api.get(`/credentials/${id}`);
-    return response.data;
+  getCredentialById: async (id: string): Promise<Credential> => {
+    return apiHelpers.get(`/credentials/${id}`);
   },
 
-  deleteCredential: async (id?: number): Promise<PaginatedResponse<null>> => {
-    const response = await api.delete(`/credentials/${id}`);
-    return response.data;
+  getCredentialDecrypted: async (id: string): Promise<Credential> => {
+    return apiHelpers.get(`/credentials/${id}/decrypted`);
+  },
+
+  deleteCredential: async (id?: string): Promise<Credential> => {
+    return apiHelpers.delete(`/credentials/${id}`);
   },
 
   createCredential: async (
-    credential: Omit<Credential, "id">
+    credential: Omit<CredentialFormValues, "id">
   ): Promise<Credential> => {
-    const response = await api.post("/credentials", credential);
-    return response.data;
+    console.log(credential);
+    return apiHelpers.post("/credentials", credential);
+  },
+
+  updateCredential: async (
+    id: string,
+    credential: Partial<Credential>
+  ): Promise<Credential> => {
+    return apiHelpers.patch(`/credentials/${id}`, credential);
   },
 };
 

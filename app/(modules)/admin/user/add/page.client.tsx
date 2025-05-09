@@ -12,6 +12,7 @@ import { PaginatedResponse } from "@/shared/types/api-response";
 import { initialFormState, userFormAtom, UserFormState } from "../state";
 import { UserForm } from "../_components/user-form";
 import roleApi from "@/shared/services/role";
+import { roles } from "@/shared/config/role";
 
 interface SelectOption {
   id: string;
@@ -44,7 +45,11 @@ export default function AddMapsPageClient() {
   };
 
   const organizationOptions = mapDataToOptions(organizationsResponse);
-  const roleOptions = mapDataToOptions(rolesResponse);
+  const roleOptions: SelectOption[] =
+    rolesResponse?.items.map((role) => ({
+      id: role.id,
+      name: roles[role.name]?.label ?? role.name, // fallback to name if label is not found
+    })) ?? [];
 
   const updateFormData = (updatedData: Partial<UserFormState>) => {
     setFormState((prevState) => ({

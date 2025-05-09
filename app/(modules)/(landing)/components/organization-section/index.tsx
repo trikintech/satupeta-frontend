@@ -35,7 +35,7 @@ export function OrganizationSection() {
               di platform Satu Peta
             </p>
             <Link
-              href="/statistik/mapset"
+              href="/maps?open-catalog=true&tab=organization"
               className="flex items-end text-primary text-sm font-medium hover:underline"
             >
               Lihat selengkapnya

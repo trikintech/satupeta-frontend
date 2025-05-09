@@ -51,10 +51,10 @@ export default function NewsPageClient() {
       pageSize={limit}
       onPaginationChangeAction={handlePaginationChange}
       emptyStateProps={{
-        title: "Organisasi tidak ditemukan",
+        title: "Konten tidak ditemukan",
       }}
       actionBarProps={{
-        buttonLabel: "Tambah Organisasi",
+        buttonLabel: "Tambah Konten",
         buttonLink: "/admin/news/add",
       }}
       refetchAction={refetch}

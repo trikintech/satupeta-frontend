@@ -5,7 +5,13 @@ import { StatisticsSection } from "./(modules)/(landing)/components/statistic-se
 import { NewsSection } from "./(modules)/(landing)/components/news-section";
 import Footer from "./(modules)/(landing)/components/layout/footer";
 import { OrganizationSection } from "./(modules)/(landing)/components/organization-section";
-import { isActiveFeature } from "@/shared/config/app-config";
+import { appsName, isActiveFeature } from "@/shared/config/app-config";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: `${appsName.name} ${appsName.wilayah}`,
+  description: `Portal geospasial resmi ${appsName.wilayah} untuk akses data spasial yang akurat, terkini, dan mendukung pengambilan keputusan berbasis lokasi.`,
+};
 
 export default function Home() {
   return (

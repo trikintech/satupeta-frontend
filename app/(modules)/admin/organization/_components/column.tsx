@@ -25,9 +25,9 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import organizationApi from "@/shared/services/organization";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
 import { DeleteDialog } from "../../_components/delete-dialog";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 interface ColumnConfig {
   id: string;
@@ -41,7 +41,7 @@ interface ColumnConfig {
 const COLUMN_CONFIGS: ColumnConfig[] = [
   {
     id: "name",
-    header: "Nama Organisasi",
+    header: "Nama Perangkat Daerah",
     accessor: "name",
     sortable: true,
   },
@@ -56,12 +56,6 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     header: "Telepon",
     accessor: "phone_number",
     sortable: false,
-  },
-  {
-    id: "count_mapset",
-    header: "Jumlah Mapset",
-    accessor: "count_mapset",
-    sortable: true,
   },
   {
     id: "is_active",
@@ -81,7 +75,8 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
   const [organizationToDelete, setOrganizationToDelete] =
     useState<Organization | null>(null);
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
+  const { session } = useAuthSession();
+
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({
@@ -186,7 +181,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     className="flex items-center gap-2"
                   >
                     <Edit className="h-4 w-4" />
-                    Edit Organisasi
+                    Edit Perangkat Daerah
                   </DropdownMenuItem>
                 )}
                 {hasPermission(userRole, "delete") && (
@@ -197,7 +192,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
                       <Trash className="h-4 w-4" />
-                      Hapus Organisasi
+                      Hapus Perangkat Daerah
                     </DropdownMenuItem>
                   </>
                 )}

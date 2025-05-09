@@ -25,8 +25,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteDialog } from "../../../_components/delete-dialog";
 import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { hasPermission } from "@/shared/config/role";
+import { useAuthSession } from "@/shared/hooks/use-session";
 
 // Type for column configuration
 interface ColumnConfig {
@@ -77,7 +77,8 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
   const router = useRouter();
   const [mapsetToDelete, setMapsetToDelete] = useState<Mapset | null>(null);
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
+  const { session } = useAuthSession();
+
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({

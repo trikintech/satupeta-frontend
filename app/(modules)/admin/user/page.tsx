@@ -4,11 +4,13 @@ import PageHeader from "../_components/page-header";
 
 export default function UserPage() {
   return (
-    <div className="container space-y-6">
+    <div className=" space-y-6">
       <PageHeader title="Manajemen User" />
-      <Suspense>
-        <UserPageClient />
-      </Suspense>
+      <div className="px-6">
+        <Suspense>
+          <UserPageClient />
+        </Suspense>
+      </div>
     </div>
   );
 }

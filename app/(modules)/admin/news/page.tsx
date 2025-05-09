@@ -4,11 +4,13 @@ import PageHeader from "../_components/page-header";
 
 export default function NewsPage() {
   return (
-    <div className="container space-y-6">
-      <PageHeader title="Manajemen News" />
-      <Suspense>
-        <NewsPageClient />
-      </Suspense>
+    <div className="space-y-6">
+      <PageHeader title="Manajemen Konten" />
+      <div className="px-6">
+        <Suspense>
+          <NewsPageClient />
+        </Suspense>
+      </div>
     </div>
   );
 }
