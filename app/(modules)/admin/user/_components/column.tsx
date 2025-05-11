@@ -1,5 +1,10 @@
-import { Badge } from "@/shared/components/ds/badge";
-import { Button } from "@/shared/components/ds/button";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/shared/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,77 +13,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { User } from "@/shared/types/user";
-import { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
+  MoreHorizontal,
   Eye,
   Edit,
   Trash,
-  MoreHorizontal,
   ArrowUp,
   ArrowDown,
+  ArrowUpDown,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import userApi from "@/shared/services/user";
+import { Badge } from "@/shared/components/ds/badge";
 import { toast } from "sonner";
-import { hasPermission } from "@/shared/config/role";
-import { DeleteDialog } from "../../_components/delete-dialog";
 import { useAuthSession } from "@/shared/hooks/use-session";
-
-// Type for column configuration
-interface ColumnConfig {
-  id: string;
-  header: string;
-  accessor?: keyof User;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  accessorFn?: (row: User) => any;
-  sortable?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  cell?: (value: any) => React.ReactNode;
-}
-
-// Default column configurations
-const COLUMN_CONFIGS: ColumnConfig[] = [
-  {
-    id: "name",
-    header: "Nama User",
-    accessor: "name",
-    sortable: true,
-  },
-  {
-    id: "classification",
-    header: "Role",
-    accessorFn: (row) => row.role?.name,
-    sortable: false,
-  },
-  {
-    id: "producer",
-    header: "Instansi",
-    accessorFn: (row) => row.organization?.name,
-    sortable: false,
-  },
-  {
-    id: "is_active",
-    header: "Status",
-    accessor: "is_active",
-    sortable: true,
-    cell: (value) => (
-      <Badge variant={value ? "success" : "secondary"}>
-        {value ? "Aktif" : "Tidak Aktif"}
-      </Badge>
-    ),
-  },
-];
+import { getRoleLabelById, hasPermission } from "@/shared/config/role";
+import { DeleteDialog } from "../../_components/delete-dialog";
+import { User } from "@/shared/types/user";
+import userApi from "@/shared/services/user";
 
 export const useUserColumns = (): ColumnDef<User>[] => {
   const router = useRouter();
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const queryClient = useQueryClient();
   const { session } = useAuthSession();
-
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({
@@ -86,17 +42,16 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       return await userApi.deleteUser(id);
     },
     onSuccess: () => {
-      toast.success("Berhasil menghapus data");
+      toast.success("Berhasil menghapus user");
       queryClient.invalidateQueries({ queryKey: ["users"] });
       setUserToDelete(null);
     },
     onError: (error) => {
-      toast.error("Gagal menghapus data");
+      toast.error("Gagal menghapus user");
       console.error("Error deleting user:", error);
     },
   });
 
-  // Helper function to render sortable header
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderSortableHeader = (column: any, label: string) => (
     <Button
@@ -105,42 +60,67 @@ export const useUserColumns = (): ColumnDef<User>[] => {
       className="p-0 hover:bg-transparent"
     >
       {label}
-      {(() => {
-        if (column.getIsSorted() === "asc") {
-          return <ArrowUp className="ml-2 h-4 w-4" />;
-        } else if (column.getIsSorted() === "desc") {
-          return <ArrowDown className="ml-2 h-4 w-4" />;
-        } else {
-          return <ArrowUpDown className="ml-2 h-4 w-4" />;
-        }
-      })()}
+      {column.getIsSorted() === "asc" ? (
+        <ArrowUp className="ml-2 h-4 w-4" />
+      ) : column.getIsSorted() === "desc" ? (
+        <ArrowDown className="ml-2 h-4 w-4" />
+      ) : (
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      )}
     </Button>
   );
 
-  // Generate base columns from config
-  const baseColumns = COLUMN_CONFIGS.map((config) => {
-    const column: ColumnDef<User> = {
-      id: config.id,
-      header: ({ column }) =>
-        config.sortable
-          ? renderSortableHeader(column, config.header)
-          : config.header,
-      ...(config.accessor && { accessorKey: config.accessor }),
-      ...(config.accessorFn && { accessorFn: config.accessorFn }),
+  const baseColumns: ColumnDef<User>[] = [
+    {
+      accessorKey: "name",
+      id: "name",
+      header: ({ column }) => renderSortableHeader(column, "Nama"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "email",
+      id: "email",
+      header: ({ column }) => renderSortableHeader(column, "Email"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "position",
+      id: "position",
+      header: "Jabatan",
+      enableSorting: false,
+    },
+    {
+      accessorKey: "organization.name",
+      id: "organization",
+      header: "Organisasi",
+      cell: ({ row }) => <div>{row.original.organization?.name}</div>,
+      enableSorting: false,
+    },
+    {
+      accessorKey: "role.name",
+      id: "role",
+      header: "Role",
       cell: ({ row }) => {
-        const value = row.getValue(config.id);
-        return config.cell ? (
-          config.cell(value)
-        ) : (
-          <div>{value as React.ReactNode}</div>
+        const label = getRoleLabelById(row.original.role?.name);
+        return (
+          <Badge variant="outline" className="capitalize">
+            {label ?? "-"}
+          </Badge>
         );
       },
-      enableSorting: config.sortable !== false,
-      enableHiding: config.id !== "select" && config.id !== "actions",
-    };
-
-    return column;
-  });
+    },
+    {
+      accessorKey: "is_active",
+      id: "is_active",
+      header: "Status",
+      cell: ({ row }) => (
+        <Badge variant={row.original.is_active ? "success" : "secondary"}>
+          {row.original.is_active ? "Aktif" : "Tidak Aktif"}
+        </Badge>
+      ),
+      enableSorting: false,
+    },
+  ];
 
   if (
     userRole &&

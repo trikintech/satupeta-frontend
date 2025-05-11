@@ -5,7 +5,7 @@ import PageHeader from "../_components/page-header";
 export default function OrganizationPage() {
   return (
     <div className="space-y-6">
-      <PageHeader title="Manajemen Perangkat Daerah" />
+      <PageHeader title="Perangkat Daerah" />
       <div className="px-6">
         <Suspense>
           <OrganizationPageClient />
