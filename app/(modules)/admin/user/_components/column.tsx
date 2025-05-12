@@ -29,7 +29,6 @@ import { getRoleLabelById, hasPermission } from "@/shared/config/role";
 import { DeleteDialog } from "../../_components/delete-dialog";
 import { User } from "@/shared/types/user";
 import userApi from "@/shared/services/user";
-
 export const useUserColumns = (): ColumnDef<User>[] => {
   const router = useRouter();
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
