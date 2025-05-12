@@ -67,7 +67,7 @@ any) {
   };
 
   return (
-    <div className="mb-6 border-b border-gray-200">
+    <div className="mb-6 border-b border-gray-200 bg-zinc-50">
       <div className="flex space-x-1">
         <TabButton
           isActive={activeTab === MapsetFormTab.INFO}

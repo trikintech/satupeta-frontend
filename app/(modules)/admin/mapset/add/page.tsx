@@ -4,9 +4,10 @@ import AddMapsPageClient from "./page.client";
 
 export default function AddMapsPage() {
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader
         title="Tambah Mapset dan Metadata"
+        className="bg-zinc-50"
         description="Tambah mapset dan metadata untuk memperbarui data geospasial di Satu Peta."
       />
       <Suspense>

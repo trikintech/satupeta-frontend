@@ -28,10 +28,7 @@ function handleGlobalError(error: unknown) {
   ) {
     const axiosError = error as AxiosError;
 
-    if (
-      axiosError.response?.status === 401 ||
-      axiosError.response?.status === 429
-    ) {
+    if (axiosError.response?.status === 401) {
       toast.error("Session expired. Redirecting to login...");
       signOut();
     }

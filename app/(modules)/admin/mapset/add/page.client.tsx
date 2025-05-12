@@ -166,7 +166,7 @@ export default function AddMapsPageClient() {
   }
 
   return (
-    <div className=" py-4">
+    <div className="pb-4">
       {/* Tab Navigation */}
       <MapsetTab
         formState={formState}
