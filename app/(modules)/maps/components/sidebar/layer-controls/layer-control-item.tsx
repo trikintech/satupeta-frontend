@@ -196,7 +196,7 @@ export const LayerControlItem = ({
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">
+            <label className="block text-sm text-zinc-700 mb-1">
               Opacity: {Math.round(opacity * 100)}%
             </label>
             <Slider

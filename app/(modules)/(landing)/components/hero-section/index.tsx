@@ -19,7 +19,7 @@ export function HeroSection() {
                 Lihat Lebih Jauh, <br />
                 <span className="text-primary">Pahami Lebih Dalam</span>
               </h1>
-              <p className="text-gray-600 max-w-[550px] text-xl">
+              <p className="text-zinc-700 max-w-[550px] text-xl">
                 Portal geospasial resmi {appsName.wilayah} untuk akses data
                 spasial yang akurat, terkini, dan mendukung pengambilan
                 keputusan berbasis lokasi.

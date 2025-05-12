@@ -138,9 +138,9 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
   // Add actions column if news has any permissions
   if (
     userRole &&
-    (hasPermission(userRole, "read") ||
-      hasPermission(userRole, "update") ||
-      hasPermission(userRole, "delete"))
+    (hasPermission(userRole, "news", "read") ||
+      hasPermission(userRole, "news", "update") ||
+      hasPermission(userRole, "news", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
@@ -159,7 +159,7 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "read") && (
+                {hasPermission(userRole, "news", "read") && (
                   <DropdownMenuItem
                     onClick={() => router.push(`/admin/news/detail/${news.id}`)}
                     className="flex items-center gap-2"
@@ -168,7 +168,7 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "update") && (
+                {hasPermission(userRole, "news", "update") && (
                   <DropdownMenuItem
                     onClick={() => router.push(`/admin/news/edit/${news.id}`)}
                     className="flex items-center gap-2"
@@ -177,7 +177,7 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
                     Edit News
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "delete") && (
+                {hasPermission(userRole, "news", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

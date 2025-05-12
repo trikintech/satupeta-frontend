@@ -58,7 +58,7 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
   const canVerify =
     mapset?.status_validation === "on_verification" &&
     userRole &&
-    hasPermission(userRole, "verify");
+    hasPermission(userRole, "mapset", "verify");
   return (
     <div>
       <div className="flex justify-between items-center mb-4">

@@ -21,7 +21,7 @@ export function FormButton({
   const variantStyles = {
     primary: "bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300",
     secondary:
-      "bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400",
+      "bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:bg-zinc-100 disabled:text-gray-400",
   };
 
   return (

@@ -49,7 +49,7 @@ export function Card({
       <div className="p-4">
         <h3 className="text-lg font-medium text-gray-900 mb-2">{title}</h3>
         {description && (
-          <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+          <p className="text-sm text-zinc-700 line-clamp-2 mb-3">
             {description}
           </p>
         )}

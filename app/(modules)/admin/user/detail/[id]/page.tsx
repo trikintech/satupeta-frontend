@@ -9,7 +9,7 @@ export default function UserDetailPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Detail User" description="Detail user di Satu Peta." />
+      <PageHeader title="Detail User" className="bg-zinc-50" />
       <UserDetail id={params.id?.toString() ?? ""} />
     </div>
   );

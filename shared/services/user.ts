@@ -1,5 +1,6 @@
+import { UserFormValues } from "../schemas/user";
 import { PaginatedResponse } from "../types/api-response";
-import { UserSubmitPayload, User } from "../types/user";
+import { User } from "../types/user";
 
 import { apiHelpers } from "./api";
 
@@ -31,12 +32,15 @@ export const userApi = {
     return apiHelpers.delete(`/users/${id}`);
   },
 
-  createUser: async (user: Omit<UserSubmitPayload, "id">): Promise<User> => {
+  createUser: async (user: Omit<UserFormValues, "id">): Promise<User> => {
     console.log(user);
     return apiHelpers.post("/users", user);
   },
 
-  updateUser: async (id: string, user: UserSubmitPayload): Promise<User> => {
+  updateUser: async (
+    id: string,
+    user: Partial<UserFormValues>
+  ): Promise<User> => {
     return apiHelpers.patch(`/users/${id}`, user);
   },
 };

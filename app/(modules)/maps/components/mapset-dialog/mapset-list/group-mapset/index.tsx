@@ -69,7 +69,7 @@ export default function GroupMapset({ item, type, search }: GroupMapsetProps) {
         {open && (
           <div className="px-3.5 relative">
             <div className="mt-2 border-l py-4 px-2.5 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-600"></div>
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-zinc-700"></div>
               <span className="ml-2 text-gray-500">Loading mapsets...</span>
             </div>
           </div>

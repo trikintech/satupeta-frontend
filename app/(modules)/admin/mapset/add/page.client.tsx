@@ -166,7 +166,7 @@ export default function AddMapsPageClient() {
   }
 
   return (
-    <div className=" py-4">
+    <div className="pb-4">
       {/* Tab Navigation */}
       <MapsetTab
         formState={formState}
@@ -174,7 +174,7 @@ export default function AddMapsPageClient() {
         handleTabChange={(e: number) => setActiveTab(e)}
       />
       {/* Tab Content */}
-      <div className="bg-white rounded-md shadow">
+      <div className="max-w-xl">
         {activeTab === MapsetFormTab.INFO && (
           <MapsetInfoForm
             initialData={formState.info}

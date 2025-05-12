@@ -50,7 +50,7 @@ export const MapsetOrganizationForm = ({
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6 space-y-6">
       {/* Nama Organisasi */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label htmlFor="organization_id" className="text-sm font-medium">
           Nama Organisasi<span className="text-red-500">*</span>
         </label>
@@ -76,7 +76,7 @@ export const MapsetOrganizationForm = ({
       </div>
 
       {/* No Telepon Organisasi */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label htmlFor="phone_number" className="text-sm font-medium">
           No Telpon Organisasi<span className="text-red-500">*</span>
         </label>

@@ -15,16 +15,3 @@ export interface User {
   organization: Organization;
   is_active: boolean;
 }
-
-export interface UserSubmitPayload {
-  name: string;
-  password?: string;
-  email: string;
-  profile_picture?: string;
-  username: string;
-  position: string;
-  role_id: string;
-  employee_id: string;
-  organization_id: string;
-  is_active: boolean;
-}

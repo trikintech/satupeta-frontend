@@ -27,6 +27,7 @@ import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
 import { hasPermission } from "@/shared/config/role";
 import { useAuthSession } from "@/shared/hooks/use-session";
+import { StatusValidationBadge } from "@/shared/components/status-validation-badge";
 
 // Type for column configuration
 interface ColumnConfig {
@@ -62,13 +63,23 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
   },
   {
     id: "is_active",
-    header: "Status",
+    header: "Status Aktif",
     accessor: "is_active",
     sortable: true,
     cell: (value) => (
       <Badge variant={value ? "success" : "secondary"}>
         {value ? "Aktif" : "Tidak Aktif"}
       </Badge>
+    ),
+  },
+  {
+    id: "status_validation",
+    accessor: "status_validation",
+    header: "Status Validasi",
+    cell: (value) => (
+      <StatusValidationBadge
+        status={value ?? "approved"}
+      ></StatusValidationBadge>
     ),
   },
 ];
@@ -142,12 +153,11 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
     return column;
   });
 
-  // Add actions column if user has any permissions
   if (
     userRole &&
-    (hasPermission(userRole, "read") ||
-      hasPermission(userRole, "update") ||
-      hasPermission(userRole, "delete"))
+    (hasPermission(userRole, "mapset", "read") ||
+      hasPermission(userRole, "mapset", "update") ||
+      hasPermission(userRole, "mapset", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
@@ -166,7 +176,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "read") && (
+                {hasPermission(userRole, "mapset", "read") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/mapset/detail/${mapset.id}`)
@@ -177,7 +187,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "update") && (
+                {hasPermission(userRole, "mapset", "update") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/mapset/edit/${mapset.id}`)
@@ -188,7 +198,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     Edit Mapset
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "delete") && (
+                {hasPermission(userRole, "mapset", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem

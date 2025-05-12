@@ -139,9 +139,9 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
 
   if (
     userRole &&
-    (hasPermission(userRole, "read") ||
-      hasPermission(userRole, "update") ||
-      hasPermission(userRole, "delete"))
+    (hasPermission(userRole, "organization", "read") ||
+      hasPermission(userRole, "organization", "update") ||
+      hasPermission(userRole, "organization", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
@@ -160,7 +160,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "read") && (
+                {hasPermission(userRole, "organization", "read") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(
@@ -173,7 +173,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "update") && (
+                {hasPermission(userRole, "organization", "update") && (
                   <DropdownMenuItem
                     onClick={() =>
                       router.push(`/admin/organization/edit/${organization.id}`)
@@ -184,7 +184,7 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     Edit Perangkat Daerah
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "delete") && (
+                {hasPermission(userRole, "organization", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
