@@ -50,7 +50,7 @@ export const MapsetMetadataForm = ({
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6 space-y-6">
       {/* Pilih MapServer */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label htmlFor="source_id" className="text-sm font-medium">
           Pilih MapServer<span className="text-red-500">*</span>
         </label>
@@ -76,7 +76,7 @@ export const MapsetMetadataForm = ({
       </div>
 
       {/* Masukan Link */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label htmlFor="layer_url" className="text-sm font-medium">
           Masukan Link<span className="text-red-500">*</span>
         </label>

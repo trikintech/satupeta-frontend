@@ -17,7 +17,7 @@ const TabSwitcher = ({ initialTab }: TabSwitcherProps) => {
   }, [initialTab, setActiveTab]);
 
   return (
-    <div className="p-1 bg-gray-100 rounded-lg grid grid-cols-2 w-full text-sm">
+    <div className="p-1 bg-zinc-100 rounded-lg grid grid-cols-2 w-full text-sm">
       <button
         onClick={() => setActiveTab("category")}
         className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${

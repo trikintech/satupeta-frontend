@@ -54,7 +54,7 @@ const DashboardPage = () => {
           <h3 className="text-xl font-semibold mb-2 text-blue-800">
             Statistik
           </h3>
-          <p className="text-gray-600">
+          <p className="text-zinc-700">
             Pantau perkembangan dan analisis data geografis Jawa Timur secara
             real-time
           </p>
@@ -79,7 +79,7 @@ const DashboardPage = () => {
           <h3 className="text-xl font-semibold mb-2 text-green-800">
             Kelola Data
           </h3>
-          <p className="text-gray-600">
+          <p className="text-zinc-700">
             Kelola dan perbarui data geografis dengan mudah dan efisien
           </p>
         </div>
@@ -103,7 +103,7 @@ const DashboardPage = () => {
           <h3 className="text-xl font-semibold mb-2 text-purple-800">
             Keamanan
           </h3>
-          <p className="text-gray-600">
+          <p className="text-zinc-700">
             Sistem keamanan terpadu untuk melindungi data geografis Jawa Timur
           </p>
         </div>
@@ -134,7 +134,7 @@ const DashboardPage = () => {
               <h4 className="font-medium text-gray-800">
                 Visualisasi Data Real-time
               </h4>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-zinc-700">
                 Pantau perubahan data geografis secara langsung
               </p>
             </div>
@@ -157,7 +157,7 @@ const DashboardPage = () => {
             </div>
             <div>
               <h4 className="font-medium text-gray-800">Analisis Terpadu</h4>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-zinc-700">
                 Analisis data geografis dengan berbagai parameter
               </p>
             </div>
@@ -180,7 +180,7 @@ const DashboardPage = () => {
             </div>
             <div>
               <h4 className="font-medium text-gray-800">Kolaborasi Tim</h4>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-zinc-700">
                 Kerja sama tim yang efisien dalam pengelolaan data
               </p>
             </div>
@@ -205,7 +205,7 @@ const DashboardPage = () => {
               <h4 className="font-medium text-gray-800">
                 Layanan Peta Terintegrasi
               </h4>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-zinc-700">
                 Kelola peta dari berbagai sumber data
               </p>
             </div>

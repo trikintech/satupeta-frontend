@@ -107,12 +107,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             );
           }
 
-          // 1. Login untuk mendapatkan token menggunakan FormData
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
             {
               method: "POST",
-              // Tidak perlu set content-type, fetch akan otomatis set dengan boundary
               body: formData,
             }
           );
@@ -125,8 +123,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           ) {
             throw new Error(data.message || "Authentication failed");
           }
-
-          // 2. Ambil data user dari /me dengan token yang didapat
 
           const userResponse = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/me`,

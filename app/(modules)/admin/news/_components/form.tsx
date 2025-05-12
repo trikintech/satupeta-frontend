@@ -118,7 +118,7 @@ export const NewsForm = ({
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
+          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 disabled:bg-zinc-100 disabled:text-gray-400"
         >
           Batal
         </button>

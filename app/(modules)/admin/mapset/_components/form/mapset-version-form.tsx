@@ -45,7 +45,7 @@ export const MapsetVersionForm = ({
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6 space-y-6">
       {/* Periode Update Data */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label htmlFor="data_update_period" className="text-sm font-medium">
           Periode Update Data<span className="text-red-500">*</span>
         </label>
@@ -67,7 +67,7 @@ export const MapsetVersionForm = ({
       </div>
 
       {/* Edisi/Versi Data */}
-      <div className="space-y-1">
+      <div className="space-y-2">
         <label htmlFor="data_version" className="text-sm font-medium">
           Edisi/Versi Data<span className="text-red-500">*</span>
         </label>
@@ -90,7 +90,7 @@ export const MapsetVersionForm = ({
           type="button"
           onClick={onPrevious}
           disabled={isSubmitting}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400"
+          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 disabled:bg-zinc-100 disabled:text-gray-400"
         >
           Kembali
         </button>

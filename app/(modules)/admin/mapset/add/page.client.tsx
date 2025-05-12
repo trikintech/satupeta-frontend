@@ -174,7 +174,7 @@ export default function AddMapsPageClient() {
         handleTabChange={(e: number) => setActiveTab(e)}
       />
       {/* Tab Content */}
-      <div className="bg-white rounded-md shadow">
+      <div className="max-w-xl">
         {activeTab === MapsetFormTab.INFO && (
           <MapsetInfoForm
             initialData={formState.info}

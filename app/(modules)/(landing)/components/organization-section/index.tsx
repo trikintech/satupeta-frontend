@@ -50,7 +50,7 @@ export function OrganizationSection() {
                   {[...Array(3)].map((_, index) => (
                     <div
                       key={index}
-                      className="animate-pulse bg-gray-100 rounded-lg p-6 h-32"
+                      className="animate-pulse bg-zinc-100 rounded-lg p-6 h-32"
                     ></div>
                   ))}
                 </div>
