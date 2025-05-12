@@ -77,6 +77,8 @@ export type Mapset = {
   data_status: "sementara" | "tetap";
   data_update_period: string;
   data_version: string;
+  coverage_level: string;
+  coverage_area: string;
   category: Category;
   projection_system: ProjectionSystem;
   producer: Producer;

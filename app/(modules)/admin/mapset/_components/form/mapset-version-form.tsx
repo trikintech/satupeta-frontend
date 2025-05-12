@@ -1,11 +1,23 @@
 // components/mapset-version-form.tsx
 "use client";
 
+import { useEffect } from "react";
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 
-// Skema validasi untuk form informasi versi
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/components/ui/form";
+import { Input } from "@/shared/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
+import { Loader2 } from "lucide-react";
+
 const versionSchema = z.object({
   data_update_period: z.string().min(1, "Periode update data harus diisi"),
   data_version: z.string().min(1, "Edisi/Versi data harus diisi"),
@@ -20,17 +32,13 @@ interface MapsetVersionFormProps {
   isSubmitting: boolean;
 }
 
-export const MapsetVersionForm = ({
+export function MapsetVersionForm({
   initialData,
   onSubmit,
   onPrevious,
   isSubmitting,
-}: MapsetVersionFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<VersionFormValues>({
+}: MapsetVersionFormProps) {
+  const form = useForm<VersionFormValues>({
     resolver: zodResolver(versionSchema),
     defaultValues: {
       data_update_period: initialData.data_update_period || "",
@@ -38,77 +46,78 @@ export const MapsetVersionForm = ({
     },
   });
 
-  const handleFormSubmit = (data: VersionFormValues) => {
-    onSubmit(data);
-  };
+  useEffect(() => {
+    form.reset({
+      data_update_period: initialData.data_update_period || "",
+      data_version: initialData.data_version || "",
+    });
+  }, [initialData, form]);
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="p-6 space-y-6">
-      {/* Periode Update Data */}
-      <div className="space-y-2">
-        <label htmlFor="data_update_period" className="text-sm font-medium">
-          Periode Update Data<span className="text-red-500">*</span>
-        </label>
-        <input
-          id="data_update_period"
-          type="text"
-          {...register("data_update_period")}
-          className="w-full p-2 border rounded-md"
-          placeholder="Triwulanan, Tahunan, atau periode tertentu lainnya"
-        />
-        {errors.data_update_period && (
-          <p className="text-sm text-red-500">
-            {errors.data_update_period.message}
-          </p>
-        )}
-        <p className="text-xs text-gray-500">
-          Contoh: Triwulanan, Tahunan, atau periode tertentu lainnya.
-        </p>
-      </div>
-
-      {/* Edisi/Versi Data */}
-      <div className="space-y-2">
-        <label htmlFor="data_version" className="text-sm font-medium">
-          Edisi/Versi Data<span className="text-red-500">*</span>
-        </label>
-        <input
-          id="data_version"
-          type="text"
-          {...register("data_version")}
-          className="w-full p-2 border rounded-md"
-          placeholder="Tuliskan versi atau edisi data"
-        />
-        {errors.data_version && (
-          <p className="text-sm text-red-500">{errors.data_version.message}</p>
-        )}
-        <p className="text-xs text-gray-500">Tuliskan versi atau edisi data.</p>
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="flex space-x-4 pt-4">
-        <button
-          type="button"
-          onClick={onPrevious}
-          disabled={isSubmitting}
-          className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 disabled:bg-zinc-100 disabled:text-gray-400"
-        >
-          Kembali
-        </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-green-300"
-        >
-          {isSubmitting ? (
-            <>
-              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent mr-2 align-[-0.125em]"></span>
-              Menyimpan...
-            </>
-          ) : (
-            "Simpan"
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-6">
+        {/* Periode Update Data */}
+        <FormField
+          control={form.control}
+          name="data_update_period"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Periode Update Data<span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Triwulanan, Tahunan, atau periode tertentu lainnya"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+              <p className="text-xs text-gray-500">
+                Contoh: Triwulanan, Tahunan, atau periode tertentu lainnya.
+              </p>
+            </FormItem>
           )}
-        </button>
-      </div>
-    </form>
+        />
+
+        {/* Edisi/Versi Data */}
+        <FormField
+          control={form.control}
+          name="data_version"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Edisi/Versi Data<span className="text-red-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Tuliskan versi atau edisi data"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+              <p className="text-xs text-gray-500">
+                Tuliskan versi atau edisi data.
+              </p>
+            </FormItem>
+          )}
+        />
+
+        {/* Navigation Buttons */}
+        <div className="flex space-x-4 pt-4">
+          <Button
+            type="button"
+            variant="secondary"
+            className="bg-zinc-200 text-zinc-950"
+            onClick={onPrevious}
+          >
+            Kembali
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isSubmitting ? "Menyimpan..." : "Simpan"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
-};
+}
