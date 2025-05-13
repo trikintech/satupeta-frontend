@@ -5,6 +5,7 @@ export interface MapSource {
   name: string;
   description: string;
   credential: Credential;
+  url: string;
   is_active: boolean;
   is_deleted: boolean;
   created_at: string;

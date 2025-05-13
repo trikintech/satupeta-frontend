@@ -29,6 +29,7 @@ import {
   MapsetFormTab,
 } from "../../state";
 import PageHeader from "../../../_components/page-header";
+import { MapsetClassificationForm } from "../../_components/form/mapset-classification-form";
 
 interface SelectOption {
   id: string;
@@ -93,13 +94,18 @@ export default function EditMapsPageClient() {
           data_status: mapset.data_status,
           classification_id: mapset.classification.id,
           organization_id: mapset.producer.id,
+          is_popular: mapset.is_popular,
         },
         metadata: {
           source_id: mapset.source.id,
           layer_url: mapset.layer_url,
         },
+        classification: {
+          coverage_level: mapset.coverage_level,
+          coverage_area: mapset.coverage_area,
+        },
         version: {
-          update_period: mapset.data_update_period,
+          data_update_period: mapset.data_update_period,
           data_version: mapset.data_version,
         },
       });
@@ -177,11 +183,16 @@ export default function EditMapsPageClient() {
       data_status: formState.info.data_status,
       classification_id: formState.info.classification_id,
       producer_id: formState.info.organization_id,
-      source_id: formState.metadata.source_id,
+      source_id:
+        formState.metadata.source_id === "lainnya"
+          ? undefined
+          : formState.metadata.source_id,
       layer_url: formState.metadata.layer_url,
+      coverage_level: formState.classification.coverage_level,
+      coverage_area: formState.classification.coverage_area,
       data_update_period: versionData.data_update_period,
       data_version: versionData.data_version,
-      is_popular: mapset?.is_popular || false,
+      is_popular: formState.info.is_popular || false,
       is_active: mapset?.is_active || true,
       regional_id:
         mapset?.regional.id || "01968b53-a910-7a67-bd10-975b8923b92e",
@@ -204,8 +215,9 @@ export default function EditMapsPageClient() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <PageHeader
+        className="bg-zinc-50"
         title="Ubah Mapset dan Metadata"
         description="Ubah mapset dan metadata untuk memperbarui data geospasial di Satu Peta."
       />
@@ -214,7 +226,7 @@ export default function EditMapsPageClient() {
         activeTab={activeTab}
         handleTabChange={(e: number) => setActiveTab(e)}
       />
-      <div className="bg-white rounded-md shadow">
+      <div className="max-w-xl">
         {activeTab === MapsetFormTab.INFO && (
           <MapsetInfoForm
             initialData={formState.info}
@@ -234,6 +246,16 @@ export default function EditMapsPageClient() {
             mapSources={mapSourceOptions}
             onSubmit={(data) => {
               updateFormData("metadata", data);
+              handleContinue();
+            }}
+            onPrevious={handlePrevious}
+          />
+        )}
+        {activeTab === MapsetFormTab.CLASSIFICATION && (
+          <MapsetClassificationForm
+            initialData={formState.classification}
+            onSubmit={(data) => {
+              updateFormData("classification", data);
               handleContinue();
             }}
             onPrevious={handlePrevious}

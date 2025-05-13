@@ -12,7 +12,7 @@ export default function Maps() {
   return (
     <div className="h-screen overflow-hidden">
       <Header />
-      <div className="pt-16 flex min-h-screen flex-col">
+      <div className="mt-16 flex min-h-screen flex-col">
         <div className="flex flex-1">
           <div className="relative flex-1">
             <MapsPageClient />

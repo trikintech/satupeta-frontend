@@ -195,7 +195,7 @@ export function UserForm({
                   onValueChange={field.onChange}
                   disabled={isRolesLoading}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih role">
                       {roles?.find((role) => role.id === field.value)?.name
                         ? getRoleLabelById(
@@ -231,7 +231,7 @@ export function UserForm({
                   onValueChange={field.onChange}
                   disabled={isOrgLoading}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih organisasi">
                       {organizations?.find((org) => org.id === field.value)
                         ?.name ?? ""}

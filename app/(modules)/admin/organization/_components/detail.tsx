@@ -36,7 +36,7 @@ export default function OrganizationDetail({ id }: { id: string }) {
             organization?.thumbnail ? (
               <Image
                 src={getFileThumbnailUrl(organization.thumbnail)}
-                alt="Thumbnail Organisasi"
+                alt="Thumbnail Perangkat Daerah"
                 className="w-32 h-32 object-cover rounded"
                 width={128}
                 height={128}

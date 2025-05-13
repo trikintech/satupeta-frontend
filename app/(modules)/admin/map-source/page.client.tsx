@@ -1,17 +1,20 @@
 "use client";
 
-import { Organization } from "@/shared/types/organization";
-import { useOrganizationColumns } from "./_components/column";
-import organizationApi from "@/shared/services/organization";
-import { useTableState } from "../_hooks/use-table-state";
-import { ResourceTable } from "../_components/resource-table";
+import { MapSource } from "@/shared/types/map-source";
+import mapSourceApi from "@/shared/services/map-source";
+
 import { ColumnDef } from "@tanstack/react-table";
 
-export default function OrganizationPageClient() {
-  const columns = useOrganizationColumns();
+import { ResourceTable } from "../_components/resource-table";
+import { useTableState } from "../_hooks/use-table-state";
+
+import { useMapSourceColumns } from "./_components/column";
+
+export default function MapSourcePageClient() {
+  const columns = useMapSourceColumns();
 
   const {
-    data: organizations,
+    data: mapSources,
     total,
     isLoading,
     isError,
@@ -25,16 +28,16 @@ export default function OrganizationPageClient() {
     pageCount,
     limit,
     setSorting,
-  } = useTableState<Organization>({
-    resourceName: "organizations",
-    fetchAction: organizationApi.getOrganizations,
+  } = useTableState<MapSource>({
+    resourceName: "mapSources",
+    fetchAction: mapSourceApi.getMapSources,
     defaultLimit: 10,
     defaultSort: { id: "name", desc: false },
   });
 
   return (
     <ResourceTable
-      data={organizations}
+      data={mapSources}
       columns={columns as ColumnDef<unknown, unknown>[]}
       total={total}
       isLoading={isLoading}
@@ -51,11 +54,11 @@ export default function OrganizationPageClient() {
       pageSize={limit}
       onPaginationChangeAction={handlePaginationChange}
       emptyStateProps={{
-        title: "Perangkat Daerah tidak ditemukan",
+        title: "Mapserver & Metadata tidak ditemukan",
       }}
       actionBarProps={{
-        buttonLabel: "Tambah Perangkat Daerah",
-        buttonLink: "/admin/organization/add",
+        buttonLabel: "Tambah Mapserver & Metadata",
+        buttonLink: "/admin/map-source/add",
       }}
       refetchAction={refetch}
     />

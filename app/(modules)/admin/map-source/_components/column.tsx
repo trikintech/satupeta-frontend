@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/shared/components/ds/badge";
 import { Button } from "@/shared/components/ds/button";
 import {
@@ -8,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { Mapset } from "@/shared/types/mapset";
+import { MapSource } from "@/shared/types/map-source";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ArrowUpDown,
@@ -22,49 +23,37 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { DeleteDialog } from "../../../_components/delete-dialog";
-import mapsetApi from "@/shared/services/mapset";
+import mapSourceApi from "@/shared/services/map-source";
 import { toast } from "sonner";
 import { hasPermission } from "@/shared/config/role";
+import { DeleteDialog } from "../../_components/delete-dialog";
 import { useAuthSession } from "@/shared/hooks/use-session";
-import { StatusValidationBadge } from "@/shared/components/status-validation-badge";
-import { ConfirmationDialog } from "../../../_components/confirmation-dialog";
 
-// Type for column configuration
 interface ColumnConfig {
   id: string;
   header: string;
-  accessor?: keyof Mapset;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  accessorFn?: (row: Mapset) => any;
+  accessor?: keyof MapSource;
+  accessorFn?: (row: MapSource) => any;
   sortable?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cell?: (value: any) => React.ReactNode;
 }
 
-// Default column configurations
 const COLUMN_CONFIGS: ColumnConfig[] = [
   {
     id: "name",
-    header: "Nama Mapset",
+    header: "Nama Mapserver & Metadata",
     accessor: "name",
     sortable: true,
   },
   {
-    id: "classification",
-    header: "Klasifikasi",
-    accessorFn: (row) => row.classification?.name,
-    sortable: false,
-  },
-  {
-    id: "producer",
-    header: "Instansi",
-    accessorFn: (row) => row.producer?.name,
+    id: "credential_type",
+    header: "Tipe",
+    accessorFn: (row) => row.credential.credential_type,
     sortable: false,
   },
   {
     id: "is_active",
-    header: "Status Aktif",
+    header: "Status",
     accessor: "is_active",
     sortable: true,
     cell: (value) => (
@@ -74,59 +63,56 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     ),
   },
   {
-    id: "status_validation",
-    accessor: "status_validation",
-    header: "Status Validasi",
-    cell: (value) => (
-      <StatusValidationBadge
-        status={value ?? "approved"}
-      ></StatusValidationBadge>
-    ),
+    id: "created_at",
+    header: "Dibuat Pada",
+    accessor: "created_at",
+    sortable: true,
+    cell: (value) =>
+      new Date(value).toLocaleDateString("id-ID", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
+  },
+  {
+    id: "updated_at",
+    header: "Diperbarui Pada",
+    accessor: "updated_at",
+    sortable: true,
+    cell: (value) =>
+      new Date(value).toLocaleDateString("id-ID", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
   },
 ];
 
-export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
+export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
   const router = useRouter();
-  const [mapsetToDelete, setMapsetToDelete] = useState<Mapset | null>(null);
+  const [mapSourceToDelete, setMapSourceToDelete] = useState<MapSource | null>(
+    null
+  );
   const queryClient = useQueryClient();
   const { session } = useAuthSession();
-  const [mapsetToSubmit, setMapsetToSubmit] = useState<Mapset | null>(null);
 
   const userRole = session?.user?.role;
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      return await mapsetApi.deleteMapset(id);
+      return await mapSourceApi.deleteMapSource(id);
     },
     onSuccess: () => {
       toast.success("Berhasil menghapus data");
-      queryClient.invalidateQueries({ queryKey: ["mapsets"] });
-      setMapsetToDelete(null);
+      queryClient.invalidateQueries({ queryKey: ["mapSources"] });
+      setMapSourceToDelete(null);
     },
     onError: (error) => {
       toast.error("Gagal menghapus data");
-      console.error("Error deleting mapset:", error);
+      console.error("Error deleting mapSource:", error);
     },
   });
 
-  const submitValidationMutation = useMutation({
-    mutationFn: async (id: string) => {
-      return await mapsetApi.updateMapset(id, {
-        status_validation: "on_verification",
-      });
-    },
-    onSuccess: () => {
-      toast.success("Berhasil mengajukan validasi");
-      queryClient.invalidateQueries({ queryKey: ["mapsets"] });
-    },
-    onError: (error) => {
-      toast.error("Gagal mengajukan validasi");
-      console.error("Error submitting for validation:", error);
-    },
-  });
-
-  // Helper function to render sortable header
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderSortableHeader = (column: any, label: string) => (
     <Button
       variant="ghost"
@@ -146,9 +132,8 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
     </Button>
   );
 
-  // Generate base columns from config
   const baseColumns = COLUMN_CONFIGS.map((config) => {
-    const column: ColumnDef<Mapset> = {
+    const column: ColumnDef<MapSource> = {
       id: config.id,
       header: ({ column }) =>
         config.sortable
@@ -173,15 +158,15 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
 
   if (
     userRole &&
-    (hasPermission(userRole, "mapset", "read") ||
-      hasPermission(userRole, "mapset", "update") ||
-      hasPermission(userRole, "mapset", "delete"))
+    (hasPermission(userRole, "map-source", "read") ||
+      hasPermission(userRole, "map-source", "update") ||
+      hasPermission(userRole, "map-source", "delete"))
   ) {
     baseColumns.push({
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const mapset = row.original;
+        const mapSource = row.original;
 
         return (
           <>
@@ -194,10 +179,10 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Aksi</DropdownMenuLabel>
-                {hasPermission(userRole, "mapset", "read") && (
+                {hasPermission(userRole, "map-source", "read") && (
                   <DropdownMenuItem
                     onClick={() =>
-                      router.push(`/admin/mapset/detail/${mapset.id}`)
+                      router.push(`/admin/map-source/detail/${mapSource.id}`)
                     }
                     className="flex items-center gap-2"
                   >
@@ -205,65 +190,39 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "mapset", "update") && (
+                {hasPermission(userRole, "map-source", "update") && (
                   <DropdownMenuItem
                     onClick={() =>
-                      router.push(`/admin/mapset/edit/${mapset.id}`)
+                      router.push(`/admin/map-source/edit/${mapSource.id}`)
                     }
                     className="flex items-center gap-2"
                   >
                     <Edit className="h-4 w-4" />
-                    Edit Mapset
+                    Edit Mapserver & Metadata
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "mapset", "update") &&
-                  mapset.status_validation === "rejected" && (
-                    <>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem
-                        onClick={() => setMapsetToSubmit(mapset)}
-                        className="flex items-center gap-2 text-warning focus:text-warning"
-                      >
-                        <ArrowUp className="h-4 w-4" />
-                        Ajukan Validasi
-                      </DropdownMenuItem>
-                    </>
-                  )}
-                {hasPermission(userRole, "mapset", "delete") && (
+                {hasPermission(userRole, "map-source", "delete") && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={() => setMapsetToDelete(mapset)}
+                      onClick={() => setMapSourceToDelete(mapSource)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
                       <Trash className="h-4 w-4" />
-                      Hapus Mapset
+                      Hapus Mapserver & Metadata
                     </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {mapsetToDelete?.id === mapset.id && (
+            {mapSourceToDelete?.id === mapSource.id && (
               <DeleteDialog
-                name={mapsetToDelete?.name}
+                name={mapSourceToDelete.name}
                 isDeleting={deleteMutation.isPending}
-                onDelete={() => deleteMutation.mutate(mapsetToDelete.id)}
-                onCancel={() => setMapsetToDelete(null)}
+                onDelete={() => deleteMutation.mutate(mapSourceToDelete.id)}
+                onCancel={() => setMapSourceToDelete(null)}
                 open={true}
-              />
-            )}
-
-            {mapsetToSubmit?.id === mapset.id && (
-              <ConfirmationDialog
-                open={mapsetToSubmit?.id === mapset.id}
-                title="Ajukan Validasi"
-                description={`Ajukan mapset "${mapset.name}" ke status validasi?`}
-                confirmText="Ajukan"
-                isLoading={submitValidationMutation.isPending}
-                onConfirm={() => submitValidationMutation.mutate(mapset.id)}
-                onCancel={() => setMapsetToSubmit(null)}
-                variant="primary"
               />
             )}
           </>

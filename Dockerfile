@@ -10,7 +10,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Install dependencies
 FROM base AS deps
-COPY pnpm-lock.yaml package.json ./
+COPY package.json ./
 RUN pnpm install 
 
 COPY . .

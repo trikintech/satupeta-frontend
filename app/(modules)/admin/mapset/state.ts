@@ -1,23 +1,11 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
-export interface MapsetFormData {
-  // Tab 1: Informasi Mapset
-  info: {
-    name: string;
-    description: string;
-    scale: string;
-    projection_system_id: string;
-    category_id: string;
-    classification_id: string;
-    data_status: "Sementara" | "Tetap";
-    is_popular: boolean;
-  };
-}
 export enum MapsetFormTab {
   INFO = 0,
   METADATA = 1,
-  VERSION = 2,
+  CLASSIFICATION = 2,
+  VERSION = 3,
 }
 
 export interface MapsetFormState {
@@ -30,13 +18,18 @@ export interface MapsetFormState {
     data_status: "sementara" | "tetap";
     classification_id: string;
     organization_id: string;
+    is_popular: boolean;
   };
   metadata: {
     source_id: string;
     layer_url: string;
   };
+  classification: {
+    coverage_level: string;
+    coverage_area: string;
+  };
   version: {
-    update_period: string;
+    data_update_period: string;
     data_version: string;
   };
 }
@@ -53,13 +46,18 @@ const initialFormState: MapsetFormState = {
     classification_id: "",
     data_status: "sementara",
     organization_id: "",
+    is_popular: false,
   },
   metadata: {
     source_id: "",
     layer_url: "",
   },
+  classification: {
+    coverage_level: "",
+    coverage_area: "",
+  },
   version: {
-    update_period: "",
+    data_update_period: "",
     data_version: "",
   },
 };

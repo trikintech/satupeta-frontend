@@ -56,9 +56,12 @@ export function OrganizationForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nama Organisasi</FormLabel>
+              <FormLabel>Nama Perangkat Daerah</FormLabel>
               <FormControl>
-                <Input placeholder="Masukkan nama organisasi" {...field} />
+                <Input
+                  placeholder="Masukkan nama perangkat daerah"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -73,7 +76,7 @@ export function OrganizationForm({
               <FormLabel>Deskripsi</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Masukkan deskripsi organisasi"
+                  placeholder="Masukkan deskripsi perangkat daerah"
                   {...field}
                 />
               </FormControl>
@@ -107,7 +110,10 @@ export function OrganizationForm({
             <FormItem>
               <FormLabel>Alamat</FormLabel>
               <FormControl>
-                <Input placeholder="Masukkan alamat organisasi" {...field} />
+                <Input
+                  placeholder="Masukkan alamat perangkat daerah"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -168,7 +174,7 @@ export function OrganizationForm({
               <div className="space-y-0.5">
                 <FormLabel className="text-base">Status</FormLabel>
                 <div className="text-sm text-muted-foreground">
-                  Aktifkan atau nonaktifkan organisasi
+                  Aktifkan atau nonaktifkan perangkat daerah
                 </div>
               </div>
               <FormControl>

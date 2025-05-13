@@ -59,8 +59,10 @@ any) {
         );
       case "metadata":
         return Boolean(data.source_id && data.layer_url);
+      case "classification":
+        return Boolean(data.coverage_area && data.coverage_level);
       case "version":
-        return Boolean(data.update_period && data.data_version);
+        return Boolean(data.data_update_period && data.data_version);
       default:
         return false;
     }
@@ -80,6 +82,12 @@ any) {
           onClick={() => handleTabChange(MapsetFormTab.METADATA)}
           label="Metadata"
           isCompleted={isTabComplete("metadata")}
+        />
+        <TabButton
+          isActive={activeTab === MapsetFormTab.CLASSIFICATION}
+          onClick={() => handleTabChange(MapsetFormTab.CLASSIFICATION)}
+          label="Klasifikasi"
+          isCompleted={isTabComplete("classification")}
         />
 
         <TabButton
