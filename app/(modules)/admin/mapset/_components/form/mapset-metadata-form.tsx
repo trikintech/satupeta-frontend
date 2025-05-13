@@ -165,6 +165,29 @@ export function MapsetMetadataForm({
           )}
         />
 
+        {sourceId === "lainnya" && (
+          <FormField
+            control={form.control}
+            name="layer_url"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  URL Layer<span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Masukkan URL layer secara manual"
+                  />
+                </FormControl>
+                <FormMessage />
+                <p className="text-xs text-gray-500">
+                  Masukkan URL layer jika tidak tersedia dalam daftar.
+                </p>
+              </FormItem>
+            )}
+          />
+        )}
         {sourceId !== "lainnya" && (
           <FormField
             control={form.control}
