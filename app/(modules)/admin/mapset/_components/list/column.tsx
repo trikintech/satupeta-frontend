@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { hasPermission } from "@/shared/config/role";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { StatusValidationBadge } from "@/shared/components/status-validation-badge";
+import { ConfirmationDialog } from "../../../_components/confirmation-dialog";
 
 // Type for column configuration
 interface ColumnConfig {
@@ -89,6 +90,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
   const [mapsetToDelete, setMapsetToDelete] = useState<Mapset | null>(null);
   const queryClient = useQueryClient();
   const { session } = useAuthSession();
+  const [mapsetToSubmit, setMapsetToSubmit] = useState<Mapset | null>(null);
 
   const userRole = session?.user?.role;
 
@@ -104,6 +106,22 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
     onError: (error) => {
       toast.error("Gagal menghapus data");
       console.error("Error deleting mapset:", error);
+    },
+  });
+
+  const submitValidationMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await mapsetApi.updateMapset(id, {
+        status_validation: "on_verification",
+      });
+    },
+    onSuccess: () => {
+      toast.success("Berhasil mengajukan validasi");
+      queryClient.invalidateQueries({ queryKey: ["mapsets"] });
+    },
+    onError: (error) => {
+      toast.error("Gagal mengajukan validasi");
+      console.error("Error submitting for validation:", error);
     },
   });
 
@@ -198,6 +216,19 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     Edit Mapset
                   </DropdownMenuItem>
                 )}
+                {hasPermission(userRole, "mapset", "update") &&
+                  mapset.status_validation === "rejected" && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => setMapsetToSubmit(mapset)}
+                        className="flex items-center gap-2 text-warning focus:text-warning"
+                      >
+                        <ArrowUp className="h-4 w-4" />
+                        Ajukan Validasi
+                      </DropdownMenuItem>
+                    </>
+                  )}
                 {hasPermission(userRole, "mapset", "delete") && (
                   <>
                     <DropdownMenuSeparator />
@@ -220,6 +251,19 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                 onDelete={() => deleteMutation.mutate(mapsetToDelete.id)}
                 onCancel={() => setMapsetToDelete(null)}
                 open={true}
+              />
+            )}
+
+            {mapsetToSubmit?.id === mapset.id && (
+              <ConfirmationDialog
+                open={mapsetToSubmit?.id === mapset.id}
+                title="Ajukan Validasi"
+                description={`Ajukan mapset "${mapset.name}" ke status validasi?`}
+                confirmText="Ajukan"
+                isLoading={submitValidationMutation.isPending}
+                onConfirm={() => submitValidationMutation.mutate(mapset.id)}
+                onCancel={() => setMapsetToSubmit(null)}
+                variant="primary"
               />
             )}
           </>
