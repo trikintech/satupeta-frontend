@@ -13,6 +13,7 @@ import {
   Key,
   ChartBarIncreasing,
   BookOpen,
+  WashingMachine,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { ScrollArea } from "@/shared/components/ui/scroll-area";
@@ -62,6 +63,12 @@ const settingsItems: MenuItem[] = [
     href: "/admin/category",
     icon: <ChartBarIncreasing className="h-5 w-5" />,
     module: "category",
+  },
+  {
+    name: "Mapserver & Metadata",
+    href: "/admin/map-source",
+    icon: <WashingMachine className="h-5 w-5" />,
+    module: "map-source",
   },
   {
     name: "Kredensial",

@@ -28,6 +28,10 @@ export const roles: Record<string, RolePermission> = {
         menu: "organization",
         permissions: ["create", "read", "update", "delete"],
       },
+      {
+        menu: "map-source",
+        permissions: ["create", "read", "update", "delete"],
+      },
     ],
   },
   data_validator: {
