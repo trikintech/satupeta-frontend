@@ -1,4 +1,4 @@
-// components/mapset-metadata-form.tsx
+// components/mapset-classification-form.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/shared/components/ui/form";
-import { Input } from "@/shared/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -24,68 +23,59 @@ import {
 } from "@/shared/components/ui/select";
 import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { coverageOptions } from "@/shared/config/coverage";
 
-const metadataSchema = z.object({
-  source_id: z.string().min(1, "MapServer harus dipilih"),
-  layer_url: z.string().min(1, "Link MapServer harus diisi"),
+const classificationSchema = z.object({
+  coverage_level: z.string().optional(),
+  coverage_area: z.string().optional(),
 });
 
-type MetadataFormValues = z.infer<typeof metadataSchema>;
+type ClassificationFormValues = z.infer<typeof classificationSchema>;
 
-interface SelectOption {
-  id: string;
-  name: string;
-}
-
-interface MapsetMetadataFormProps {
-  initialData: Partial<MetadataFormValues>;
-  mapSources: SelectOption[];
-  onSubmit: (data: MetadataFormValues) => void;
+interface MapsetClassificationFormProps {
+  initialData: Partial<ClassificationFormValues>;
+  onSubmit: (data: ClassificationFormValues) => void;
   onPrevious: () => void;
 }
 
-export function MapsetMetadataForm({
+export function MapsetClassificationForm({
   initialData,
-  mapSources,
   onSubmit,
   onPrevious,
-}: MapsetMetadataFormProps) {
-  const form = useForm<MetadataFormValues>({
-    resolver: zodResolver(metadataSchema),
+}: MapsetClassificationFormProps) {
+  const form = useForm<ClassificationFormValues>({
+    resolver: zodResolver(classificationSchema),
     defaultValues: {
-      source_id: initialData.source_id || "",
-      layer_url: initialData.layer_url || "",
+      coverage_level: initialData?.coverage_level || "",
+      coverage_area: initialData?.coverage_area || "",
     },
   });
 
   useEffect(() => {
     form.reset({
-      source_id: initialData.source_id || "",
-      layer_url: initialData.layer_url || "",
+      coverage_level: initialData?.coverage_level || "",
+      coverage_area: initialData?.coverage_area || "",
     });
   }, [initialData, form]);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-6">
-        {/* Pilih MapServer */}
         <FormField
           control={form.control}
-          name="source_id"
+          name="coverage_level"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Pilih MapServer<span className="text-red-500">*</span>
-              </FormLabel>
+              <FormLabel>Tingkat Penyajian Wilayah</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Pilih server untuk menyimpan data" />
+                    <SelectValue placeholder="Pilih tingkat wilayah" />
                   </SelectTrigger>
                   <SelectContent>
-                    {mapSources.map((source) => (
-                      <SelectItem key={source.id} value={source.id}>
-                        {source.name}
+                    {coverageOptions.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -93,37 +83,40 @@ export function MapsetMetadataForm({
               </FormControl>
               <FormMessage />
               <p className="text-xs text-gray-500">
-                Pilih server tempat data mapset disimpan. Pilih
-                &quot;Lainnya&quot; jika tidak tersedia dalam daftar.
+                Pilih tingkat detail penyajian data wilayah.
               </p>
             </FormItem>
           )}
         />
 
-        {/* Masukan Link */}
         <FormField
           control={form.control}
-          name="layer_url"
+          name="coverage_area"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Masukan Link<span className="text-red-500">*</span>
-              </FormLabel>
+              <FormLabel>Cakupan Wilayah</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Masukkan URL atau link ke server"
-                  {...field}
-                />
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih cakupan wilayah" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {coverageOptions.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
               <p className="text-xs text-gray-500">
-                Masukan link MapServer yang akan Anda tampilkan.
+                Pilih cakupan wilayah data secara administratif.
               </p>
             </FormItem>
           )}
         />
 
-        {/* Navigation Buttons */}
         <div className="flex space-x-4 pt-4">
           <Button
             type="button"

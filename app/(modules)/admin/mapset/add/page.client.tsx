@@ -26,6 +26,7 @@ import {
   MapsetFormState,
   MapsetFormTab,
 } from "../state";
+import { MapsetClassificationForm } from "../_components/form/mapset-classification-form";
 
 interface SelectOption {
   id: string;
@@ -127,12 +128,7 @@ export default function AddMapsPageClient() {
     },
   });
 
-  const handleSubmitMapset = (versionData: {
-    data_update_period: string;
-    data_version: string;
-  }) => {
-    updateFormData("version", versionData);
-
+  const handleSubmitMapset = () => {
     const payload: MapsetSubmitPayload = {
       name: formState.info.name,
       description: formState.info.description,
@@ -144,8 +140,10 @@ export default function AddMapsPageClient() {
       producer_id: formState.info.organization_id,
       source_id: formState.metadata.source_id,
       layer_url: formState.metadata.layer_url,
-      data_update_period: versionData.data_update_period,
-      data_version: versionData.data_version,
+      coverage_level: formState.classification.coverage_level,
+      coverage_area: formState.classification.coverage_area,
+      data_update_period: formState.version.data_update_period,
+      data_version: formState.version.data_version,
       is_popular: false,
       is_active: true,
       regional_id: "01968b53-a910-7a67-bd10-975b8923b92e",
@@ -194,6 +192,16 @@ export default function AddMapsPageClient() {
             mapSources={mapSourceOptions}
             onSubmit={(data) => {
               updateFormData("metadata", data);
+              handleContinue();
+            }}
+            onPrevious={handlePrevious}
+          />
+        )}
+        {activeTab === MapsetFormTab.CLASSIFICATION && (
+          <MapsetClassificationForm
+            initialData={formState.classification}
+            onSubmit={(data) => {
+              updateFormData("classification", data);
               handleContinue();
             }}
             onPrevious={handlePrevious}

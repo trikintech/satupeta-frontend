@@ -25,11 +25,13 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Switch } from "@/shared/components/ui/switch";
 
 // Validation schema
 const mapsetInfoSchema = z.object({
   name: z.string().min(3, "Judul mapset minimal 3 karakter"),
   description: z.string().min(10, "Deskripsi terlalu pendek"),
+  is_popular: z.boolean(),
   scale: z.string().min(1, "Skala harus diisi"),
   projection_system_id: z.string().min(1, "Sistem proyeksi harus dipilih"),
   category_id: z.string().min(1, "Kategori harus dipilih"),
@@ -69,6 +71,7 @@ export function MapsetInfoForm({
     defaultValues: {
       name: initialData.name || "",
       description: initialData.description || "",
+      is_popular: initialData.is_popular || false,
       scale: initialData.scale || "",
       projection_system_id: initialData.projection_system_id || "",
       category_id: initialData.category_id || "",
@@ -82,6 +85,7 @@ export function MapsetInfoForm({
     form.reset({
       name: initialData.name || "",
       description: initialData.description || "",
+      is_popular: initialData.is_popular || false,
       scale: initialData.scale || "",
       projection_system_id: initialData.projection_system_id || "",
       category_id: initialData.category_id || "",
@@ -99,7 +103,9 @@ export function MapsetInfoForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Judul Mapset</FormLabel>
+              <FormLabel>
+                Judul Mapset <span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Masukkan judul mapset" {...field} />
               </FormControl>
@@ -113,7 +119,9 @@ export function MapsetInfoForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Deskripsi</FormLabel>
+              <FormLabel>
+                Deskripsi<span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Tuliskan penjelasan lengkap mengenai isi dan tujuan mapset."
@@ -130,7 +138,9 @@ export function MapsetInfoForm({
           name="scale"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Skala</FormLabel>
+              <FormLabel>
+                Skala<span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Input placeholder="Contoh: 1:25.000" {...field} />
               </FormControl>
@@ -145,10 +155,12 @@ export function MapsetInfoForm({
           name="projection_system_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Sistem Proyeksi</FormLabel>
+              <FormLabel>
+                Sistem Proyeksi<span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih sistem proyeksi" />
                   </SelectTrigger>
                   <SelectContent>
@@ -171,10 +183,12 @@ export function MapsetInfoForm({
           name="category_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Kategori</FormLabel>
+              <FormLabel>
+                Kategori<span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih kategori" />
                   </SelectTrigger>
                   <SelectContent>
@@ -197,10 +211,12 @@ export function MapsetInfoForm({
           name="classification_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Klasifikasi</FormLabel>
+              <FormLabel>
+                Klasifikasi<span className="text-red-500">*</span>
+              </FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih klasifikasi" />
                   </SelectTrigger>
                   <SelectContent>
@@ -226,7 +242,7 @@ export function MapsetInfoForm({
               <FormLabel>Organisasi</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih organisasi" />
                   </SelectTrigger>
                   <SelectContent>
@@ -271,6 +287,27 @@ export function MapsetInfoForm({
                 </RadioGroup>
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="is_popular"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">Mapset Populer</FormLabel>
+                <div className="text-sm text-muted-foreground">
+                  Aktifkan untuk menandai mapset ini sebagai populer.
+                </div>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
             </FormItem>
           )}
         />

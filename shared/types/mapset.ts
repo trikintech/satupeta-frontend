@@ -107,4 +107,6 @@ export interface MapsetSubmitPayload {
   regional_id: string;
   classification_id: string;
   status_validation: string;
+  coverage_level: string;
+  coverage_area: string;
 }

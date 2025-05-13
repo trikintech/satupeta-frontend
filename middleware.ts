@@ -39,7 +39,7 @@ export default auth((req) => {
 
   // Redirect to login if not authenticated
   if (!session?.user) {
-    const loginUrl = new URL("/", req.nextUrl);
+    const loginUrl = new URL("/auth/admin/login", req.nextUrl);
     loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
