@@ -3,7 +3,6 @@ import Credentials from "next-auth/providers/credentials";
 
 import { jwtDecode } from "jwt-decode";
 
-import { handleLogout } from "./shared/hooks/use-auth-api";
 import { User } from "./shared/types/user";
 
 interface LoginResponse {
@@ -32,7 +31,7 @@ async function refreshAccessToken(token: any) {
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
-      handleLogout();
+      signOut();
 
       return {
         ...token,
