@@ -3,9 +3,9 @@ import Credentials from "next-auth/providers/credentials";
 
 import { jwtDecode } from "jwt-decode";
 
+import { handleLogout } from "./shared/hooks/use-auth-api";
 import { User } from "./shared/types/user";
 
-// Tipe untuk response dari API
 interface LoginResponse {
   access_token: string;
   refresh_token: string;
@@ -13,7 +13,6 @@ interface LoginResponse {
   message?: string;
 }
 
-// Fungsi untuk refresh token
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function refreshAccessToken(token: any) {
   try {
@@ -33,6 +32,8 @@ async function refreshAccessToken(token: any) {
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
+      handleLogout();
+
       return {
         ...token,
         error: "RefreshAccessTokenError",
@@ -139,10 +140,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             throw new Error("Failed to fetch user data");
           }
 
-          // Decode token untuk mendapatkan expiry time
           const decodedToken = jwtDecode<{ exp: number }>(data.access_token);
 
-          // Kembalikan sebagai User yang valid untuk NextAuth
           return {
             id: String(userData.id),
             name: userData.name,
@@ -180,7 +179,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         };
       }
 
-      // Token belum expired
       if (
         typeof token.accessTokenExpires === "number" &&
         Date.now() < token.accessTokenExpires
@@ -188,7 +186,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return token;
       }
 
-      // Token expired, refresh
       return refreshAccessToken(token);
     },
     session: async ({ session, token }) => {
@@ -196,7 +193,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.refresh_token = token.refresh_token as string;
       session.error = token.error as string;
 
-      // Tambahkan user data dari token ke session
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       session.user = token.user as any;
 
