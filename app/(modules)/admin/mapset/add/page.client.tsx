@@ -138,7 +138,10 @@ export default function AddMapsPageClient() {
       data_status: formState.info.data_status,
       classification_id: formState.info.classification_id,
       producer_id: formState.info.organization_id,
-      source_id: formState.metadata.source_id,
+      source_id:
+        formState.metadata.source_id === "lainnya"
+          ? null
+          : formState.metadata.source_id,
       layer_url: formState.metadata.layer_url,
       coverage_level: formState.classification.coverage_level,
       coverage_area: formState.classification.coverage_area,

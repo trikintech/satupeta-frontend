@@ -100,7 +100,7 @@ export interface MapsetSubmitPayload {
   category_id: string;
   projection_system_id: string;
   producer_id: string;
-  source_id?: string;
+  source_id?: string | null;
   is_popular: boolean;
   is_active: boolean;
   layer_url: string;

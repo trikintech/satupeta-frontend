@@ -185,7 +185,7 @@ export default function EditMapsPageClient() {
       producer_id: formState.info.organization_id,
       source_id:
         formState.metadata.source_id === "lainnya"
-          ? undefined
+          ? null
           : formState.metadata.source_id,
       layer_url: formState.metadata.layer_url,
       coverage_level: formState.classification.coverage_level,

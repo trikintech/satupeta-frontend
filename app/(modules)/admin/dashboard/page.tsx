@@ -1,5 +1,6 @@
 "use client";
 
+import { appsName } from "@/shared/config/app-config";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { useRouter } from "next/navigation";
 
@@ -20,16 +21,16 @@ const DashboardPage = () => {
     <div className="p-6 space-y-8">
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-          Selamat Datang di Satu Peta Jatim
+          Selamat Datang di Satu Peta {appsName.wilayah}
         </h1>
         <p className="text-xl text-muted-foreground">
-          Portal Informasi Geospasial Jawa Timur
+          Portal Informasi Geospasial {appsName.wilayah}
         </p>
         <div className="max-w-2xl mx-auto">
           <p className="text-lg">
             Platform terpadu untuk mengelola dan memvisualisasikan data
-            geografis Jawa Timur. Bersama kita wujudkan Jawa Timur yang lebih
-            terintegrasi dan informatif.
+            geografis {appsName.wilayah}. Bersama kita wujudkan{" "}
+            {appsName.wilayah} yang lebih terintegrasi dan informatif.
           </p>
         </div>
       </div>
@@ -55,8 +56,8 @@ const DashboardPage = () => {
             Statistik
           </h3>
           <p className="text-zinc-700">
-            Pantau perkembangan dan analisis data geografis Jawa Timur secara
-            real-time
+            Pantau perkembangan dan analisis data geografis {appsName.wilayah}{" "}
+            secara real-time
           </p>
         </div>
 
@@ -104,7 +105,8 @@ const DashboardPage = () => {
             Keamanan
           </h3>
           <p className="text-zinc-700">
-            Sistem keamanan terpadu untuk melindungi data geografis Jawa Timur
+            Sistem keamanan terpadu untuk melindungi data geografis{" "}
+            {appsName.wilayah}
           </p>
         </div>
       </div>
