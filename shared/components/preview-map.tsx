@@ -7,13 +7,21 @@ import { LatLngBoundsExpression } from "leaflet";
 export default function PreviewMap({
   mapset,
   isActiveControl,
-}: Readonly<{ mapset: Mapset; isActiveControl?: boolean }>) {
+  centerCustom,
+}: Readonly<{
+  mapset: Mapset;
+  isActiveControl?: boolean;
+  centerCustom?: [number, number];
+}>) {
   const parsed = parseWmsUrl(mapset?.layer_url);
   const bounds = parsed?.params.bounds as LatLngBoundsExpression | undefined;
 
   // Add a fallback center and zoom
-  const center: [number, number] = [mapConfig.center[0], mapConfig.center[1]];
-  const zoom = 7;
+  const center: [number, number] = centerCustom ?? [
+    mapConfig.center[0],
+    mapConfig.center[1],
+  ];
+  const zoom = 8;
 
   return (
     <MapContainer

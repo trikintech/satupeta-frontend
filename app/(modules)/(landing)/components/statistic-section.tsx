@@ -1,27 +1,37 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import mapsetApi from "@/shared/services/mapset";
+import { getTotalMetadata } from "@/shared/utils/geonetwork";
 
 export function StatisticsSection() {
   const [mapsetCount, setMapsetCount] = useState<number>(0);
+  const [metadataCount, setMetadataCount] = useState<number>(0); // <- state baru
 
   useEffect(() => {
-    const fetchMapsetCount = async () => {
+    const fetchStats = async () => {
       try {
-        const response = await mapsetApi.getMapsets();
-        setMapsetCount(response.total);
+        const [mapsetResponse, metadataResponse] = await Promise.all([
+          mapsetApi.getMapsets(),
+          getTotalMetadata(),
+        ]);
+
+        setMapsetCount(mapsetResponse.total);
+        if (metadataResponse !== null) {
+          setMetadataCount(metadataResponse);
+        }
       } catch (error) {
-        console.error("Error fetching mapset count:", error);
+        console.error("Error fetching statistics:", error);
       }
     };
 
-    fetchMapsetCount();
+    fetchStats();
   }, []);
 
   return (
-    <section className="py-12  bg-gray-50" id="statistic">
+    <section className="py-12 bg-gray-50" id="statistic">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-20">
           <div className="w-1/2">
@@ -55,11 +65,11 @@ export function StatisticsSection() {
 
             <div className="bg-sky-950 p-4 text-slate-50">
               <div className="flex flex-col gap-4 mb-24">
-                <h3 className="text-8xl font-bold mb-2">115</h3>
+                <h3 className="text-8xl font-bold mb-2">{metadataCount}</h3>
                 <p className="mb-4 text-2xl">Metadata</p>
               </div>
               <Link
-                href="https://geonetwork.jatimrprov.go.id/"
+                href="https://geonetwork.jatimprov.go.id/"
                 className="flex items-center text-sm font-medium hover:underline"
               >
                 Lihat selengkapnya

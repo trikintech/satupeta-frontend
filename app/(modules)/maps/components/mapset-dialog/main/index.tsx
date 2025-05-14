@@ -6,6 +6,7 @@ import { selectedMapsetAtom } from "../../../state/mapset-dialog";
 import EmptyState from "./empty-state";
 import { DatasetDetailSidebar } from "./dataset-detail-sidebar";
 import { useEffect, useState } from "react";
+import { mapConfig } from "@/shared/config/map-config";
 
 const PreviewMap = dynamic(() => import("@/shared/components/preview-map"), {
   ssr: false,
@@ -28,7 +29,11 @@ export default function MainDialog() {
     <>
       {selectedMapset ? (
         <div className="relative h-full">
-          <PreviewMap mapset={selectedMapset} isActiveControl={true} />
+          <PreviewMap
+            mapset={selectedMapset}
+            isActiveControl={true}
+            centerCustom={[mapConfig.center[0], mapConfig.center[1] + 1.5]}
+          />
           <DatasetDetailSidebar
             open={open}
             onCloseAction={() => setOpen(false)}
