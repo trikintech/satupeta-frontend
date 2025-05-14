@@ -119,17 +119,14 @@ export function DatasetDetailSidebar({
             />
             <div className="mt-4 pt-4 border-t">
               <h3 className="font-medium mb-2">Sumber Data</h3>
+
               <Row
                 label="Nama Sumber"
-                value={`: ${selectedMapset.source.name}`}
-              />
-              <Row
-                label="Deskripsi"
-                value={`: ${selectedMapset.source.description}`}
-              />
-              <Row
-                label="Kredensial"
-                value={`: ${selectedMapset.source.credential.name}`}
+                value={`: ${
+                  selectedMapset.source
+                    ? selectedMapset.source?.name
+                    : "Lainnya"
+                }`}
               />
             </div>
           </div>

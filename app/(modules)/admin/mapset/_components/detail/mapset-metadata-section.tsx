@@ -12,7 +12,9 @@ export default function MapsetMetadataSection({ mapset }: { mapset: Mapset }) {
         <div className="text-sm font-medium text-zinc-950">
           Map Server Terkait
         </div>
-        <div className="text-sm text-zinc-800">{mapset.source.name}</div>
+        <div className="text-sm text-zinc-800">
+          {mapset.source ? mapset.source.name : "Lainnya"}
+        </div>
       </div>
       {mapset?.layer_url && (
         <div className="py-2 px-4">
