@@ -1,10 +1,14 @@
-// hooks/use-auth-api.ts
-
 import { useSession, signOut } from "next-auth/react";
 
 import { useEffect } from "react";
 
 import { setupApiInterceptors } from "../services/api";
+import authApi from "../services/auth";
+
+export const handleLogout = async () => {
+  await authApi.logout();
+  await signOut();
+};
 
 export function useAuthApi() {
   const { data: session, status } = useSession();
@@ -38,8 +42,7 @@ export function useAuthApi() {
         }
       },
 
-      // Session expired handler
-      () => signOut()
+      () => handleLogout()
     );
   }, [session]);
 
