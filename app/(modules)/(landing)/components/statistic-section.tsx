@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { mapsetApi } from "@/shared/services/mapset";
+import mapsetApi from "@/shared/services/mapset";
 
 export function StatisticsSection() {
   const [mapsetCount, setMapsetCount] = useState<number>(0);

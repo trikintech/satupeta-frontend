@@ -3,7 +3,7 @@ import { Classification } from "../types/classification";
 
 import { apiHelpers } from "./api";
 
-export const classificationApi = {
+const classificationApi = {
   getClassifications: async (): Promise<
     PaginatedResponse<Classification[]>
   > => {

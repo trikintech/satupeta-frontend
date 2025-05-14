@@ -7,7 +7,7 @@ export interface LayerOption {
   url: string;
 }
 
-export const fetchWMSLayersFromSourceId = async (
+const fetchWMSLayersFromSourceId = async (
   sourceId: string
 ): Promise<LayerOption[]> => {
   try {
@@ -44,3 +44,5 @@ export const fetchWMSLayersFromSourceId = async (
     return [];
   }
 };
+
+export { fetchWMSLayersFromSourceId };

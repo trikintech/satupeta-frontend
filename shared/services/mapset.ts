@@ -3,7 +3,7 @@ import { Mapset, MapsetSubmitPayload } from "../types/mapset";
 
 import { apiHelpers } from "./api";
 
-export const mapsetApi = {
+const mapsetApi = {
   getMapsets: async (params?: {
     filter?: string | string[];
     limit?: number;

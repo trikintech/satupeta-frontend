@@ -3,7 +3,7 @@ import { Role } from "../types/role";
 
 import { apiHelpers } from "./api";
 
-export const roleApi = {
+const roleApi = {
   getRoles: async (params?: {
     filter?: string;
     search?: string;

@@ -4,7 +4,7 @@ import { User } from "../types/user";
 
 import { apiHelpers } from "./api";
 
-export const userApi = {
+const userApi = {
   getUsers: async (params?: {
     filter?: string | string[];
     limit?: number;

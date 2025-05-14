@@ -4,7 +4,7 @@ import { MapSource } from "../types/map-source";
 
 import { apiHelpers } from "./api";
 
-export const mapSourceApi = {
+const mapSourceApi = {
   getMapSources: async (params?: {
     filter?: string | string[];
     limit?: number;

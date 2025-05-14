@@ -12,7 +12,7 @@ interface LoginResponse {
   user: User;
 }
 
-export const authApi = {
+const authApi = {
   login: async (credentials: LoginPayload): Promise<LoginResponse> => {
     return apiHelpers.post("/auth/login", credentials);
   },

@@ -33,7 +33,7 @@ export interface FileUploadResponse {
   modified_at: string;
 }
 
-export const fileApi = {
+const fileApi = {
   uploadFile: async (
     file: File,
     description?: string

@@ -4,7 +4,7 @@ import { Category } from "../types/category";
 
 import { apiHelpers } from "./api";
 
-export const categoryApi = {
+const categoryApi = {
   getCategories: async (params?: {
     search?: string;
     filter?: string | string[];
