@@ -4,5 +4,5 @@ export const appsName = {
 };
 
 export const isActiveFeature = {
-  news: false,
+  news: true,
 };

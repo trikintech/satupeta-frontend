@@ -43,7 +43,7 @@ export function useAuthApi() {
         }
       },
 
-      () => handleLogout()
+      () => signOut()
     );
   }, [session]);
 
