@@ -4,7 +4,7 @@ import { Credential } from "../types/credential";
 
 import { apiHelpers } from "./api";
 
-export const credentialApi = {
+const credentialApi = {
   getCredentials: async (params?: {
     filter?: string | string[];
     limit?: number;

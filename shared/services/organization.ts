@@ -4,7 +4,7 @@ import { Organization } from "../types/organization";
 
 import { apiHelpers } from "./api";
 
-export const organizationApi = {
+const organizationApi = {
   getOrganizations: async (params?: {
     filter?: string | string[];
     limit?: number;

@@ -8,7 +8,7 @@ import { cn } from "@/shared/utils/utils";
 import { Button } from "@/shared/components/ds/button";
 import { isActiveFeature } from "@/shared/config/app-config";
 import { useAuthSession } from "@/shared/hooks/use-session";
-import { signOut } from "next-auth/react";
+import { handleLogout } from "@/shared/hooks/use-auth-api";
 
 const navigation = [
   { name: "Katalog Mapset", href: "#catalog" },
@@ -58,10 +58,6 @@ export function Header() {
 
   const handleLogin = () => {
     router.push("/auth/admin/login?callbackUrl=/");
-  };
-
-  const handleLogout = async () => {
-    await signOut();
   };
 
   return (

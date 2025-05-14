@@ -3,7 +3,7 @@ import { News } from "../types/news";
 
 import { apiHelpers } from "./api";
 
-export const newsApi = {
+const newsApi = {
   getAllNews: async (params?: {
     filter?: string | string[];
     limit?: number;

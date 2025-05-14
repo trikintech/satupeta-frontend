@@ -3,7 +3,7 @@ import { Topic } from "../types/topic";
 
 import { apiHelpers } from "./api";
 
-export const topicApi = {
+const topicApi = {
   getTopics: async (): Promise<ApiResponse<Topic[]>> => {
     return apiHelpers.get("/topik");
   },

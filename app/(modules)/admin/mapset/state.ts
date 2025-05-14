@@ -1,5 +1,4 @@
 import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 
 export enum MapsetFormTab {
   INFO = 0,
@@ -62,9 +61,6 @@ const initialFormState: MapsetFormState = {
   },
 };
 
-const mapsetFormAtom = atomWithStorage<MapsetFormState>(
-  "mapsetForm",
-  initialFormState
-);
+const mapsetFormAtom = atom<MapsetFormState>(initialFormState);
 
 export { activeTabAtom, mapsetFormAtom, initialFormState };

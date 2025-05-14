@@ -1,10 +1,10 @@
 import { QueryClient, QueryCache, MutationCache } from "@tanstack/react-query";
 
-import { signOut } from "next-auth/react";
-
 import { AxiosError } from "axios";
 
 import { toast } from "sonner";
+
+import { handleLogout } from "../hooks/use-auth-api";
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -30,7 +30,7 @@ function handleGlobalError(error: unknown) {
 
     if (axiosError.response?.status === 401) {
       toast.error("Session expired. Redirecting to login...");
-      signOut();
+      handleLogout();
     }
   }
 }

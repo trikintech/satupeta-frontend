@@ -3,7 +3,7 @@ import { MapProjectionSystem } from "../types/map-projection-system";
 
 import { apiHelpers } from "./api";
 
-export const mapProjectionSystemApi = {
+const mapProjectionSystemApi = {
   getMapProjectionSystems: async (): Promise<
     PaginatedResponse<MapProjectionSystem[]>
   > => {

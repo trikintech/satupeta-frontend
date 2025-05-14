@@ -4,7 +4,7 @@ import { User } from "../types/user";
 
 import { apiHelpers } from "./api";
 
-export const userApi = {
+const userApi = {
   getUsers: async (params?: {
     filter?: string | string[];
     limit?: number;
@@ -19,7 +19,7 @@ export const userApi = {
     return apiHelpers.get("/users", {
       params: filteredParams,
       paramsSerializer: {
-        indexes: null, // This allows multiple params with the same name
+        indexes: null,
       },
     });
   },

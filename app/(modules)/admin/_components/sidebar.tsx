@@ -21,7 +21,7 @@ import { cn } from "@/shared/utils/utils";
 import Image from "next/image";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { getRoleLabelById, hasPermission } from "@/shared/config/role";
-import { signOut } from "next-auth/react";
+import { handleLogout } from "@/shared/hooks/use-auth-api";
 
 interface MenuItem {
   name: string;
@@ -236,7 +236,7 @@ const Sidebar = () => {
             "w-full flex items-center justify-start text-zinc-700 hover:bg-gray-200 mt-1",
             collapsed ? "justify-center px-2" : "justify-start"
           )}
-          onClick={() => signOut()}
+          onClick={() => handleLogout()}
         >
           <LogOut className="h-5 w-5" />
           {!collapsed && <span className="ml-3 text-sm">Logout</span>}

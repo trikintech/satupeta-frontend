@@ -76,12 +76,10 @@ export function MapsetMetadataForm({
     { id: "lainnya", name: "Lainnya" },
   ];
 
-  // Debounce effect
   useEffect(() => {
     const timerId = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
 
-      // Restore focus after debounce update if input was focused
       if (
         searchInputRef.current &&
         document.activeElement === searchInputRef.current
@@ -95,7 +93,6 @@ export function MapsetMetadataForm({
     return () => clearTimeout(timerId);
   }, [searchQuery]);
 
-  // Now use debouncedSearchQuery instead of searchQuery in your filter
   const filteredLayerOptions = useMemo(() => {
     if (!debouncedSearchQuery) return layerOptions;
     const query = debouncedSearchQuery.toLowerCase();
