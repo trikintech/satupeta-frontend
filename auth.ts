@@ -31,8 +31,6 @@ async function refreshAccessToken(token: any) {
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
-      signOut();
-
       return {
         ...token,
         error: "RefreshAccessTokenError",
@@ -40,6 +38,7 @@ async function refreshAccessToken(token: any) {
     }
 
     // Dapatkan waktu expire dari token
+    console.log(refreshedTokens);
     const decodedToken = jwtDecode<{ exp: number }>(
       refreshedTokens.access_token
     );
@@ -68,6 +67,8 @@ async function refreshAccessToken(token: any) {
     };
   } catch (error) {
     console.error(error);
+    signOut();
+
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -200,7 +201,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 hari
+    maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
     signIn: "admin/login",
