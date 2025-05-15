@@ -16,10 +16,8 @@ export function useAuthApi() {
 
   useEffect(() => {
     setupApiInterceptors(
-      // Get token function
       () => (session?.access_token as string) || null,
 
-      // Refresh token function
       async () => {
         try {
           const response = await fetch(

@@ -13,6 +13,7 @@ export function OrganizationSection() {
       organizationApi
         .getOrganizations({
           limit: 5,
+          filter: ["is_active=true"],
         })
         .then((res) => {
           return res.items;

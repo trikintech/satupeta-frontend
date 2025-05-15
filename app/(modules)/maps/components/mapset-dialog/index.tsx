@@ -1,17 +1,23 @@
 "use client";
 import { useAtom } from "jotai";
-import { isOpenMapsetDialogAtom } from "../../state/mapset-dialog";
+import {
+  isOpenMapsetDialogAtom,
+  selectedMapsetAtom,
+} from "../../state/mapset-dialog";
 import MapsetList from "./mapset-list";
 import MainDialog from "./main";
 import { useQueryParam, StringParam } from "use-query-params";
 import { useEffect } from "react";
 import { XIcon } from "lucide-react";
 import TabSwitcher from "./tab-switcher";
+import mapsetApi from "@/shared/services/mapset";
 
 export default function MapsetDialog() {
   const [isOpenDialog, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);
   const [openCatalog] = useQueryParam("open-catalog", StringParam);
   const [tabParam] = useQueryParam("tab", StringParam);
+  const [mapsetIdParam] = useQueryParam("mapset-id", StringParam);
+  const [, setSelectedMapset] = useAtom(selectedMapsetAtom);
 
   // Convert the query param to a valid tab type
   const initialTab =
@@ -20,10 +26,22 @@ export default function MapsetDialog() {
       : undefined;
 
   useEffect(() => {
-    if (openCatalog === "true") {
-      setIsOpenDialog(true);
-    }
-  }, [openCatalog, setIsOpenDialog]);
+    const fetchMapset = async () => {
+      if (mapsetIdParam) {
+        try {
+          const data = await mapsetApi.getMapsetById(mapsetIdParam);
+          setSelectedMapset(data);
+          setIsOpenDialog(true);
+        } catch (error) {
+          console.error("Error fetching mapset by ID:", error);
+        }
+      } else if (openCatalog === "true") {
+        setIsOpenDialog(true);
+      }
+    };
+
+    fetchMapset();
+  }, [openCatalog, mapsetIdParam, setIsOpenDialog, setSelectedMapset]);
 
   return (
     <div

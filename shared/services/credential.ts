@@ -39,7 +39,6 @@ const credentialApi = {
   createCredential: async (
     credential: Omit<CredentialFormValues, "id">
   ): Promise<Credential> => {
-    console.log(credential);
     return apiHelpers.post("/credentials", credential);
   },
 

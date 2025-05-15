@@ -33,7 +33,6 @@ const userApi = {
   },
 
   createUser: async (user: Omit<UserFormValues, "id">): Promise<User> => {
-    console.log(user);
     return apiHelpers.post("/users", user);
   },
 

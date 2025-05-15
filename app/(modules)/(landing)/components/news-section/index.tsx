@@ -4,34 +4,22 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import NewsCard from "./news-card";
+import { useQuery } from "@tanstack/react-query";
+import newsApi from "@/shared/services/news";
 
 export function NewsSection() {
-  const news = [
-    {
-      title:
-        "Pemutakhiran Mapset: Satu Peta Tambahkan 50 Dataset Baru di Kuartal Pertama 2025",
-      description: "Berita terbaru tentang pemutakhiran mapset",
-      date: "2025-01-01",
-      link: "/statistik/mapset",
-      image: "/template-news.png",
-    },
-    {
-      title:
-        "Pemutakhiran Mapset: Satu Peta Tambahkan 50 Dataset Baru di Kuartal Pertama 2025",
-      description: "Berita terbaru tentang pemutakhiran mapset",
-      date: "2025-01-01",
-      link: "/statistik/mapset",
-      image: "/template-news.png",
-    },
-    {
-      title:
-        "Pemutakhiran Mapset: Satu Peta Tambahkan 50 Dataset Baru di Kuartal Pertama 2025",
-      description: "Berita terbaru tentang pemutakhiran mapset",
-      date: "2025-01-01",
-      link: "/statistik/mapset",
-      image: "/template-news.png",
-    },
-  ];
+  const { data: news, isLoading } = useQuery({
+    queryKey: ["news"],
+    queryFn: () =>
+      newsApi
+        .getNewsList({
+          limit: 5,
+          filter: ["is_active=true"],
+        })
+        .then((res) => res.items),
+    staleTime: 5000,
+  });
+
   return (
     <section className="py-10" id="news">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,17 +44,24 @@ export function NewsSection() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 mb-4 ">
-            {news.map((item, index) => (
-              <NewsCard
-                key={index}
-                title={item.title}
-                description={item.description}
-                date={item.date}
-                link={item.link}
-                image={item.image}
-              />
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {isLoading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="animate-pulse bg-slate-200 h-72 rounded-xl"
+                  />
+                ))
+              : news &&
+                news.map((item) => (
+                  <NewsCard
+                    key={item.id}
+                    title={item.name}
+                    description={item.description}
+                    link={`/news/${item.id}`}
+                    image={item.thumbnail}
+                  />
+                ))}
           </div>
         </div>
       </div>

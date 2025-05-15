@@ -34,7 +34,7 @@ export function MainMapsetCard({ mapset }: Readonly<{ mapset: Mapset }>) {
 
           <div className="mt-auto pt-2">
             <a
-              href={`/mapsets/${mapset.id}`}
+              href={`/maps?mapset-id=${mapset.id}`}
               className="inline-flex items-center text-primary hover:underline"
               target="_blank"
               rel="noopener noreferrer"

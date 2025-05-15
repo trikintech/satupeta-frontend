@@ -35,7 +35,6 @@ const organizationApi = {
   createOrganization: async (
     organization: Omit<OrganizationFormValues, "id">
   ): Promise<Organization> => {
-    console.log(organization);
     return apiHelpers.post("/organizations", organization);
   },
 

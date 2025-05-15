@@ -19,7 +19,7 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   // Public routes that don't require authentication
-  const publicRoutes = ["/", "/maps", "/login", "/not-found"];
+  const publicRoutes = ["/", "/maps", "/login", "/not-found", "/news"];
   const isPublicRoute = publicRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
@@ -39,9 +39,7 @@ export default auth((req) => {
 
   // Redirect to login if not authenticated
   if (!session?.user) {
-    const loginUrl = new URL("/auth/admin/login", req.nextUrl);
-    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.next();
   }
 
   const userRole = session.user?.role;

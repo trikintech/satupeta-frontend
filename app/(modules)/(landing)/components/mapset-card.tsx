@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/shared/components/ui/card";
 import { Mapset } from "@/shared/types/mapset";
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const PreviewMap = dynamic(() => import("@/shared/components/preview-map"), {
   ssr: false,
@@ -30,9 +31,12 @@ export function MapsetCard({ mapset }: Readonly<{ mapset: Mapset }>) {
               {mapset?.name}
             </div>
           </div>
-          <div className="mt-4 self-start">
+          <Link
+            href={`/maps?mapset-id=${mapset.id}`}
+            className="mt-4 self-start"
+          >
             <ArrowRight className="text-primary" />
-          </div>
+          </Link>
         </CardContent>
       </div>
     </Card>

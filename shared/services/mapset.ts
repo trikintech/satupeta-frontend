@@ -48,10 +48,12 @@ const mapsetApi = {
   updateMapsetStatus: async (
     id: string,
     status: string,
+    notes: string,
     layer_url: string
   ): Promise<Mapset> => {
     return apiHelpers.patch(`/mapsets/${id}`, {
       status_validation: status,
+      notes: notes,
       layer_url,
     });
   },

@@ -11,7 +11,7 @@ export default function NewsPageClient() {
   const columns = useNewsColumns();
 
   const {
-    data: newss,
+    data: news,
     total,
     isLoading,
     isError,
@@ -26,15 +26,15 @@ export default function NewsPageClient() {
     limit,
     setSorting,
   } = useTableState<News>({
-    resourceName: "newss",
-    fetchAction: newsApi.getAllNews,
+    resourceName: "news",
+    fetchAction: newsApi.getNewsList,
     defaultLimit: 10,
     defaultSort: { id: "name", desc: false },
   });
 
   return (
     <ResourceTable
-      data={newss}
+      data={news}
       columns={columns as ColumnDef<unknown, unknown>[]}
       total={total}
       isLoading={isLoading}
