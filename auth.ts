@@ -38,7 +38,6 @@ async function refreshAccessToken(token: any) {
     }
 
     // Dapatkan waktu expire dari token
-    console.log(refreshedTokens);
     const decodedToken = jwtDecode<{ exp: number }>(
       refreshedTokens.access_token
     );
@@ -67,7 +66,6 @@ async function refreshAccessToken(token: any) {
     };
   } catch (error) {
     console.error(error);
-    signOut();
 
     return {
       ...token,

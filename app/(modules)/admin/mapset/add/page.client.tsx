@@ -150,6 +150,7 @@ export default function AddMapsPageClient() {
       is_popular: false,
       is_active: true,
       regional_id: "01968b53-a910-7a67-bd10-975b8923b92e",
+      notes: "Mapset baru dibuat",
       status_validation: StatusValidation.ON_VERIFICATION,
     };
 

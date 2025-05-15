@@ -31,8 +31,13 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
   const userRole = session?.user.role;
 
   const updateStatusMutation = useMutation({
-    mutationFn: (status: string) =>
-      mapsetApi.updateMapsetStatus(id, status, mapset?.layer_url ?? ""),
+    mutationFn: (updateData: { status: string; notes: string }) =>
+      mapsetApi.updateMapsetStatus(
+        id,
+        updateData.status,
+        updateData.notes,
+        mapset?.layer_url ?? ""
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["mapset", id] });
       toast.success("Status mapset berhasil diperbarui");
@@ -50,9 +55,12 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
     setIsVerifyDialogOpen(true);
   };
 
-  const handleVerificationAction = (action: "approve" | "reject") => {
+  const handleVerificationAction = (
+    action: "approve" | "reject",
+    notes: string
+  ) => {
     const newStatus = action === "approve" ? "approved" : "rejected";
-    updateStatusMutation.mutate(newStatus);
+    updateStatusMutation.mutate({ status: newStatus, notes });
   };
 
   const canVerify =
