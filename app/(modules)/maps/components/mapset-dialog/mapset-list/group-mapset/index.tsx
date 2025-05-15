@@ -24,11 +24,16 @@ export default function GroupMapset({ item, type, search }: GroupMapsetProps) {
   const [selectedMapset, setSelectedMapset] = useAtom(selectedMapsetAtom);
   const queryClient = useQueryClient();
 
+  const dynamicFilter =
+    type === "organization"
+      ? `producer_id=${item.id}`
+      : `category_id=${item.id}`;
+
   const qParams = {
     filter: JSON.stringify([
-      type === "organization"
-        ? `producer_id=${item.id}`
-        : `category_id=${item.id}`,
+      dynamicFilter,
+      "is_active=true",
+      "status_validation=approved",
     ]),
     search,
   };

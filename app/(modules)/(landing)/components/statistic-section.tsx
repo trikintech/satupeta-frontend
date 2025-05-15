@@ -8,13 +8,15 @@ import { getTotalMetadata } from "@/shared/utils/geonetwork";
 
 export function StatisticsSection() {
   const [mapsetCount, setMapsetCount] = useState<number>(0);
-  const [metadataCount, setMetadataCount] = useState<number>(0); // <- state baru
+  const [metadataCount, setMetadataCount] = useState<number>(0);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const [mapsetResponse, metadataResponse] = await Promise.all([
-          mapsetApi.getMapsets(),
+          mapsetApi.getMapsets({
+            filter: ["is_active=true", "status_validation=approved"],
+          }),
           getTotalMetadata(),
         ]);
 
