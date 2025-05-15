@@ -33,7 +33,7 @@ export default function NewsEditPageClient() {
         <NewsForm
           defaultValues={news as Partial<NewsFormValues>}
           onSubmitAction={handleSubmitNews}
-          isSubmitting={isSubmitting}
+          isPending={isSubmitting}
           onCancelAction={resetForm}
         />
       </div>

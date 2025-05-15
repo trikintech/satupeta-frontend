@@ -23,7 +23,7 @@ export default function AddNewsPageClient() {
     <div className="max-w-xl">
       <NewsForm
         onSubmitAction={handleSubmitNews}
-        isSubmitting={isSubmitting}
+        isPending={isSubmitting}
         onCancelAction={resetForm}
       />
     </div>

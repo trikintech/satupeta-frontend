@@ -1,5 +1,7 @@
 "use client";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/shared/components/ui/button";
 import {
   Form,
@@ -11,28 +13,21 @@ import {
 } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
 import { Switch } from "@/shared/components/ui/switch";
-import { Textarea } from "@/shared/components/ui/textarea";
 import { ImageUpload } from "@/shared/components/image-upload";
-
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { z } from "zod";
-import { newsSchema } from "@/shared/schemas/news";
-
-type NewsFormValues = z.infer<typeof newsSchema>;
+import { TiptapEditor } from "@/shared/components/text-editor";
+import { NewsFormValues, newsSchema } from "@/shared/schemas/news";
 
 interface NewsFormProps {
   defaultValues?: Partial<NewsFormValues>;
   onSubmitAction: (data: NewsFormValues) => void;
-  isSubmitting?: boolean;
+  isPending?: boolean;
   onCancelAction?: () => void;
 }
 
 export function NewsForm({
   defaultValues,
   onSubmitAction,
-  isSubmitting,
+  isPending = false,
   onCancelAction,
 }: NewsFormProps) {
   const form = useForm<NewsFormValues>({
@@ -69,9 +64,12 @@ export function NewsForm({
             <FormItem>
               <FormLabel>Isi Konten</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Masukkan isi lengkap konten"
-                  {...field}
+                <TiptapEditor
+                  content={field.value ?? ""}
+                  onChange={field.onChange}
+                  minHeight={200}
+                  maxHeight={800}
+                  initialHeight={400}
                 />
               </FormControl>
               <FormMessage />
@@ -124,13 +122,13 @@ export function NewsForm({
               type="button"
               variant="outline"
               onClick={onCancelAction}
-              disabled={isSubmitting}
+              disabled={isPending}
             >
               Batal
             </Button>
           )}
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Menyimpan..." : "Simpan"}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Menyimpan..." : "Simpan"}
           </Button>
         </div>
       </form>
