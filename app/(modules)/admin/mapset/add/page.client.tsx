@@ -143,6 +143,7 @@ export default function AddMapsPageClient() {
           ? null
           : formState.metadata.source_id,
       layer_url: formState.metadata.layer_url,
+      metadata_url: formState.metadata.metadata_url,
       coverage_level: formState.classification.coverage_level,
       coverage_area: formState.classification.coverage_area,
       data_update_period: formState.version.data_update_period,
