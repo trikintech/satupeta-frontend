@@ -1,3 +1,4 @@
+import { getFileUrl } from "@/shared/utils/file";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,27 +6,26 @@ import Link from "next/link";
 export default function NewsCard({
   title,
   description,
-  date,
   link,
   image,
 }: {
   title: string;
   description: string;
-  date: string;
   link: string;
-  image: string;
+  image?: string;
 }) {
-  const formattedDate = new Intl.DateTimeFormat("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(date));
-
   return (
     <div className="gap-4 p-4 border border-[#94A3B8] flex flex-col">
-      <Image src={image} alt="news" width={0} height={379} className="w-full" />
+      {image && (
+        <Image
+          src={getFileUrl(image)}
+          alt="news"
+          width={379}
+          height={379}
+          className="w-full"
+        />
+      )}
       <div className="relative flex flex-col gap-4 pb-20">
-        <div className="text-slate-500 text-sm">{formattedDate}</div>
         <div className="text-slate-600 leading-9 text-3xl ">{title}</div>
 
         <div className="text-slate-500 text-sm pt-12">{description}</div>
