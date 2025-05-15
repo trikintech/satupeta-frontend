@@ -22,6 +22,8 @@ export interface MapsetFormState {
   metadata: {
     source_id: string;
     layer_url: string;
+    metadata_source_id: string;
+    metadata_url: string;
   };
   classification: {
     coverage_level: string;
@@ -50,6 +52,8 @@ const initialFormState: MapsetFormState = {
   metadata: {
     source_id: "",
     layer_url: "",
+    metadata_source_id: "",
+    metadata_url: "",
   },
   classification: {
     coverage_level: "",

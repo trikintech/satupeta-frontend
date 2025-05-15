@@ -97,8 +97,10 @@ export default function EditMapsPageClient() {
           is_popular: mapset.is_popular,
         },
         metadata: {
-          source_id: mapset.source.id,
+          source_id: mapset.source?.id,
           layer_url: mapset.layer_url,
+          metadata_source_id: "",
+          metadata_url: mapset.metadata_url,
         },
         classification: {
           coverage_level: mapset.coverage_level,
@@ -188,6 +190,7 @@ export default function EditMapsPageClient() {
           ? null
           : formState.metadata.source_id,
       layer_url: formState.metadata.layer_url,
+      metadata_url: formState.metadata.metadata_url,
       coverage_level: formState.classification.coverage_level,
       coverage_area: formState.classification.coverage_area,
       data_update_period: versionData.data_update_period,

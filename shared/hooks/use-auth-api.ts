@@ -15,34 +15,7 @@ export function useAuthApi() {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    setupApiInterceptors(
-      () => (session?.access_token as string) || null,
-
-      async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                refresh_token: session?.refresh_token,
-              }),
-            }
-          );
-
-          const data = await response.json();
-          return data.data.access_token;
-        } catch (error) {
-          console.error("Error refreshing token:", error);
-          throw error;
-        }
-      },
-
-      () => signOut()
-    );
+    setupApiInterceptors(() => (session?.access_token as string) || null);
   }, [session]);
 
   return {

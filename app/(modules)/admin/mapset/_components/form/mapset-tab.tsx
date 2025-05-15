@@ -58,7 +58,7 @@ any) {
             data.classification_id
         );
       case "metadata":
-        return Boolean(data.source_id && data.layer_url);
+        return Boolean(data.metadata_url && data.layer_url);
       case "classification":
         return Boolean(data.coverage_area && data.coverage_level);
       case "version":

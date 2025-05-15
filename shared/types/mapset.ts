@@ -72,6 +72,7 @@ export type Mapset = {
   description: string;
   scale: string;
   layer_url: string;
+  metadata_url: string;
   status_validation: string;
   classification: Classification;
   data_status: "sementara" | "tetap";
@@ -84,6 +85,7 @@ export type Mapset = {
   producer: Producer;
   regional: Regional;
   source: Source;
+  metadata_source?: Source;
   is_popular: boolean;
   is_active: boolean;
   created_at: string;
@@ -104,6 +106,8 @@ export interface MapsetSubmitPayload {
   is_popular: boolean;
   is_active: boolean;
   layer_url: string;
+  metadata_url: string;
+  metadata_source_id?: string;
   regional_id: string;
   classification_id: string;
   status_validation: string;

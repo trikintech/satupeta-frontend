@@ -36,7 +36,7 @@ export function NewsSection() {
             </p>
 
             <Link
-              href="/katalog"
+              href="/news"
               className="flex items-center text-primary text-sm font-medium hover:underline"
             >
               Lihat selengkapnya
