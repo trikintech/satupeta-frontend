@@ -35,7 +35,6 @@ const mapSourceApi = {
   createMapSource: async (
     mapsSource: Omit<MapSourceFormValues, "id">
   ): Promise<MapSource> => {
-    console.log(mapsSource);
     return apiHelpers.post("/map_sources", mapsSource);
   },
 

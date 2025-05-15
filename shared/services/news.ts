@@ -1,10 +1,12 @@
+import { NewsFormValues } from "../schemas/news";
 import { PaginatedResponse } from "../types/api-response";
 import { News } from "../types/news";
 
 import { apiHelpers } from "./api";
 
 const newsApi = {
-  getAllNews: async (params?: {
+  getNewsList: async (params?: {
+    search?: string;
     filter?: string | string[];
     limit?: number;
     offset?: number;
@@ -18,7 +20,7 @@ const newsApi = {
     return apiHelpers.get("/news", {
       params: filteredParams,
       paramsSerializer: {
-        indexes: null, // This allows multiple params with the same name
+        indexes: null,
       },
     });
   },
@@ -31,12 +33,11 @@ const newsApi = {
     return apiHelpers.delete(`/news/${id}`);
   },
 
-  createNews: async (news: Omit<News, "id">): Promise<News> => {
-    console.log(news);
+  createNews: async (news: Omit<NewsFormValues, "id">): Promise<News> => {
     return apiHelpers.post("/news", news);
   },
 
-  updateNews: async (id: string, news: News): Promise<News> => {
+  updateNews: async (id: string, news: Partial<News>): Promise<News> => {
     return apiHelpers.patch(`/news/${id}`, news);
   },
 };

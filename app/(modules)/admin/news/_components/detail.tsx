@@ -16,11 +16,11 @@ export default function NewsDetail({ id }: { id: string }) {
       <div className="mx-6 p-2 border rounded-[6px] border-zinc-200">
         <div className="py-2 px-4">
           <span className="text-lg font-semibold text-zinc-950">
-            Informasi Berita
+            Informasi Konten
           </span>
         </div>
 
-        <DetailItem label="Judul" value={news?.name} />
+        <DetailItem label="Nama" value={news?.name} />
         <DetailItem label="Deskripsi" value={news?.description} />
         <DetailItem
           label="Status"
@@ -32,7 +32,7 @@ export default function NewsDetail({ id }: { id: string }) {
             news?.thumbnail ? (
               <Image
                 src={getFileThumbnailUrl(news.thumbnail)}
-                alt="Thumbnail"
+                alt="Thumbnail Konten"
                 className="w-32 h-32 object-cover rounded"
                 width={128}
                 height={128}

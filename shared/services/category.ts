@@ -36,7 +36,6 @@ const categoryApi = {
   createCategory: async (
     category: Omit<CategoryFormValues, "id">
   ): Promise<Category> => {
-    console.log(category);
     return apiHelpers.post("/categories", category);
   },
 

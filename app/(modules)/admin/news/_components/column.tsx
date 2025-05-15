@@ -1,5 +1,20 @@
+"use client";
+
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/shared/components/ds/badge";
-import { Button } from "@/shared/components/ds/button";
+import { Button } from "@/shared/components/ui/button";
+import {
+  MoreHorizontal,
+  Eye,
+  Edit,
+  Trash,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,27 +23,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
-import { News } from "@/shared/types/news";
-import { ColumnDef } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  Eye,
-  Edit,
-  Trash,
-  MoreHorizontal,
-  ArrowUp,
-  ArrowDown,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import { getFileThumbnailUrl } from "@/shared/utils/file";
 import newsApi from "@/shared/services/news";
 import { toast } from "sonner";
 import { hasPermission } from "@/shared/config/role";
-import { DeleteDialog } from "../../_components/delete-dialog";
 import { useAuthSession } from "@/shared/hooks/use-session";
+import { DeleteDialog } from "../../_components/delete-dialog";
+import { News } from "@/shared/types/news"; // adjust the path if needed
 
-// Type for column configuration
 interface ColumnConfig {
   id: string;
   header: string;
@@ -40,19 +43,29 @@ interface ColumnConfig {
   cell?: (value: any) => React.ReactNode;
 }
 
-// Default column configurations
 const COLUMN_CONFIGS: ColumnConfig[] = [
   {
     id: "name",
-    header: "Judul",
+    header: "Judul Konten",
     accessor: "name",
     sortable: true,
   },
   {
     id: "thumbnail",
-    header: "Gambar",
-    accessorFn: (row) => row.thumbnail,
+    header: "Thumbnail",
+    accessor: "thumbnail",
     sortable: false,
+    cell: (value) =>
+      value ? (
+        <div className="relative h-10 w-10">
+          <Image
+            src={getFileThumbnailUrl(value)}
+            alt="Thumbnail"
+            fill
+            className="object-cover rounded-md"
+          />
+        </div>
+      ) : null,
   },
   {
     id: "is_active",
@@ -80,12 +93,12 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
       return await newsApi.deleteNews(id);
     },
     onSuccess: () => {
-      toast.success("Berhasil menghapus data");
-      queryClient.invalidateQueries({ queryKey: ["newss"] });
+      toast.success("Berhasil menghapus konten");
+      queryClient.invalidateQueries({ queryKey: ["news"] });
       setNewsToDelete(null);
     },
     onError: (error) => {
-      toast.error("Gagal menghapus data");
+      toast.error("Gagal menghapus konten");
       console.error("Error deleting news:", error);
     },
   });
@@ -98,19 +111,16 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
       className="p-0 hover:bg-transparent"
     >
       {label}
-      {(() => {
-        if (column.getIsSorted() === "asc") {
-          return <ArrowUp className="ml-2 h-4 w-4" />;
-        } else if (column.getIsSorted() === "desc") {
-          return <ArrowDown className="ml-2 h-4 w-4" />;
-        } else {
-          return <ArrowUpDown className="ml-2 h-4 w-4" />;
-        }
-      })()}
+      {column.getIsSorted() === "asc" ? (
+        <ArrowUp className="ml-2 h-4 w-4" />
+      ) : column.getIsSorted() === "desc" ? (
+        <ArrowDown className="ml-2 h-4 w-4" />
+      ) : (
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      )}
     </Button>
   );
 
-  // Generate base columns from config
   const baseColumns = COLUMN_CONFIGS.map((config) => {
     const column: ColumnDef<News> = {
       id: config.id,
@@ -135,7 +145,6 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
     return column;
   });
 
-  // Add actions column if news has any permissions
   if (
     userRole &&
     (hasPermission(userRole, "news", "read") ||
@@ -174,7 +183,7 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
                     className="flex items-center gap-2"
                   >
                     <Edit className="h-4 w-4" />
-                    Edit News
+                    Edit Konten
                   </DropdownMenuItem>
                 )}
                 {hasPermission(userRole, "news", "delete") && (
@@ -185,18 +194,18 @@ export const useNewsColumns = (): ColumnDef<News>[] => {
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
                       <Trash className="h-4 w-4" />
-                      Hapus News
+                      Hapus Konten
                     </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {newsToDelete?.id === news.id && (
+            {newsToDelete && newsToDelete?.id === news.id && (
               <DeleteDialog
                 name={newsToDelete?.name ?? ""}
                 isDeleting={deleteMutation.isPending}
-                onDelete={() => deleteMutation.mutate(newsToDelete?.id ?? "")}
+                onDelete={() => deleteMutation.mutate(newsToDelete.id!)}
                 onCancel={() => setNewsToDelete(null)}
                 open={true}
               />

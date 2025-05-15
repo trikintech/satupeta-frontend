@@ -10,7 +10,7 @@ export default function NewsDetailPage() {
   return (
     <div className="container space-y-6">
       <PageHeader
-        title="Detail Berita"
+        title="Detail Konten"
         description="Detail konten di Satu Peta."
       />
       <NewsDetail id={params.id?.toString() ?? ""} />

@@ -41,29 +41,29 @@ async function refreshAccessToken(token: any) {
 
     // Dapatkan waktu expire dari token
     const decodedToken = jwtDecode<{ exp: number }>(
-      refreshedTokens.data.access_token
+      refreshedTokens.access_token
     );
 
     // Ambil user data lagi dengan token baru
     const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/me`, {
       headers: {
-        Authorization: `Bearer ${refreshedTokens.data.access_token}`,
+        Authorization: `Bearer ${refreshedTokens.access_token}`,
       },
     });
 
     const userData = await userResponse.json();
 
     return {
-      access_token: refreshedTokens.data.access_token,
-      refresh_token: refreshedTokens.data.refresh_token ?? token.refresh_token,
+      access_token: refreshedTokens.access_token,
+      refresh_token: refreshedTokens.refresh_token ?? token.refresh_token,
       accessTokenExpires: decodedToken.exp * 1000,
       user: {
-        id: String(userData.data.id),
-        name: userData.data.name,
-        email: userData.data.email,
-        image: userData.data.image,
-        username: userData.data.username,
-        role: userData.data.role,
+        id: String(userData.id),
+        name: userData.name,
+        email: userData.email,
+        image: userData.image,
+        username: userData.username,
+        role: userData.role,
       },
     };
   } catch (error) {
