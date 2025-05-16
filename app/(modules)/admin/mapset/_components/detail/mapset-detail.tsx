@@ -13,6 +13,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { VerifyMapsetDialog } from "../verify-mapset-dialog";
 import { useAuthSession } from "@/shared/hooks/use-session";
+import MapsetClassificationSection from "./mapset-classification-section";
 
 interface MapsetDetailProps {
   id: string;
@@ -101,6 +102,7 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
         </div>
         <div className="space-y-6">
           <MapsetMetadataSection mapset={mapset} />
+          <MapsetClassificationSection mapset={mapset} />
           <MapsetVersionSection mapset={mapset} />
         </div>
       </div>
