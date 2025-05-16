@@ -67,7 +67,6 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-      {/* Tombol buka */}
       <div
         className={`absolute transition-all duration-300 ease-out top-4 left-4 ${
           isOpen
