@@ -34,6 +34,7 @@ declare module "next-auth" {
       username: string;
       role: Role;
     };
+    refreshFailedCount: number;
   }
 }
 

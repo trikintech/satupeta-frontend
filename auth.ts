@@ -174,17 +174,32 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             username: user.username,
             role: user.role,
           },
+          refreshFailedCount: 0,
         };
       }
 
-      if (
+      const isTokenExpired =
         typeof token.accessTokenExpires === "number" &&
-        Date.now() < token.accessTokenExpires
-      ) {
+        Date.now() >= token.accessTokenExpires;
+
+      if (!isTokenExpired) {
         return token;
       }
 
-      return refreshAccessToken(token);
+      const refreshed = await refreshAccessToken(token);
+
+      // If refresh fails
+      if (refreshed.refreshFailed) {
+        return {
+          ...token,
+          refreshFailedCount: Number(token.refreshFailedCount ?? 0) + 1,
+        };
+      }
+
+      return {
+        ...refreshed,
+        refreshFailedCount: 0,
+      };
     },
     session: async ({ session, token }) => {
       session.access_token = token.access_token as string;
