@@ -31,6 +31,7 @@ async function refreshAccessToken(token: any) {
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
+      console.log("error refresh token 1", response);
       return {
         ...token,
         error: "RefreshAccessTokenError",
@@ -63,7 +64,8 @@ async function refreshAccessToken(token: any) {
       },
     };
   } catch (error) {
-    console.error(error);
+    console.log("error refresh token 2", error);
+
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -174,7 +176,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (
         typeof token.accessTokenExpires === "number" &&
-        Date.now() < token.accessTokenExpires
+        Date.now() * 14 * 60 * 1000 < token.accessTokenExpires
       ) {
         return token;
       }
