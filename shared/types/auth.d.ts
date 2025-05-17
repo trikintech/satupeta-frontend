@@ -37,7 +37,6 @@ declare module "next-auth" {
       role: Role;
       organization: Organization;
     };
-    refreshFailedCount: number;
   }
 }
 

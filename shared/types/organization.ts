@@ -7,8 +7,8 @@ export type Organization = {
   phone_number: string;
   email: string;
   website: string;
-  count_mapset: number;
-  is_active: boolean;
-  created_at: string;
-  modified_at: string;
+  count_mapset?: number;
+  is_active?: boolean;
+  created_at?: string;
+  modified_at?: string;
 };
