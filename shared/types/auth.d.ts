@@ -1,5 +1,6 @@
 import "next-auth";
 
+import { Organization } from "./organization";
 import { Role } from "./role";
 
 // Extend the built-in session types
@@ -14,6 +15,7 @@ declare module "next-auth" {
     image?: string | null;
     username: string;
     role: Role;
+    organization: Organization;
     access_token: string;
     refresh_token: string;
     accessTokenExpires: number;
@@ -33,6 +35,7 @@ declare module "next-auth" {
       image?: string | null;
       username: string;
       role: Role;
+      organization: Organization;
     };
     refreshFailedCount: number;
   }
