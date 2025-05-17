@@ -9,7 +9,7 @@ export const organizationSchema = z.object({
   phone_number: z.string().optional(),
   email: z.string().email("Email tidak valid").optional(),
   website: z.string().url("URL tidak valid").optional(),
-  is_active: z.boolean(),
+  is_active: z.boolean().optional(),
 });
 
 export type OrganizationFormValues = z.infer<typeof organizationSchema>;

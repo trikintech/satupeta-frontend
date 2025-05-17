@@ -1,8 +1,11 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { AdapterUser } from "next-auth/adapters";
 
 import { jwtDecode } from "jwt-decode";
 
+import { Organization } from "./shared/types/organization";
+import { Role } from "./shared/types/role";
 import { User } from "./shared/types/user";
 
 interface LoginResponse {
@@ -191,8 +194,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.refresh_token = token.refresh_token as string;
       session.error = token.error as string;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      session.user = token.user as any; // ✅ already includes organization
+      session.user = token.user as AdapterUser & {
+        id: string;
+        name?: string | null;
+        email?: string | null;
+        image?: string | null;
+        username: string;
+        role: Role;
+        organization: Organization;
+      };
 
       return session;
     },

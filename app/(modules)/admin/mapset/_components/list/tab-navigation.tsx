@@ -21,7 +21,7 @@ export function TabNavigation({ activeTab }: TabNavigationProps) {
   const { data: session } = useSession();
 
   const roleName = session?.user?.role?.name;
-  // const organizationId = session?.user?.organization?.id;
+  const organizationId = session?.user?.organization?.id;
   const shouldAddProducerFilter =
     roleName === "data_viewer" || roleName === "data_manager";
 
@@ -66,9 +66,9 @@ export function TabNavigation({ activeTab }: TabNavigationProps) {
 
       const combinedFilters = [...tab.filters];
 
-      // if (shouldAddProducerFilter && organizationId) {
-      //   combinedFilters.push(`["producer_id=${organizationId}"]`);
-      // }
+      if (shouldAddProducerFilter && organizationId) {
+        combinedFilters.push(`["producer_id=${organizationId}"]`);
+      }
 
       if (combinedFilters.length > 0) {
         const filterValue = combinedFilters.toString();
@@ -77,7 +77,7 @@ export function TabNavigation({ activeTab }: TabNavigationProps) {
 
       router.push(`?${newParams.toString()}`);
     },
-    [router, searchParams, shouldAddProducerFilter]
+    [organizationId, router, searchParams, shouldAddProducerFilter]
   );
 
   return (

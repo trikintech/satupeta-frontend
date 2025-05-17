@@ -71,7 +71,7 @@ export function OrganizationSection() {
                 {organizations.map((org) => (
                   <OrganizationCard
                     name={org.name}
-                    totalDataset={org.count_mapset}
+                    totalDataset={org?.count_mapset ?? 0}
                     link={`/maps?open-catalog=true&query=${org.name}&tab=organization`}
                     key={org.id}
                   />
