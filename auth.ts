@@ -4,10 +4,6 @@ import { AdapterUser } from "next-auth/adapters";
 
 import { jwtDecode } from "jwt-decode";
 
-import { Organization } from "./shared/types/organization";
-import { Role } from "./shared/types/role";
-import { User } from "./shared/types/user";
-
 interface LoginResponse {
   access_token: string;
   refresh_token: string;
@@ -63,12 +59,11 @@ async function refreshAccessToken(token: any) {
         image: userData.image,
         username: userData.username,
         role: userData.role,
-        ...(userData.organization && { organization: userData.organization }),
+        organizationId: userData.organization?.id || null, // Only store organization ID
       },
     };
   } catch (error) {
     console.error(error);
-
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -88,24 +83,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         try {
           const formData = new FormData();
-
-          if (credentials?.username) {
-            formData.append(
-              "username",
-              typeof credentials.username === "string"
-                ? credentials.username
-                : JSON.stringify(credentials.username)
-            );
-          }
-
-          if (credentials?.password) {
-            formData.append(
-              "password",
-              typeof credentials.password === "string"
-                ? credentials.password
-                : JSON.stringify(credentials.password)
-            );
-          }
+          formData.append("username", credentials?.username as string);
+          formData.append("password", credentials?.password as string);
 
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
@@ -117,10 +96,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
           const data = (await response.json()) as LoginResponse;
 
-          if (
-            !response.ok ||
-            (data.error && Object.keys(data.error).length > 0)
-          ) {
+          if (!response.ok || data.error) {
             throw new Error(data.message || "Authentication failed");
           }
 
@@ -133,7 +109,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             }
           );
 
-          const userData = (await userResponse.json()) as User;
+          const userData = await userResponse.json();
 
           if (!userResponse.ok) {
             throw new Error("Failed to fetch user data");
@@ -148,9 +124,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: userData.profile_picture,
             username: userData.username,
             role: userData.role,
-            ...(userData.organization && {
-              organization: userData.organization,
-            }),
+            organizationId: userData.organization?.id || null, // Only store organization ID
             access_token: data.access_token,
             refresh_token: data.refresh_token,
             accessTokenExpires: decodedToken.exp * 1000,
@@ -176,7 +150,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: user.image,
             username: user.username,
             role: user.role,
-            ...(user.organization && { organization: user.organization }),
+            organizationId: user.organizationId, // Only ID
           },
         };
       }
@@ -201,8 +175,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         email?: string | null;
         image?: string | null;
         username: string;
-        role: Role;
-        organization?: Partial<Organization>;
+        role: string;
+        organizationId?: string | null;
       };
 
       return session;

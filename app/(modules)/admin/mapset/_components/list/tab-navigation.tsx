@@ -21,7 +21,7 @@ export function TabNavigation({ activeTab }: TabNavigationProps) {
   const { data: session } = useSession();
 
   const roleName = session?.user?.role?.name;
-  const organizationId = session?.user?.organization?.id;
+  const organizationId = session?.user?.organizationId;
   const shouldAddProducerFilter =
     roleName === "data_viewer" || roleName === "data_manager";
 

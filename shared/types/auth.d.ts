@@ -1,8 +1,5 @@
 import "next-auth";
 
-import { Organization } from "./organization";
-import { Role } from "./role";
-
 // Extend the built-in session types
 declare module "next-auth" {
   /**
@@ -15,7 +12,7 @@ declare module "next-auth" {
     image?: string | null;
     username: string;
     role: Role;
-    organization: OrganizationFormValues;
+    organizationId: string;
     access_token: string;
     refresh_token: string;
     accessTokenExpires: number;
@@ -35,7 +32,7 @@ declare module "next-auth" {
       image?: string | null;
       username: string;
       role: Role;
-      organization: Organization;
+      organizationId: string;
     };
   }
 }
@@ -57,7 +54,7 @@ declare module "next-auth/jwt" {
       image?: string | null;
       username: string;
       role: Role;
-      organization: Organization;
+      organizationId: string;
     };
   }
 }
