@@ -37,12 +37,10 @@ async function refreshAccessToken(token: any) {
       };
     }
 
-    // Dapatkan waktu expire dari token
     const decodedToken = jwtDecode<{ exp: number }>(
       refreshedTokens.access_token
     );
 
-    // Ambil user data lagi dengan token baru
     const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/me`, {
       headers: {
         Authorization: `Bearer ${refreshedTokens.access_token}`,
@@ -62,12 +60,11 @@ async function refreshAccessToken(token: any) {
         image: userData.image,
         username: userData.username,
         role: userData.role,
-        organization: userData.organization,
+        organization: userData.organization, // ✅ added
       },
     };
   } catch (error) {
     console.error(error);
-
     return {
       ...token,
       error: "RefreshAccessTokenError",
@@ -88,7 +85,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         try {
           const formData = new FormData();
 
-          // Tambahkan credentials ke FormData
           if (credentials?.username) {
             formData.append(
               "username",
@@ -148,7 +144,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: userData.profile_picture,
             username: userData.username,
             role: userData.role,
-            organization: userData.organization,
+            organization: userData.organization, // ✅ added
             access_token: data.access_token,
             refresh_token: data.refresh_token,
             accessTokenExpires: decodedToken.exp * 1000,
@@ -162,7 +158,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     jwt: async ({ token, user }) => {
-      // Initial sign in
       if (user) {
         return {
           access_token: user.access_token,
@@ -175,34 +170,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: user.image,
             username: user.username,
             role: user.role,
-            organization: user.organization,
+            organization: user.organization, // ✅ added
           },
-          refreshFailedCount: 0,
         };
       }
 
-      const isTokenExpired =
+      if (
         typeof token.accessTokenExpires === "number" &&
-        Date.now() >= token.accessTokenExpires;
-
-      if (!isTokenExpired) {
+        Date.now() < token.accessTokenExpires
+      ) {
         return token;
       }
 
-      const refreshed = await refreshAccessToken(token);
-
-      // If refresh fails
-      if (refreshed.refreshFailed) {
-        return {
-          ...token,
-          refreshFailedCount: Number(token.refreshFailedCount ?? 0) + 1,
-        };
-      }
-
-      return {
-        ...refreshed,
-        refreshFailedCount: 0,
-      };
+      return refreshAccessToken(token);
     },
     session: async ({ session, token }) => {
       session.access_token = token.access_token as string;
@@ -210,14 +190,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.error = token.error as string;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      session.user = token.user as any;
+      session.user = token.user as any; // ✅ already includes organization
 
       return session;
     },
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   pages: {
     signIn: "admin/login",
