@@ -117,20 +117,14 @@ const Sidebar = () => {
         } h-16 p-2 space-x-2`}
       >
         {!collapsed && (
-          <>
+          <div>
             <Image
-              src={"/admin-logo.png"}
+              src={"/logo.svg"}
               alt="admin-logo"
-              width={32}
-              height={32}
+              width={140}
+              height={120}
             />
-            <div className="flex-1">
-              <div className="font-semibold text-sm">Satu Peta</div>
-              <div className="text-xs text-gray-500">
-                {getRoleLabelById(userRoleName ?? "")}
-              </div>
-            </div>
-          </>
+          </div>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
@@ -227,6 +221,9 @@ const Sidebar = () => {
           {!collapsed && (
             <div className="ml-3">
               <p className="text-sm font-medium">{session?.user?.name}</p>
+              <div className="text-xs text-gray-500">
+                {getRoleLabelById(userRoleName ?? "")}
+              </div>
             </div>
           )}
         </div>
