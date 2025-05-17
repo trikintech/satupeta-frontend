@@ -61,6 +61,7 @@ async function refreshAccessToken(token: any) {
         image: userData.image,
         username: userData.username,
         role: userData.role,
+        organization: userData.organization,
       },
     };
   } catch (error) {
@@ -145,6 +146,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: userData.profile_picture,
             username: userData.username,
             role: userData.role,
+            organization: userData.organization,
             access_token: data.access_token,
             refresh_token: data.refresh_token,
             accessTokenExpires: decodedToken.exp * 1000,
@@ -170,6 +172,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: user.image,
             username: user.username,
             role: user.role,
+            organization: user.organization,
           },
         };
       }

@@ -128,7 +128,10 @@ export default function AddMapsPageClient() {
     },
   });
 
-  const handleSubmitMapset = () => {
+  const handleSubmitMapset = (versionData: {
+    data_update_period: string;
+    data_version: string;
+  }) => {
     const payload: MapsetSubmitPayload = {
       name: formState.info.name,
       description: formState.info.description,
@@ -138,16 +141,16 @@ export default function AddMapsPageClient() {
       data_status: formState.info.data_status,
       classification_id: formState.info.classification_id,
       producer_id: formState.info.organization_id,
-      source_id:
-        formState.metadata.source_id === "lainnya"
-          ? null
-          : formState.metadata.source_id,
+      source_id: [
+        formState.metadata.source_id,
+        formState.metadata.metadata_source_id,
+      ].filter((id) => id !== "lainnya" && id !== null) as string[],
       layer_url: formState.metadata.layer_url,
       metadata_url: formState.metadata.metadata_url,
       coverage_level: formState.classification.coverage_level,
       coverage_area: formState.classification.coverage_area,
-      data_update_period: formState.version.data_update_period,
-      data_version: formState.version.data_version,
+      data_update_period: versionData.data_update_period,
+      data_version: versionData.data_version,
       is_popular: false,
       is_active: true,
       regional_id: "01968b53-a910-7a67-bd10-975b8923b92e",
