@@ -1,5 +1,4 @@
 import { JWT } from "@auth/core/jwt";
-import { AdapterUser } from "@auth/core/adapters";
 
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -207,7 +206,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.access_token = token.access_token as string;
       session.refresh_token = token.refresh_token as string;
       session.error = token.error as string;
-      session.user = token.user as AdapterUser;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      session.user = token.user as any;
 
       return session;
     },
