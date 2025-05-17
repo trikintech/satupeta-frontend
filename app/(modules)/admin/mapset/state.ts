@@ -20,9 +20,9 @@ export interface MapsetFormState {
     is_popular: boolean;
   };
   metadata: {
-    source_id: string;
+    source_id: string | null;
     layer_url: string;
-    metadata_source_id: string;
+    metadata_source_id: string | null;
     metadata_url: string;
   };
   classification: {

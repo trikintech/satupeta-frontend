@@ -84,6 +84,13 @@ export default function EditMapsPageClient() {
 
   useEffect(() => {
     if (mapset) {
+      const geoserverSource = mapset.sources.find((source) =>
+        source.url.includes("geoserver")
+      );
+
+      const geonetworkSource = mapset.sources.find((source) =>
+        source.url.includes("geonetwork")
+      );
       setFormState({
         info: {
           name: mapset.name,
@@ -97,9 +104,9 @@ export default function EditMapsPageClient() {
           is_popular: mapset.is_popular,
         },
         metadata: {
-          source_id: mapset.source?.id,
+          source_id: geoserverSource?.id || null,
           layer_url: mapset.layer_url,
-          metadata_source_id: "",
+          metadata_source_id: geonetworkSource?.id || null,
           metadata_url: mapset.metadata_url,
         },
         classification: {
@@ -185,10 +192,10 @@ export default function EditMapsPageClient() {
       data_status: formState.info.data_status,
       classification_id: formState.info.classification_id,
       producer_id: formState.info.organization_id,
-      source_id:
-        formState.metadata.source_id === "lainnya"
-          ? null
-          : formState.metadata.source_id,
+      source_id: [
+        formState.metadata.source_id,
+        formState.metadata.metadata_source_id,
+      ].filter((id) => id !== "lainnya" && id !== null) as string[],
       layer_url: formState.metadata.layer_url,
       metadata_url: formState.metadata.metadata_url,
       coverage_level: formState.classification.coverage_level,

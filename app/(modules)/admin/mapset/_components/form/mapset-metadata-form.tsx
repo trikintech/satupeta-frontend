@@ -27,9 +27,9 @@ import { fetchWMSLayersFromSourceId } from "@/shared/services/map-layer";
 import { fetchGeoNetworkLayersFromSourceId } from "@/shared/services/metadata-url";
 
 const metadataSchema = z.object({
-  source_id: z.string().min(1, "Map Server harus dipilih"),
+  source_id: z.string().nullable(),
   layer_url: z.string().min(1, "Link Map Server harus diisi"),
-  metadata_source_id: z.string().min(1, "Metadata Server harus dipilih"),
+  metadata_source_id: z.string().nullable(),
   metadata_url: z.string().min(1, "Link Metadata Server harus diisi"),
 });
 
@@ -156,7 +156,6 @@ export function MapsetMetadataForm({
           metadataSourceId
         );
 
-        console.log(metadata);
         setMetadataOptions(metadata);
       } catch (error) {
         console.error("Failed to fetch metadata:", error);
@@ -186,7 +185,10 @@ export function MapsetMetadataForm({
                 Pilih MapServer<span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  value={field.value ?? undefined}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih server untuk menyimpan data" />
                   </SelectTrigger>
@@ -301,7 +303,10 @@ export function MapsetMetadataForm({
                 Pilih Metadata Server<span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Select
+                  value={field.value ?? undefined}
+                  onValueChange={field.onChange}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih metadata server" />
                   </SelectTrigger>

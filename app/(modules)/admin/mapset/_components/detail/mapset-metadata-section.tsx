@@ -3,22 +3,38 @@ import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 export default function MapsetMetadataSection({ mapset }: { mapset: Mapset }) {
+  const geoserverSource = mapset.sources.find(
+    (source) =>
+      source.credential.credential_type === "geoserver" &&
+      source.url.includes("geoserver")
+  );
+
+  const geonetworkSource = mapset.sources.find((source) =>
+    source.url.includes("geonetwork")
+  );
+
   return (
     <div className="p-2 border rounded-[6px] border-zinc-200">
       <div className="py-2 px-4">
         <span className="text-lg font-semibold text-zinc-950">Metadata</span>
       </div>
+
+      {/* Map Server Section */}
       <div className="py-2 px-4">
         <div className="text-sm font-medium text-zinc-950">
           Map Server Terkait
         </div>
-        <div className="text-sm text-zinc-800">
-          {mapset.source ? mapset.source.name : "Lainnya"}
+        <div className="text-sm text-zinc-800 flex items-center gap-2">
+          {geoserverSource ? geoserverSource.name : "Lainnya"}
         </div>
       </div>
-      {mapset?.layer_url && (
+
+      {/* Layer URL */}
+      {mapset.layer_url && (
         <div className="py-2 px-4">
-          <div className="text-sm font-medium text-zinc-950 mb-1">Tautan</div>
+          <div className="text-sm font-medium text-zinc-950 mb-1">
+            Tautan Layer
+          </div>
           <div className="text-sm text-zinc-800">
             <Link
               href={mapset.layer_url}
@@ -35,17 +51,22 @@ export default function MapsetMetadataSection({ mapset }: { mapset: Mapset }) {
         </div>
       )}
 
+      {/* Metadata Server Section */}
       <div className="py-2 px-4">
         <div className="text-sm font-medium text-zinc-950">
           Metadata Server Terkait
         </div>
-        <div className="text-sm text-zinc-800">
-          {mapset.metadata_source ? mapset.metadata_source?.name : "Lainnya"}
+        <div className="text-sm text-zinc-800 flex items-center gap-2">
+          {geonetworkSource ? geonetworkSource.name : "Lainnya"}
         </div>
       </div>
-      {mapset?.metadata_url && (
+
+      {/* Metadata URL */}
+      {mapset.metadata_url && (
         <div className="py-2 px-4">
-          <div className="text-sm font-medium text-zinc-950 mb-1">Tautan</div>
+          <div className="text-sm font-medium text-zinc-950 mb-1">
+            Tautan Metadata
+          </div>
           <div className="text-sm text-zinc-800">
             <Link
               href={mapset.metadata_url}
