@@ -12,6 +12,6 @@ export interface User {
   position: string;
   role: Role;
   employee_id: string;
-  organization: Organization;
+  organization: Partial<Organization>;
   is_active: boolean;
 }
