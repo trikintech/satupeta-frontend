@@ -176,7 +176,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (
         typeof token.accessTokenExpires === "number" &&
-        Date.now() * 14 * 60 * 1000 < token.accessTokenExpires
+        Date.now() < token.accessTokenExpires
       ) {
         return token;
       }
