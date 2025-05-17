@@ -58,6 +58,7 @@ declare module "next-auth/jwt" {
       image?: string | null;
       username: string;
       role: Role;
+      organization: Organization;
     };
   }
 }
