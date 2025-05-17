@@ -1,9 +1,9 @@
-// components/list/tab-navigation.tsx
 "use client";
 
 import { useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { cn } from "@/shared/utils/utils";
+import { useSession } from "next-auth/react";
 
 interface TabItem {
   id: string;
@@ -18,6 +18,12 @@ export interface TabNavigationProps {
 export function TabNavigation({ activeTab }: TabNavigationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
+
+  const roleName = session?.user?.role?.name;
+  const organizationId = session?.user?.organization?.id;
+  const shouldAddProducerFilter =
+    roleName === "data_viewer" || roleName === "data_manager";
 
   const tabs: TabItem[] = [
     {
@@ -55,17 +61,23 @@ export function TabNavigation({ activeTab }: TabNavigationProps) {
       // Set active tab
       newParams.set("tab", tab.id);
 
-      // Handle filters format for the backend
-      if (tab.filters.length > 0) {
-        newParams.delete("filter");
-        const filterValue = tab.filters.toString(); // Encode untuk URL
-        newParams.set("filter", "[" + filterValue + "]");
-      } else {
-        newParams.delete("filter");
+      // Inject filter
+      newParams.delete("filter");
+
+      const combinedFilters = [...tab.filters];
+
+      if (shouldAddProducerFilter && organizationId) {
+        combinedFilters.push(`["producer_id=${organizationId}"]`);
       }
+
+      if (combinedFilters.length > 0) {
+        const filterValue = combinedFilters.toString();
+        newParams.set("filter", `[${filterValue}]`);
+      }
+
       router.push(`?${newParams.toString()}`);
     },
-    [router, searchParams]
+    [router, searchParams, shouldAddProducerFilter, organizationId]
   );
 
   return (

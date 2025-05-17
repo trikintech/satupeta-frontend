@@ -64,19 +64,19 @@ export function Header() {
     <header
       className={cn(
         "fixed top-0 z-[403] h-[64px] left-0 right-0 bg-zinc-50 font-inter transition-all duration-300 border-b border-zinc-200 text-slate-800",
-        isScrolled ? "py-3 shadow-sm" : "py-3"
+        isScrolled ?? "shadow-sm"
       )}
     >
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+      <div className="container max-w-7xl mx-auto h-full">
+        <div className="flex items-center px-4 sm:px-6 lg:px-8nter justify-between h-full">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className=" w-40 h-auto">
               <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="Satu Peta"
                 width={120}
-                height={32}
-                className="h-8 w-auto"
+                height={120}
+                className="w-auto"
               />
             </Link>
             <div className="mx-4 h-8 w-px bg-zinc-200" />

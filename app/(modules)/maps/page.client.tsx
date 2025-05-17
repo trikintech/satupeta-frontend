@@ -11,10 +11,14 @@ export default function MapsPageClient() {
   return (
     <Suspense>
       <QueryParamProvider adapter={NextAdapterApp}>
-        <Sidebar />
-        <MapComponent />
-        <MapsetDialog />
-        <FeatureInformation />
+        <div className="pt-16 flex h-screen flex-col">
+          <div className="relative flex-1">
+            <Sidebar />
+            <MapComponent />
+            <MapsetDialog />
+            <FeatureInformation />
+          </div>
+        </div>
       </QueryParamProvider>
     </Suspense>
   );
