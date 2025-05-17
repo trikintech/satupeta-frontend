@@ -1,5 +1,3 @@
-import { JWT } from "@auth/core/jwt";
-
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
@@ -14,7 +12,8 @@ interface LoginResponse {
   message?: string;
 }
 
-async function refreshAccessToken(token: JWT) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function refreshAccessToken(token: any) {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,

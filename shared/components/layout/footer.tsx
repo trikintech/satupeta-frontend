@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white px-6 py-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
-        <Image src={"/logo-white.png"} alt="Logo" width={200} height={50} />
+        <Image src={"/logo.svg"} alt="Logo" width={200} height={50} />
         <div className="flex flex-col gap-6.5">
           <p className="font-semibold mb-2">Discover</p>
           <ul className="flex flex-col gap-2 text-gray-400">
