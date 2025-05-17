@@ -117,18 +117,6 @@ export function DatasetDetailSidebar({
               label="Website"
               value={`: ${selectedMapset.producer.website}`}
             />
-            <div className="mt-4 pt-4 border-t">
-              <h3 className="font-medium mb-2">Sumber Data</h3>
-
-              <Row
-                label="Nama Sumber"
-                value={`: ${
-                  selectedMapset.source
-                    ? selectedMapset.source?.name
-                    : "Lainnya"
-                }`}
-              />
-            </div>
           </div>
         </TabsContent>
       </Tabs>

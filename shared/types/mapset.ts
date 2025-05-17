@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Category } from "./category";
+import { MapSource } from "./map-source";
 
 export interface Classification {
   id: string;
@@ -32,17 +34,6 @@ export interface Regional {
   description: any;
   thumbnail: any;
   is_active: boolean;
-}
-
-export interface Source {
-  id: string;
-  name: string;
-  description: string;
-  credential: Credential;
-  is_active: boolean;
-  is_deleted: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface Credential {
@@ -84,8 +75,7 @@ export type Mapset = {
   projection_system: ProjectionSystem;
   producer: Producer;
   regional: Regional;
-  source: Source;
-  metadata_source?: Source;
+  sources: MapSource[];
   is_popular: boolean;
   is_active: boolean;
   created_at: string;
@@ -102,12 +92,11 @@ export interface MapsetSubmitPayload {
   category_id: string;
   projection_system_id: string;
   producer_id: string;
-  source_id?: string | null;
+  source_id?: string | string[] | null;
   is_popular: boolean;
   is_active: boolean;
   layer_url: string;
   metadata_url: string;
-  metadata_source_id?: string;
   regional_id: string;
   classification_id: string;
   status_validation: string;
