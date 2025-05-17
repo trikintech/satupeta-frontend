@@ -15,7 +15,7 @@ declare module "next-auth" {
     image?: string | null;
     username: string;
     role: Role;
-    organization: Organization;
+    organization: OrganizationFormValues;
     access_token: string;
     refresh_token: string;
     accessTokenExpires: number;
