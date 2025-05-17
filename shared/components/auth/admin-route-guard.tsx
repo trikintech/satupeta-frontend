@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { hasAdminAccess } from "@/shared/config/access-admin";
 import { useAuthSession } from "@/shared/hooks/use-session";
-import { signOut } from "next-auth/react";
 
 export default function AdminRouteGuard({
   children,
@@ -18,24 +17,17 @@ export default function AdminRouteGuard({
 
   const { session, status } = useAuthSession(true);
 
-  const isAdmin = hasAdminAccess(session?.user?.role?.name);
-  const maxRefreshRetries = 3;
+  const hasTokenError = session?.error === "RefreshAccessTokenError";
 
   useEffect(() => {
-    const refreshFailedCount = session?.refreshFailedCount || 0;
-
-    if (
-      isAdminRoute &&
-      refreshFailedCount >= maxRefreshRetries &&
-      status === "authenticated"
-    ) {
-      signOut({
-        callbackUrl: `/auth/admin/login?callbackUrl=${encodeURIComponent(
-          pathname
-        )}`,
-      });
+    if (hasTokenError && isAdminRoute) {
+      router.push(
+        `/auth/admin/login?callbackUrl=${encodeURIComponent(pathname)}`
+      );
     }
-  }, [session?.refreshFailedCount, isAdminRoute, pathname, status]);
+  }, [hasTokenError, isAdminRoute, pathname, router]);
+
+  const isAdmin = hasAdminAccess(session?.user?.role?.name);
 
   useEffect(() => {
     if (status === "authenticated" && !isAdmin && isAdminRoute) {

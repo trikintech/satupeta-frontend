@@ -1,3 +1,6 @@
+import { JWT } from "@auth/core/jwt";
+import { AdapterUser } from "@auth/core/adapters";
+
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
@@ -12,8 +15,7 @@ interface LoginResponse {
   message?: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function refreshAccessToken(token: any) {
+async function refreshAccessToken(token: JWT) {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
@@ -34,15 +36,14 @@ async function refreshAccessToken(token: any) {
       return {
         ...token,
         error: "RefreshAccessTokenError",
+        refreshFailed: true,
       };
     }
 
-    // Dapatkan waktu expire dari token
     const decodedToken = jwtDecode<{ exp: number }>(
       refreshedTokens.access_token
     );
 
-    // Ambil user data lagi dengan token baru
     const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/me`, {
       headers: {
         Authorization: `Bearer ${refreshedTokens.access_token}`,
@@ -64,13 +65,14 @@ async function refreshAccessToken(token: any) {
         role: userData.role,
         organization: userData.organization,
       },
+      refreshFailed: 0,
     };
   } catch (error) {
     console.error(error);
-
     return {
       ...token,
       error: "RefreshAccessTokenError",
+      refreshFailed: true,
     };
   }
 }
@@ -88,7 +90,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         try {
           const formData = new FormData();
 
-          // Tambahkan credentials ke FormData
           if (credentials?.username) {
             formData.append(
               "username",
@@ -154,7 +155,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             organization: userData.organization,
           };
         } catch (error) {
-          console.error("Authentication error:", error);
+          console.error(error);
           return null;
         }
       },
@@ -162,7 +163,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     jwt: async ({ token, user }) => {
-      // Initial sign in
       if (user) {
         return {
           access_token: user.access_token,
@@ -191,7 +191,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       const refreshed = await refreshAccessToken(token);
 
-      // If refresh fails
       if (refreshed.refreshFailed) {
         return {
           ...token,
@@ -208,9 +207,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       session.access_token = token.access_token as string;
       session.refresh_token = token.refresh_token as string;
       session.error = token.error as string;
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      session.user = token.user as any;
+      session.user = token.user as AdapterUser;
 
       return session;
     },
@@ -219,8 +216,38 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`, // Removed __Secure- prefix
+      options: {
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production", // Only secure in production
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60,
+      },
+    },
+    callbackUrl: {
+      name: `next-auth.callback-url`, // Removed __Secure- prefix
+      options: {
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+    csrfToken: {
+      name: `next-auth.csrf-token`, // Removed __Host- prefix
+      options: {
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      },
+    },
+  },
   pages: {
     signIn: "admin/login",
     error: "admin/login/error",
   },
+  debug: process.env.NODE_ENV === "development",
+  trustHost: true,
 });
