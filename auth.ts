@@ -215,34 +215,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
-  cookies: {
-    sessionToken: {
-      name: `next-auth.session-token`, // Removed __Secure- prefix
-      options: {
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production", // Only secure in production
-        httpOnly: true,
-        maxAge: 30 * 24 * 60 * 60,
-      },
-    },
-    callbackUrl: {
-      name: `next-auth.callback-url`, // Removed __Secure- prefix
-      options: {
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-    csrfToken: {
-      name: `next-auth.csrf-token`, // Removed __Host- prefix
-      options: {
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-  },
   pages: {
     signIn: "admin/login",
     error: "admin/login/error",
