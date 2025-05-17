@@ -34,7 +34,6 @@ async function refreshAccessToken(token: any) {
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
-      console.log("error refresh token 1", response);
       return {
         ...token,
         error: "RefreshAccessTokenError",
@@ -64,11 +63,11 @@ async function refreshAccessToken(token: any) {
         image: userData.image,
         username: userData.username,
         role: userData.role,
-        organization: userData.organization,
+        ...(userData.organization && { organization: userData.organization }),
       },
     };
   } catch (error) {
-    console.log("error refresh token 2", error);
+    console.error(error);
 
     return {
       ...token,
@@ -149,7 +148,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: userData.profile_picture,
             username: userData.username,
             role: userData.role,
-            organization: userData.organization,
+            ...(userData.organization && {
+              organization: userData.organization,
+            }),
             access_token: data.access_token,
             refresh_token: data.refresh_token,
             accessTokenExpires: decodedToken.exp * 1000,
@@ -175,7 +176,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: user.image,
             username: user.username,
             role: user.role,
-            organization: user.organization,
+            ...(user.organization && { organization: user.organization }),
           },
         };
       }
@@ -201,7 +202,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         image?: string | null;
         username: string;
         role: Role;
-        organization: Organization;
+        organization?: Partial<Organization>;
       };
 
       return session;
