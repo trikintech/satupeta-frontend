@@ -24,12 +24,14 @@ export function MapsetCard({ mapset }: Readonly<{ mapset: Mapset }>) {
             <span className="bg-yellow-400 text-black text-xs px-2 py-1 rounded">
               {mapset?.category?.name}
             </span>
-            <div
-              className="line-clamp-4 hover:text-primary mt-2 font-medium lg:line-clamp-2 xl:line-clamp-3
+            <Link href={`/maps?mapset-id=${mapset.id}`}>
+              <div
+                className="line-clamp-4 hover:text-primary mt-2 font-medium lg:line-clamp-2 xl:line-clamp-3
               text-base sm:text-lg md:text-lg lg:text-lg xl:text-2xl"
-            >
-              {mapset?.name}
-            </div>
+              >
+                {mapset?.name}
+              </div>
+            </Link>
           </div>
           <Link
             href={`/maps?mapset-id=${mapset.id}`}
