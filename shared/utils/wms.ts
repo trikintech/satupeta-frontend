@@ -104,3 +104,78 @@ export const getLegendUrl = ({
 
   return url.toString();
 };
+
+// Fungsi terpisah untuk mendapatkan bounds dari GetCapabilities
+export const getWmsLayerBounds = async (
+  baseUrl: string,
+  layerName: string
+): Promise<L.LatLngBoundsExpression | undefined> => {
+  try {
+    const capabilitiesUrl =
+      `${baseUrl}?` +
+      new URLSearchParams({
+        service: "WMS",
+        version: "1.3.0",
+        request: "GetCapabilities",
+      });
+
+    const response = await fetch(capabilitiesUrl);
+    if (!response.ok) return undefined;
+
+    const text = await response.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(text, "text/xml");
+
+    // Find the requested layer in capabilities
+    const layerElements = xmlDoc.getElementsByTagName("Layer");
+
+    for (const element of layerElements) {
+      const nameElement = element.getElementsByTagName("Name")[0];
+      if (nameElement && nameElement.textContent === layerName) {
+        const bboxElement =
+          element.getElementsByTagName("BoundingBox")[0] ||
+          element.getElementsByTagName("EX_GeographicBoundingBox")[0];
+
+        if (bboxElement) {
+          // Extract bounds based on the bbox type
+          if (bboxElement.tagName === "BoundingBox") {
+            const minx = parseFloat(bboxElement.getAttribute("minx") ?? "0");
+            const miny = parseFloat(bboxElement.getAttribute("miny") ?? "0");
+            const maxx = parseFloat(bboxElement.getAttribute("maxx") ?? "0");
+            const maxy = parseFloat(bboxElement.getAttribute("maxy") ?? "0");
+            return [
+              [miny, minx],
+              [maxy, maxx],
+            ];
+          } else {
+            const westBound = parseFloat(
+              bboxElement.getElementsByTagName("westBoundLongitude")[0]
+                ?.textContent ?? "0"
+            );
+            const southBound = parseFloat(
+              bboxElement.getElementsByTagName("southBoundLatitude")[0]
+                ?.textContent ?? "0"
+            );
+            const eastBound = parseFloat(
+              bboxElement.getElementsByTagName("eastBoundLongitude")[0]
+                ?.textContent ?? "0"
+            );
+            const northBound = parseFloat(
+              bboxElement.getElementsByTagName("northBoundLatitude")[0]
+                ?.textContent ?? "0"
+            );
+            return [
+              [southBound, westBound],
+              [northBound, eastBound],
+            ];
+          }
+        }
+      }
+    }
+
+    return undefined;
+  } catch (error) {
+    console.error("Error fetching layer bounds:", error);
+    return undefined;
+  }
+};
