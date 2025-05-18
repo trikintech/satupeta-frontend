@@ -31,7 +31,7 @@ export default function MapsetPageClient() {
     resourceName: "mapsets",
     fetchAction: mapsetApi.getMapsets,
     defaultLimit: 10,
-    defaultSort: { id: "name", desc: false },
+    defaultSort: { id: "created_at", desc: true },
   });
 
   return (

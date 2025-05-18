@@ -29,7 +29,7 @@ export default function OrganizationPageClient() {
     resourceName: "organizations",
     fetchAction: organizationApi.getOrganizations,
     defaultLimit: 10,
-    defaultSort: { id: "name", desc: false },
+    defaultSort: { id: "created_at", desc: true },
   });
 
   return (
