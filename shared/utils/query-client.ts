@@ -45,7 +45,6 @@ function handleGlobalError(error: unknown) {
         toast.error("Session expired. Refreshing token...");
       }
     } else {
-      // Untuk error lainnya selain 401
       toast.error(axiosError.message || "Something went wrong.");
     }
   }

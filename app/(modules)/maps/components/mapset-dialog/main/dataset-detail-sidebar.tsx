@@ -50,13 +50,13 @@ export function DatasetDetailSidebar({
         <TabsList className="grid grid-cols-2 rounded-none w-full p-0 h-auto bg-white border-b border-gray-200">
           <TabsTrigger
             value="informasi"
-            className="data-[state=active]:text-white data-[state=active]:bg-primary data-[state=active]:border-t border-primary h-full border-0  rounded-none p-3"
+            className="cursor-pointer data-[state=active]:text-white data-[state=active]:bg-primary data-[state=active]:border-t border-primary h-full border-0  rounded-none p-3"
           >
             Informasi Dataset Geospasial
           </TabsTrigger>
           <TabsTrigger
             value="penanggung"
-            className="data-[state=active]:text-white data-[state=active]:bg-primary h-full  rounded-none p-3"
+            className="cursor-pointer data-[state=active]:text-white data-[state=active]:bg-primary h-full  rounded-none p-3"
           >
             Penanggung Jawab
           </TabsTrigger>
