@@ -1,19 +1,26 @@
 "use client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import mapsetApi from "@/shared/services/mapset";
-import { MapsetStatus } from "./mapset-status";
 import { Button } from "@/shared/components/ds/button";
-import { Check } from "lucide-react";
-import MapsetInfoSection from "./mapset-info-section";
-import MapsetOrganizationSection from "./mapset-organization-section";
-import MapsetMetadataSection from "./mapset-metadata-section";
-import MapsetVersionSection from "./mapset-version-section";
 import { hasPermission } from "@/shared/config/role";
-import { useState } from "react";
-import { toast } from "sonner";
-import { VerifyMapsetDialog } from "../verify-mapset-dialog";
 import { useAuthSession } from "@/shared/hooks/use-session";
+
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { Check } from "lucide-react";
+
+import { useState } from "react";
+
+import { toast } from "sonner";
+
+import { VerifyMapsetDialog } from "../verify-mapset-dialog";
+
 import MapsetClassificationSection from "./mapset-classification-section";
+import MapsetInfoSection from "./mapset-info-section";
+import MapsetMetadataSection from "./mapset-metadata-section";
+import MapsetOrganizationSection from "./mapset-organization-section";
+import { MapsetStatus } from "./mapset-status";
+import MapsetVersionSection from "./mapset-version-section";
+import { formatIndonesianDate } from "@/shared/utils/date";
 
 interface MapsetDetailProps {
   id: string;
@@ -73,7 +80,7 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Mapset Detail</h1>
         <div className="text-sm text-gray-500">
-          Diperbarui {mapset.updated_at}
+          Diperbarui {formatIndonesianDate(mapset.updated_at)}
         </div>
       </div>
 
