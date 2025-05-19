@@ -82,7 +82,6 @@ const Sidebar = () => {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const { session } = useAuthSession();
-  const userRoleName = session?.user?.role?.name;
   const userRole = session?.user?.role;
 
   const isActive = useCallback(
@@ -222,7 +221,7 @@ const Sidebar = () => {
             <div className="ml-3">
               <p className="text-sm font-medium">{session?.user?.name}</p>
               <div className="text-xs text-gray-500">
-                {getRoleLabelById(userRoleName ?? "")}
+                {getRoleLabelById(userRole.name ?? "")}
               </div>
             </div>
           )}
