@@ -1,9 +1,12 @@
 "use client";
 import newsApi from "@/shared/services/news";
-import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import DetailItem from "../../_components/detail-item";
 import { getFileThumbnailUrl } from "@/shared/utils/file";
+
+import { useQuery } from "@tanstack/react-query";
+
+import Image from "next/image";
+
+import DetailItem from "../../_components/detail-item";
 
 export default function NewsDetail({ id }: { id: string }) {
   const { data: news } = useQuery({
@@ -20,8 +23,12 @@ export default function NewsDetail({ id }: { id: string }) {
           </span>
         </div>
 
-        <DetailItem label="Nama" value={news?.name} />
-        <DetailItem label="Deskripsi" value={news?.description} />
+        <DetailItem label="Judul" value={news?.name} />
+        <DetailItem
+          label="Isi Konten"
+          value={news?.description}
+          renderAsHtml={true}
+        />
         <DetailItem
           label="Status"
           value={news?.is_active ? "Aktif" : "Tidak Aktif"}

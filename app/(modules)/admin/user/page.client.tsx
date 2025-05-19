@@ -1,11 +1,14 @@
 "use client";
 
 import { User } from "@/shared/types/user";
-import { useUserColumns } from "./_components/column";
 import userApi from "@/shared/services/user";
-import { useTableState } from "../_hooks/use-table-state";
-import { ResourceTable } from "../_components/resource-table";
+
 import { ColumnDef } from "@tanstack/react-table";
+
+import { ResourceTable } from "../_components/resource-table";
+import { useTableState } from "../_hooks/use-table-state";
+
+import { useUserColumns } from "./_components/column";
 
 export default function UserPageClient() {
   const columns = useUserColumns();
@@ -29,7 +32,7 @@ export default function UserPageClient() {
     resourceName: "users",
     fetchAction: userApi.getUsers,
     defaultLimit: 10,
-    defaultSort: { id: "created_at", desc: true },
+    defaultSort: { id: "name", desc: false },
   });
 
   return (

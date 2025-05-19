@@ -29,7 +29,7 @@ export default function NewsPageClient() {
     resourceName: "news",
     fetchAction: newsApi.getNewsList,
     defaultLimit: 10,
-    defaultSort: { id: "created_at", desc: true },
+    defaultSort: { id: "name", desc: false },
   });
 
   return (

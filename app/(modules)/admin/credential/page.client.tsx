@@ -29,7 +29,7 @@ export default function CredentialPageClient() {
     resourceName: "credentials",
     fetchAction: credentialApi.getCredentials,
     defaultLimit: 10,
-    defaultSort: { id: "created_at", desc: true },
+    defaultSort: { id: "name", desc: false },
   });
 
   return (

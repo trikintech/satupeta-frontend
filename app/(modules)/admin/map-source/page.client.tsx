@@ -32,7 +32,7 @@ export default function MapSourcePageClient() {
     resourceName: "mapSources",
     fetchAction: mapSourceApi.getMapSources,
     defaultLimit: 10,
-    defaultSort: { id: "created_at", desc: true },
+    defaultSort: { id: "name", desc: false },
   });
 
   return (
