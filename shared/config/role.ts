@@ -95,3 +95,19 @@ export function hasPermission(
   const menuPerm = rolePermission?.menus.find((m) => m.menu === menu);
   return menuPerm?.permissions.includes(permission) || false;
 }
+
+export function isAdministrator(role: Role): boolean {
+  return role.name === "administrator";
+}
+
+export function isDataValidator(role: Role): boolean {
+  return role.name === "data_validator";
+}
+
+export function isDataManager(role: Role): boolean {
+  return role.name === "data_manager";
+}
+
+export function isDataViewer(role: Role): boolean {
+  return role.name === "data_viewer";
+}

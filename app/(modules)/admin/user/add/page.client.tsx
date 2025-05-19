@@ -3,8 +3,11 @@
 import { Loader2 } from "lucide-react";
 import { useUserForm } from "../_hooks/use-form";
 import { UserForm } from "../_components/form";
+import { useSession } from "next-auth/react";
+import { isAdministrator } from "@/shared/config/role";
 
 export default function AddUserPageClient() {
+  const { data: session } = useSession();
   const { isLoading, handleSubmitUser, resetForm, isSubmitting } =
     useUserForm();
 
@@ -25,6 +28,7 @@ export default function AddUserPageClient() {
         onSubmitAction={handleSubmitUser}
         isSubmitting={isSubmitting}
         onCancelAction={resetForm}
+        isAdministrator={isAdministrator(session?.user?.role)}
       />
     </div>
   );

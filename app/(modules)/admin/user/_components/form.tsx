@@ -40,6 +40,7 @@ interface UserFormProps {
   onSubmitAction: (data: UserFormValues) => void;
   isSubmitting?: boolean;
   onCancelAction?: () => void;
+  isAdministrator?: boolean;
 }
 
 export function UserForm({
@@ -47,6 +48,7 @@ export function UserForm({
   onSubmitAction,
   isSubmitting,
   onCancelAction,
+  isAdministrator = false,
 }: UserFormProps) {
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),
@@ -206,11 +208,16 @@ export function UserForm({
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
-                    {roles?.map((role: Role) => (
-                      <SelectItem key={role.id} value={role.id}>
-                        {getRoleLabelById(role.name)}
-                      </SelectItem>
-                    ))}
+                    {roles
+                      ?.filter(
+                        (role) =>
+                          isAdministrator || role.name !== "administrator"
+                      )
+                      .map((role: Role) => (
+                        <SelectItem key={role.id} value={role.id}>
+                          {getRoleLabelById(role.name)}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </FormControl>
