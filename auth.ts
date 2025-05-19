@@ -2,11 +2,10 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { AdapterUser } from "next-auth/adapters";
 
-import { jwtDecode } from "jwt-decode";
-
 interface LoginResponse {
   access_token: string;
   refresh_token: string;
+  expires_at: number;
   error?: Record<string, unknown>;
   message?: string;
 }
@@ -36,10 +35,6 @@ async function refreshAccessToken(token: any) {
       };
     }
 
-    const decodedToken = jwtDecode<{ exp: number }>(
-      refreshedTokens.access_token
-    );
-
     const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/me`, {
       headers: {
         Authorization: `Bearer ${refreshedTokens.access_token}`,
@@ -51,7 +46,7 @@ async function refreshAccessToken(token: any) {
     return {
       access_token: refreshedTokens.access_token,
       refresh_token: refreshedTokens.refresh_token ?? token.refresh_token,
-      accessTokenExpires: decodedToken.exp * 1000,
+      accessTokenExpires: refreshedTokens.expires_at * 1000,
       user: {
         id: String(userData.id),
         name: userData.name,
@@ -115,8 +110,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             throw new Error("Failed to fetch user data");
           }
 
-          const decodedToken = jwtDecode<{ exp: number }>(data.access_token);
-
           return {
             id: String(userData.id),
             name: userData.name,
@@ -127,7 +120,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             organizationId: userData.organization?.id || null, // Only store organization ID
             access_token: data.access_token,
             refresh_token: data.refresh_token,
-            accessTokenExpires: decodedToken.exp * 1000,
+            accessTokenExpires: data.expires_at * 1000,
           };
         } catch (error) {
           console.error("Authentication error:", error);

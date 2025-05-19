@@ -62,10 +62,11 @@ export default function MapsetDialog() {
           </div>
 
           <button
-            className="absolute cursor-pointer text-zinc-400 right-4 top-4"
+            className="absolute cursor-pointer text-zinc-950 space-x-2  right-4 top-4 flex group hover:text-zinc-600"
             onClick={() => setIsOpenDialog(false)}
           >
-            <XIcon />
+            <span>Tutup Pratinjau Peta</span>
+            <XIcon className="text-zinc-700 group-hover:text-slate-600" />
           </button>
         </div>
 

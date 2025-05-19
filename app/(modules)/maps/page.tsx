@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { Header } from "@/shared/components/layout/header";
 import MapsPageClient from "./page.client";
 import { appsName } from "@/shared/config/app-config";
 
@@ -9,11 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Maps() {
-  return (
-    <div className="h-screen overflow-hidden">
-      <Header />
-
-      <MapsPageClient />
-    </div>
-  );
+  return <MapsPageClient />;
 }

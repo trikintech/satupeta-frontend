@@ -11,7 +11,13 @@ export const userSchema = z
     role_id: z.string().min(1),
     organization_id: z.string().min(1),
     is_active: z.boolean(),
-    password: z.string().min(6, "Password minimal 6 karakter").optional(),
+    password: z
+      .string()
+      .min(8, "Password minimal 8 karakter")
+      .regex(/[A-Z]/, "Password harus mengandung minimal 1 huruf besar")
+      .regex(/\d/, "Password harus mengandung minimal 1 angka")
+      .regex(/[^A-Za-z0-9]/, "Password harus mengandung minimal 1 simbol")
+      .optional(),
     confirm_password: z.string().optional(),
   })
   .refine(

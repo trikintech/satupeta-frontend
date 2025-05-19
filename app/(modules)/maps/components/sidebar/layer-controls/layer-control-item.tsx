@@ -87,6 +87,41 @@ export const LayerControlItem = ({
     }
   };
 
+  function toLatLngBounds(bounds: L.LatLngBoundsExpression): L.LatLngBounds {
+    // Jika sudah objek LatLngBounds, return langsung
+    if ("getSouthWest" in bounds && "getNorthEast" in bounds) {
+      return bounds as L.LatLngBounds;
+    }
+    // Kalau array koordinat, convert dengan L.latLngBounds()
+    return L.latLngBounds(bounds as L.LatLngExpression[]);
+  }
+
+  const handleDownloadImage = () => {
+    if (!layer.layer.url || !layer.layer.layers) return;
+
+    const rawBounds = layer.layer.bounds ?? map?.getBounds() ?? null;
+    if (!rawBounds) return;
+
+    const bounds = toLatLngBounds(rawBounds);
+
+    const southWest = bounds.getSouthWest();
+    const northEast = bounds.getNorthEast();
+
+    const bbox = [
+      southWest.lng,
+      southWest.lat,
+      northEast.lng,
+      northEast.lat,
+    ].join(",");
+
+    const width = 1024;
+    const height = 768;
+
+    const downloadUrl = `${layer.layer.url}?service=WMS&version=1.1.1&request=GetMap&layers=${layer.layer.layers}&styles=&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:4326&format=image/png&transparent=true`;
+
+    window.open(downloadUrl, "_blank");
+  };
+
   return (
     <div className="bg-muted rounded-lg border border-primary p-3">
       <div className="cursor-pointer w-full flex items-center justify-between text-sm">
@@ -190,6 +225,7 @@ export const LayerControlItem = ({
             <Button
               variant="ghost"
               className="flex items-center gap-1  hover:bg-transparent font-normal"
+              onClick={() => handleDownloadImage()}
             >
               <Download size={24} />
             </Button>

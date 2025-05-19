@@ -29,7 +29,7 @@ export default function CategoryPageClient() {
     resourceName: "categories",
     fetchAction: categoryApi.getCategories,
     defaultLimit: 10,
-    defaultSort: { id: "name", desc: false },
+    defaultSort: { id: "created_at", desc: true },
   });
 
   return (

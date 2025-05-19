@@ -29,7 +29,7 @@ export default function UserPageClient() {
     resourceName: "users",
     fetchAction: userApi.getUsers,
     defaultLimit: 10,
-    defaultSort: { id: "name", desc: false },
+    defaultSort: { id: "created_at", desc: true },
   });
 
   return (

@@ -31,6 +31,11 @@ export default function HeroSearchInput() {
         className="pl-10 pr-4 py-3 border border-gray-300 rounded-lg w-full h-[52px]"
         value={input}
         onChange={handleChange}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSearch();
+          }
+        }}
       />
       <Button
         className="absolute right-2 top-2 bottom-2 h-9 bg-primary hover:bg-primary-hover cursor-pointer"

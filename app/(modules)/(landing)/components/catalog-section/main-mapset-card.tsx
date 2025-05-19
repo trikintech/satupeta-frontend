@@ -24,19 +24,19 @@ export function MainMapsetCard({ mapset }: Readonly<{ mapset: Mapset }>) {
               {mapset?.category?.name}
             </span>
           </div>
-
-          <h3
-            className="line-clamp-4 hover:text-primary mb-0 font-medium lg:line-clamp-2 xl:line-clamp-3
+          <a href={`/maps?mapset-id=${mapset.id}`} rel="noopener noreferrer">
+            <h3
+              className="line-clamp-4 hover:text-primary mb-0 font-medium lg:line-clamp-2 xl:line-clamp-3
               text-base sm:text-lg md:text-lg lg:text-lg xl:text-2xl"
-          >
-            {mapset.name}
-          </h3>
+            >
+              {mapset.name}
+            </h3>
+          </a>
 
           <div className="mt-auto pt-2">
             <a
               href={`/maps?mapset-id=${mapset.id}`}
               className="inline-flex items-center text-primary hover:underline"
-              target="_blank"
               rel="noopener noreferrer"
             >
               <ArrowRight />
