@@ -90,7 +90,7 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
 
     try {
       toast.loading("Mempersiapkan download...");
-      const response = await fetch(`/api/mapset/download/${id}`);
+      const response = await fetch(`/api/fe/mapset/download/${id}`);
 
       if (!response.ok) {
         const error = await response.json();
