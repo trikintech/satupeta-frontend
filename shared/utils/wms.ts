@@ -179,3 +179,23 @@ export const getWmsLayerBounds = async (
     return undefined;
   }
 };
+
+export const getWmsToGeoJsonUrl = (wmsUrl: string | undefined | null) => {
+  if (!wmsUrl) return null;
+
+  const parsedWms = parseWmsUrl(wmsUrl);
+  if (!parsedWms) return null;
+
+  const { baseUrl, params } = parsedWms;
+  const downloadUrl = new URL(baseUrl);
+
+  // Set parameters for GeoJSON download
+  downloadUrl.searchParams.set("service", "WFS");
+  downloadUrl.searchParams.set("version", "1.0.0");
+  downloadUrl.searchParams.set("request", "GetFeature");
+  downloadUrl.searchParams.set("typeName", params.layers);
+  downloadUrl.searchParams.set("outputFormat", "application/json");
+  downloadUrl.searchParams.set("srsName", params.srs);
+
+  return downloadUrl.toString();
+};

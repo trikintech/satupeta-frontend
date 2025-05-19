@@ -1,12 +1,21 @@
 "use client";
+import { useAuthSession } from "@/shared/hooks/use-session";
+import { DeleteDialog } from "@/app/(modules)/admin/_components/delete-dialog";
+import { formatIndonesianDate } from "@/shared/utils/date";
 import mapsetApi from "@/shared/services/mapset";
 import { Button } from "@/shared/components/ds/button";
-import { hasPermission } from "@/shared/config/role";
-import { useAuthSession } from "@/shared/hooks/use-session";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { Check } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+import {
+  Check,
+  PencilLineIcon,
+  DownloadIcon,
+  UnlinkIcon,
+  Trash2Icon,
+} from "lucide-react";
 
 import { useState } from "react";
 
@@ -20,7 +29,6 @@ import MapsetMetadataSection from "./mapset-metadata-section";
 import MapsetOrganizationSection from "./mapset-organization-section";
 import { MapsetStatus } from "./mapset-status";
 import MapsetVersionSection from "./mapset-version-section";
-import { formatIndonesianDate } from "@/shared/utils/date";
 
 interface MapsetDetailProps {
   id: string;
@@ -28,15 +36,15 @@ interface MapsetDetailProps {
 
 export function MapsetDetail({ id }: MapsetDetailProps) {
   const [isVerifyDialogOpen, setIsVerifyDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const { checkPermission } = useAuthSession();
 
   const { data: mapset } = useQuery({
     queryKey: ["mapset", id],
     queryFn: () => mapsetApi.getMapsetById(id),
   });
-
-  const { session } = useAuthSession();
-  const userRole = session?.user.role;
 
   const updateStatusMutation = useMutation({
     mutationFn: (updateData: { status: string; notes: string }) =>
@@ -57,6 +65,81 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: () => mapsetApi.deleteMapset(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mapsets"] });
+      toast.success("Mapset berhasil dihapus");
+      router.push("/admin/mapset");
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("Gagal menghapus mapset");
+    },
+  });
+
+  const handleEdit = () => {
+    router.push(`/admin/mapset/edit/${id}`);
+  };
+
+  const handleDownload = async () => {
+    if (!mapset?.layer_url) {
+      toast.error("URL layer tidak tersedia");
+      return;
+    }
+
+    try {
+      toast.loading("Mempersiapkan download...");
+      const response = await fetch(`/api/mapset/download/${id}`);
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Gagal mengunduh data");
+      }
+
+      // Get the blob from the response
+      const blob = await response.blob();
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${mapset.name}.geojson`;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+
+      toast.success("Download GeoJSON dimulai");
+    } catch (error) {
+      console.error("Download error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Gagal mengunduh data"
+      );
+    } finally {
+      toast.dismiss();
+    }
+  };
+
+  const handleUnlink = () => {
+    if (!mapset?.layer_url) {
+      toast.error("URL layer tidak tersedia");
+      return;
+    }
+    navigator.clipboard.writeText(mapset.layer_url);
+    toast.success("URL layer berhasil disalin");
+  };
+
+  const handleDelete = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteMutation.mutate();
+  };
+
   if (!mapset) return null;
 
   const handleVerifyClick = () => {
@@ -73,8 +156,13 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
 
   const canVerify =
     mapset?.status_validation === "on_verification" &&
-    userRole &&
-    hasPermission(userRole, "mapset", "verify");
+    checkPermission("mapset", "verify");
+
+  const canEdit = checkPermission("mapset", "update");
+  const canDownload = checkPermission("mapset", "read");
+  const canUnlink = checkPermission("mapset", "update");
+  const canDelete = checkPermission("mapset", "delete");
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -84,20 +172,62 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-4 mb-6 text-sm">
         <MapsetStatus mapset={mapset} />
-        <div className="border-l h-6 border-gray-200" />
+        <div className="border-l h-8 border-gray-200" />
         {canVerify && (
-          <Button variant="primary" onClick={handleVerifyClick}>
-            <Check className="w-5 h-5 mr-2" /> Validasi Mapset
+          <Button
+            variant="primary"
+            className="px-2.5 h-8 text-xs"
+            onClick={handleVerifyClick}
+          >
+            <Check className="w-5 h-4 mr-2" /> Validasi Mapset
           </Button>
         )}
 
-        <div className="ml-auto flex justify-between items-center">
+        <div className="ml-auto flex gap-2 justify-between items-center">
           {mapset.is_popular && (
-            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-md">
+            <div className="bg-green-100 text-green-700 px-3 py-2 rounded-full">
               Mapset Populer
             </div>
+          )}
+          <div className="border-l h-8 border-gray-200" />
+          <div className="flex">
+            {canEdit && (
+              <button
+                className="cursor-pointer w-9 h-9 flex items-center justify-center"
+                onClick={handleEdit}
+              >
+                <PencilLineIcon className="w-4 h-4" />
+              </button>
+            )}
+            {canDownload && (
+              <button
+                className="cursor-pointer w-9 h-9 flex items-center justify-center"
+                onClick={handleDownload}
+              >
+                <DownloadIcon className="w-4 h-4" />
+              </button>
+            )}
+            {canUnlink && (
+              <button
+                className="cursor-pointer w-9 h-9 flex items-center justify-center"
+                onClick={handleUnlink}
+              >
+                <UnlinkIcon className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+          {canDelete && (
+            <>
+              <div className="border-l h-8 border-gray-200" />
+              <button
+                className="cursor-pointer w-9 h-9 flex items-center justify-center"
+                onClick={handleDelete}
+              >
+                <Trash2Icon className="w-4 h-4 text-red-600" />
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -123,6 +253,14 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
           open={isVerifyDialogOpen}
         />
       )}
+
+      <DeleteDialog
+        name={mapset.name}
+        isDeleting={deleteMutation.isPending}
+        onDelete={handleDeleteConfirm}
+        onCancel={() => setIsDeleteDialogOpen(false)}
+        open={isDeleteDialogOpen}
+      />
     </div>
   );
 }

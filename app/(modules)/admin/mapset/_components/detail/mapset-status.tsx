@@ -10,17 +10,17 @@ export function MapsetStatus({ mapset }: { mapset: Mapset }) {
   > = {
     [StatusValidation.APPROVED]: {
       name: "Tervalidasi",
-      color: "bg-green-100 text-green-800",
+      color: "text-green-800",
       icon: <Check />,
     },
     [StatusValidation.ON_VERIFICATION]: {
       name: "Menunggu Validasi",
-      color: "bg-yellow-100 text-yellow-800",
-      icon: <LoaderCircle />,
+      color: "text-yellow-700",
+      icon: <LoaderCircle className="h-4" />,
     },
     [StatusValidation.REJECTED]: {
       name: "Mapset Ditolak",
-      color: "bg-red-100 text-red-800",
+      color: "text-red-800",
       icon: <XIcon />,
     },
   };
