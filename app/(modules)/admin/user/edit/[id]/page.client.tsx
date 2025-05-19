@@ -6,10 +6,13 @@ import { Loader2 } from "lucide-react";
 import userApi from "@/shared/services/user";
 import { UserForm } from "../../_components/form";
 import { useUserForm } from "../../_hooks/use-form";
+import { useSession } from "next-auth/react";
+import { isAdministrator } from "@/shared/config/role";
 
 export default function UserEditPageClient() {
   const params = useParams();
   const id = params.id as string;
+  const { data: session } = useSession();
 
   const { data: user, isLoading } = useQuery({
     queryKey: ["user", id],
@@ -33,6 +36,7 @@ export default function UserEditPageClient() {
         onSubmitAction={handleSubmitUser}
         isSubmitting={isSubmitting}
         onCancelAction={resetForm}
+        isAdministrator={isAdministrator(session?.user?.role)}
       />
     </div>
   );

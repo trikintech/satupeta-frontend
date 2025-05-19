@@ -18,6 +18,7 @@ import {
   MoreHorizontal,
   ArrowUp,
   ArrowDown,
+  Power,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -91,6 +92,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
   const queryClient = useQueryClient();
   const { session } = useAuthSession();
   const [mapsetToSubmit, setMapsetToSubmit] = useState<Mapset | null>(null);
+  const [mapsetToToggle, setMapsetToToggle] = useState<Mapset | null>(null);
 
   const userRole = session?.user?.role;
 
@@ -122,6 +124,27 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
     onError: (error) => {
       toast.error("Gagal mengajukan validasi");
       console.error("Error submitting for validation:", error);
+    },
+  });
+
+  const toggleActiveMutation = useMutation({
+    mutationFn: async ({
+      id,
+      is_active,
+    }: {
+      id: string;
+      is_active: boolean;
+    }) => {
+      return await mapsetApi.updateMapset(id, { is_active });
+    },
+    onSuccess: () => {
+      toast.success("Berhasil mengubah status aktif");
+      queryClient.invalidateQueries({ queryKey: ["mapsets"] });
+      setMapsetToToggle(null);
+    },
+    onError: (error) => {
+      toast.error("Gagal mengubah status aktif");
+      console.error("Error toggling active status:", error);
     },
   });
 
@@ -206,15 +229,24 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                   </DropdownMenuItem>
                 )}
                 {hasPermission(userRole, "mapset", "update") && (
-                  <DropdownMenuItem
-                    onClick={() =>
-                      router.push(`/admin/mapset/edit/${mapset.id}`)
-                    }
-                    className="flex items-center gap-2"
-                  >
-                    <Edit className="h-4 w-4" />
-                    Edit Mapset
-                  </DropdownMenuItem>
+                  <>
+                    <DropdownMenuItem
+                      onClick={() =>
+                        router.push(`/admin/mapset/edit/${mapset.id}`)
+                      }
+                      className="flex items-center gap-2"
+                    >
+                      <Edit className="h-4 w-4" />
+                      Edit Mapset
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => setMapsetToToggle(mapset)}
+                      className="flex items-center gap-2"
+                    >
+                      <Power className="h-4 w-4" />
+                      {mapset.is_active ? "Nonaktifkan" : "Aktifkan"} Mapset
+                    </DropdownMenuItem>
+                  </>
                 )}
                 {hasPermission(userRole, "mapset", "update") &&
                   mapset.status_validation === "rejected" && (
@@ -264,6 +296,28 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                 onConfirm={() => submitValidationMutation.mutate(mapset.id)}
                 onCancel={() => setMapsetToSubmit(null)}
                 variant="primary"
+              />
+            )}
+
+            {mapsetToToggle?.id === mapset.id && (
+              <ConfirmationDialog
+                open={mapsetToToggle?.id === mapset.id}
+                title={
+                  mapset.is_active ? "Nonaktifkan Mapset" : "Aktifkan Mapset"
+                }
+                description={`Apakah Anda yakin ingin ${
+                  mapset.is_active ? "menonaktifkan" : "mengaktifkan"
+                } mapset "${mapset.name}"?`}
+                confirmText={mapset.is_active ? "Nonaktifkan" : "Aktifkan"}
+                isLoading={toggleActiveMutation.isPending}
+                onConfirm={() =>
+                  toggleActiveMutation.mutate({
+                    id: mapset.id,
+                    is_active: !mapset.is_active,
+                  })
+                }
+                onCancel={() => setMapsetToToggle(null)}
+                variant={mapset.is_active ? "destructive" : "primary"}
               />
             )}
           </>
