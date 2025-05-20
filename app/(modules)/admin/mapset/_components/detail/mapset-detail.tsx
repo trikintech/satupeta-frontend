@@ -15,6 +15,7 @@ import {
   DownloadIcon,
   UnlinkIcon,
   Trash2Icon,
+  ChevronLeft,
 } from "lucide-react";
 
 import { useState } from "react";
@@ -166,7 +167,17 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Mapset Detail</h1>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8"
+            onClick={() => router.back()}
+          >
+            <ChevronLeft className="h-8 w-8 text-zinc-700 cursor-pointer" />
+          </Button>
+          <h1 className="text-2xl font-bold">Mapset Detail</h1>
+        </div>
         <div className="text-sm text-gray-500">
           Diperbarui {formatIndonesianDate(mapset.updated_at)}
         </div>
