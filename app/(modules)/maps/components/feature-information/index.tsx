@@ -26,7 +26,7 @@ export default function FeatureInformation() {
   };
 
   return (
-    <div className="z-[403] absolute top-32 right-32 bg-white rounded-lg shadow-md p-4 text-gray-900 w-[800px] max-h-[600px] overflow-auto">
+    <div className="z-[403] absolute top-5 right-5 bg-white rounded-lg shadow-md p-4 text-gray-900 w-[800px] max-h-[600px] overflow-auto">
       <div className="text-lg font-semibold mb-4">Feature Information</div>
 
       <div className="">
