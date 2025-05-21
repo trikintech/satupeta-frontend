@@ -30,6 +30,7 @@ import MapsetMetadataSection from "./mapset-metadata-section";
 import MapsetOrganizationSection from "./mapset-organization-section";
 import { MapsetStatus } from "./mapset-status";
 import MapsetVersionSection from "./mapset-version-section";
+import PreviewMap from "@/shared/components/preview-map";
 
 interface MapsetDetailProps {
   id: string;
@@ -252,6 +253,9 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
           <MapsetMetadataSection mapset={mapset} />
           <MapsetClassificationSection mapset={mapset} />
           <MapsetVersionSection mapset={mapset} />
+          <div className="relative h-66">
+            <PreviewMap isActiveControl={true} mapset={mapset} />
+          </div>
         </div>
       </div>
 

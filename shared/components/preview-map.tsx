@@ -1,8 +1,9 @@
 import { MapContainer, TileLayer, WMSTileLayer } from "react-leaflet";
 import { mapConfig } from "../config/map-config";
 import { Mapset } from "@/shared/types/mapset";
-import { parseWmsUrl } from "../utils/wms";
+import { getWmsLayerBounds, parseWmsUrl } from "../utils/wms";
 import { LatLngBoundsExpression } from "leaflet";
+import { useEffect, useState } from "react";
 
 export default function PreviewMap({
   mapset,
@@ -14,7 +15,33 @@ export default function PreviewMap({
   centerCustom?: [number, number];
 }>) {
   const parsed = parseWmsUrl(mapset?.layer_url);
-  const bounds = parsed?.params.bounds as LatLngBoundsExpression | undefined;
+  const [bounds, setBounds] = useState<LatLngBoundsExpression | undefined>(
+    parsed?.params.bounds ?? undefined
+  );
+
+  useEffect(() => {
+    const fetchBounds = async () => {
+      if (parsed?.baseUrl && parsed?.params.layers && !parsed?.params.bounds) {
+        const newBounds = await getWmsLayerBounds(
+          parsed.baseUrl,
+          parsed.params.layers
+        );
+        if (newBounds) {
+          setBounds(newBounds);
+          console.log("New bounds set:", newBounds);
+        }
+      }
+    };
+
+    fetchBounds();
+  }, [parsed?.baseUrl, parsed?.params.layers, parsed?.params.bounds]);
+
+  // Add a new useEffect to handle bounds changes
+  useEffect(() => {
+    if (bounds) {
+      console.log("Bounds changed:", bounds);
+    }
+  }, [bounds]);
 
   // Add a fallback center and zoom
   const center: [number, number] = centerCustom ?? [
@@ -25,9 +52,10 @@ export default function PreviewMap({
 
   return (
     <MapContainer
-      {...(bounds ? { bounds } : { center, zoom })} // Use bounds if available, otherwise fallback to center and zoom
+      key={bounds ? "with-bounds" : "without-bounds"}
+      {...(bounds ? { bounds } : { center, zoom })}
       className="h-full w-full"
-      style={{ height: "100%", width: "100%" }} // Add explicit style
+      style={{ height: "100%", width: "100%" }}
       attributionControl={isActiveControl ?? false}
       zoomControl={isActiveControl ?? false}
       scrollWheelZoom={isActiveControl ?? false}
