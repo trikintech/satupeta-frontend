@@ -11,13 +11,16 @@ export const formatIndonesianDate = (
   timezone: "WIB" | "WITA" | "WIT" = "WIB"
 ): string => {
   const dateObj = new Date(date);
-  const formattedDate = dateObj.toLocaleDateString("id-ID", {
+
+  const datePart = dateObj.toLocaleDateString("id-ID", {
     day: "numeric",
     month: "long",
     year: "numeric",
+  });
+  const timePart = dateObj.toLocaleTimeString("id-ID", {
     hour: "2-digit",
     minute: "2-digit",
   });
 
-  return `${formattedDate} ${timezone}`;
+  return `${datePart} ${timePart} ${timezone}`;
 };
