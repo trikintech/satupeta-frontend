@@ -3,10 +3,11 @@
 import { appsName } from "@/shared/config/app-config";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { useRouter } from "next/navigation";
+import { roles } from "@/shared/config/role";
 
 const DashboardPage = () => {
   const router = useRouter();
-  const { isLoading, isAuthenticated } = useAuthSession();
+  const { isLoading, isAuthenticated, session } = useAuthSession();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -15,6 +16,16 @@ const DashboardPage = () => {
   if (!isAuthenticated) {
     router.replace("/auth/admin/login");
     return null;
+  }
+
+  // Get the user's role and redirect to the appropriate path
+  const userRole = session?.user?.role;
+  if (userRole && roles[userRole.name]) {
+    const redirectPath = roles[userRole.name].redirectTo;
+    if (redirectPath !== "/admin/dashboard") {
+      router.replace(redirectPath);
+      return null;
+    }
   }
 
   return (
