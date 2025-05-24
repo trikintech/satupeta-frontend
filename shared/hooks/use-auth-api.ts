@@ -7,8 +7,13 @@ import { setupApiInterceptors } from "../services/api";
 import authApi from "../services/auth";
 
 export const handleLogout = async () => {
-  await authApi.logout();
-  await signOut();
+  try {
+    await authApi.logout();
+    await signOut();
+  } catch (e) {
+    console.error(e);
+    await signOut();
+  }
 };
 
 export function useAuthApi() {

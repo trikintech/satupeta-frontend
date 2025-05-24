@@ -27,6 +27,8 @@ import {
   MapsetFormTab,
 } from "../state";
 import { MapsetClassificationForm } from "../_components/form/mapset-classification-form";
+import { useAuthSession } from "@/shared/hooks/use-session";
+import { useEffect } from "react";
 
 interface SelectOption {
   id: string;
@@ -38,6 +40,34 @@ export default function AddMapsPageClient() {
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useAtom(activeTabAtom);
   const [formState, setFormState] = useAtom(mapsetFormAtom);
+
+  const { session } = useAuthSession();
+  const isDataManager = session?.user?.role?.name === "data_manager";
+  const userOrganizationId = session?.user?.organizationId;
+
+  // Add query to fetch organization details
+  const { data: userOrganization } = useQuery({
+    queryKey: ["user-organization", userOrganizationId],
+    queryFn: () =>
+      organizationApi.getOrganizationById(userOrganizationId || ""),
+    enabled: !!userOrganizationId,
+  });
+
+  const isDiskominfo =
+    userOrganization?.name === "Dinas Komunikasi dan Informatika";
+
+  // Update the initial form state with organization ID for data managers
+  useEffect(() => {
+    if (isDataManager && !isDiskominfo && userOrganizationId) {
+      setFormState((prev) => ({
+        ...prev,
+        info: {
+          ...prev.info,
+          organization_id: userOrganizationId,
+        },
+      }));
+    }
+  }, [isDataManager, !isDiskominfo, userOrganizationId, setFormState]);
 
   const { data: projectionSystemsResponse, isLoading: isLoadingProjections } =
     useQuery({
@@ -61,7 +91,13 @@ export default function AddMapsPageClient() {
   const { data: organizationsResponse, isLoading: isLoadingOrganizations } =
     useQuery({
       queryKey: ["organizations"],
-      queryFn: () => organizationApi.getOrganizations(),
+      queryFn: () =>
+        organizationApi.getOrganizations({
+          filter:
+            isDataManager && userOrganizationId && !isDiskominfo
+              ? [`id=${userOrganizationId}`]
+              : undefined,
+        }),
     });
 
   const { data: mapSourcesResponse, isLoading: isLoadingMapSources } = useQuery(
