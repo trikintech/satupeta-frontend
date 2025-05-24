@@ -11,13 +11,13 @@ import {
 import { Mapset } from "@/shared/types/mapset";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
+  ChevronsUpDown,
   Eye,
   Edit,
   Trash,
   MoreHorizontal,
-  ArrowUp,
-  ArrowDown,
+  ChevronUp,
+  ChevronDown,
   Power,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -154,16 +154,16 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
     <Button
       variant="ghost"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      className="p-0 hover:bg-transparent"
+      className="p-0 hover:bg-transparent flex items-center"
     >
       {label}
       {(() => {
         if (column.getIsSorted() === "asc") {
-          return <ArrowUp className="ml-2 h-4 w-4" />;
+          return <ChevronUp className="ml-2 h-4 w-4" />;
         } else if (column.getIsSorted() === "desc") {
-          return <ArrowDown className="ml-2 h-4 w-4" />;
+          return <ChevronDown className="ml-2 h-4 w-4" />;
         } else {
-          return <ArrowUpDown className="ml-2 h-4 w-4" />;
+          return <ChevronsUpDown className="ml-2 h-4 w-4" />;
         }
       })()}
     </Button>
@@ -256,7 +256,7 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                         onClick={() => setMapsetToSubmit(mapset)}
                         className="flex items-center gap-2 text-warning focus:text-warning"
                       >
-                        <ArrowUp className="h-4 w-4" />
+                        <ChevronUp className="h-4 w-4" />
                         Ajukan Validasi
                       </DropdownMenuItem>
                     </>

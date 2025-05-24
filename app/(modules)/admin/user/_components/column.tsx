@@ -18,9 +18,9 @@ import {
   Eye,
   Edit,
   Trash,
-  ArrowUp,
-  ArrowDown,
-  ArrowUpDown,
+  ChevronUp,
+  ChevronDown,
+  ChevronsUpDown,
 } from "lucide-react";
 import { Badge } from "@/shared/components/ds/badge";
 import { toast } from "sonner";
@@ -60,11 +60,11 @@ export const useUserColumns = (): ColumnDef<User>[] => {
     >
       {label}
       {column.getIsSorted() === "asc" ? (
-        <ArrowUp className="ml-2 h-4 w-4" />
+        <ChevronUp className="ml-2 h-4 w-4" />
       ) : column.getIsSorted() === "desc" ? (
-        <ArrowDown className="ml-2 h-4 w-4" />
+        <ChevronDown className="ml-2 h-4 w-4" />
       ) : (
-        <ArrowUpDown className="ml-2 h-4 w-4" />
+        <ChevronsUpDown className="ml-2 h-4 w-4" />
       )}
     </Button>
   );

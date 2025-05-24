@@ -12,13 +12,13 @@ import {
 import { Organization } from "@/shared/types/organization";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
+  ChevronsUpDown,
   Eye,
   Edit,
   Trash,
   MoreHorizontal,
-  ArrowUp,
-  ArrowDown,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -103,11 +103,11 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
       {label}
       {(() => {
         if (column.getIsSorted() === "asc") {
-          return <ArrowUp className="ml-2 h-4 w-4" />;
+          return <ChevronUp className="ml-2 h-4 w-4" />;
         } else if (column.getIsSorted() === "desc") {
-          return <ArrowDown className="ml-2 h-4 w-4" />;
+          return <ChevronDown className="ml-2 h-4 w-4" />;
         } else {
-          return <ArrowUpDown className="ml-2 h-4 w-4" />;
+          return <ChevronsUpDown className="ml-2 h-4 w-4" />;
         }
       })()}
     </Button>

@@ -28,7 +28,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  ArrowUpDown,
+  ChevronsUpDown,
 } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
@@ -48,7 +48,7 @@ export function createSortableHeader<T>(label: string) {
         className="flex items-center gap-1 font-medium"
       >
         {label}
-        <ArrowUpDown className="ml-2 h-4 w-4" />
+        <ChevronsUpDown className="ml-2 h-4 w-4" />
       </Button>
     );
   };
