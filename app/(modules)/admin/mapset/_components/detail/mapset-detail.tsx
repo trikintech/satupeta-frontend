@@ -94,7 +94,7 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
 
     try {
       toast.loading("Mempersiapkan download...");
-      const response = await fetch(`/fe-api/mapset/download/${id}`);
+      const response = await fetch(`/fe-api/mapset/download/geojson/${id}`);
 
       if (!response.ok) {
         const error = await response.json();

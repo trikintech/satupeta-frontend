@@ -1,3 +1,15 @@
+import { LatLngBoundsExpression } from "leaflet";
+
+interface GetLegendUrlOptions {
+  baseUrl: string;
+  layerName: string;
+  format?: string;
+  width?: number;
+  height?: number;
+  version?: string;
+  sld_version?: string;
+}
+
 export const parseWmsUrl = (url: string | undefined | null) => {
   if (!url) return null;
 
@@ -49,8 +61,6 @@ export const getWmsTileLayerUrl = (url: string | undefined | null) => {
   return `${baseUrl}?${wmsParams.toString()}`;
 };
 
-import { LatLngBoundsExpression } from "leaflet";
-
 export function parseBBoxToBounds(
   bboxString: string
 ): LatLngBoundsExpression | null {
@@ -70,16 +80,6 @@ export function parseBBoxToBounds(
     console.error("Invalid bbox input:", e);
     return null;
   }
-}
-
-interface GetLegendUrlOptions {
-  baseUrl: string;
-  layerName: string;
-  format?: string;
-  width?: number;
-  height?: number;
-  version?: string;
-  sld_version?: string;
 }
 
 export const getLegendUrl = ({
@@ -105,7 +105,6 @@ export const getLegendUrl = ({
   return url.toString();
 };
 
-// Fungsi terpisah untuk mendapatkan bounds dari GetCapabilities
 export const getWmsLayerBounds = async (
   baseUrl: string,
   layerName: string
@@ -195,6 +194,47 @@ export const getWmsToGeoJsonUrl = (wmsUrl: string | undefined | null) => {
   downloadUrl.searchParams.set("request", "GetFeature");
   downloadUrl.searchParams.set("typeName", params.layers);
   downloadUrl.searchParams.set("outputFormat", "application/json");
+  downloadUrl.searchParams.set("srsName", params.srs);
+
+  return downloadUrl.toString();
+};
+
+export const getWmsToShpUrl = (wmsUrl: string | undefined | null) => {
+  if (!wmsUrl) return null;
+
+  const parsedWms = parseWmsUrl(wmsUrl);
+  if (!parsedWms) return null;
+
+  const { baseUrl, params } = parsedWms;
+  const downloadUrl = new URL(baseUrl);
+
+  downloadUrl.searchParams.set("service", "WFS");
+  downloadUrl.searchParams.set("version", "1.0.0");
+  downloadUrl.searchParams.set("request", "GetFeature");
+  downloadUrl.searchParams.set("typeName", params.layers);
+  downloadUrl.searchParams.set("outputFormat", "SHAPE-ZIP");
+  downloadUrl.searchParams.set("srsName", params.srs);
+
+  return downloadUrl.toString();
+};
+
+export const getWmsToKmlUrl = (wmsUrl: string | undefined | null) => {
+  if (!wmsUrl) return null;
+
+  const parsedWms = parseWmsUrl(wmsUrl);
+  if (!parsedWms) return null;
+
+  const { baseUrl, params } = parsedWms;
+  const downloadUrl = new URL(baseUrl);
+
+  downloadUrl.searchParams.set("service", "WFS");
+  downloadUrl.searchParams.set("version", "1.0.0");
+  downloadUrl.searchParams.set("request", "GetFeature");
+  downloadUrl.searchParams.set("typeName", params.layers);
+  downloadUrl.searchParams.set(
+    "outputFormat",
+    "application/vnd.google-earth.kml+xml"
+  );
   downloadUrl.searchParams.set("srsName", params.srs);
 
   return downloadUrl.toString();

@@ -43,7 +43,7 @@ export default function RootLayout({
         </head>
         <Providers>
           {children}
-          <Toaster />
+          <Toaster style={{ zIndex: 9999 }} />
         </Providers>
       </body>
     </html>
