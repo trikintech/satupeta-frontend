@@ -1,4 +1,3 @@
-import { Badge } from "@/shared/components/ds/badge";
 import { Button } from "@/shared/components/ds/button";
 import {
   DropdownMenu,
@@ -28,8 +27,10 @@ import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
 import { hasPermission } from "@/shared/config/role";
 import { useAuthSession } from "@/shared/hooks/use-session";
-import { StatusValidationBadge } from "@/shared/components/status-validation-badge";
 import { ConfirmationDialog } from "../../../_components/confirmation-dialog";
+import StatusValidation, {
+  statusValidationLabel,
+} from "@/shared/config/status-validation";
 
 // Type for column configuration
 interface ColumnConfig {
@@ -50,6 +51,14 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     header: "Nama Mapset",
     accessor: "name",
     sortable: true,
+    cell: (value) => (
+      <div
+        className="truncate max-w-[300px] 2xl:max-w-[500px]"
+        title={value as string}
+      >
+        {value as string}
+      </div>
+    ),
   },
   {
     id: "classification",
@@ -62,27 +71,27 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     header: "Instansi",
     accessorFn: (row) => row.producer?.name,
     sortable: false,
+    cell: (value) => (
+      <div
+        className="truncate max-w-[250px] 2xl:max-w-[300px]"
+        title={value as string}
+      >
+        {value as string}
+      </div>
+    ),
   },
   {
     id: "is_active",
     header: "Status Aktif",
     accessor: "is_active",
     sortable: true,
-    cell: (value) => (
-      <Badge variant={value ? "success" : "destructive"}>
-        {value ? "Aktif" : "Tidak Aktif"}
-      </Badge>
-    ),
+    cell: (value) => (value ? "Aktif" : "Non-aktif"),
   },
   {
     id: "status_validation",
     accessor: "status_validation",
     header: "Status Validasi",
-    cell: (value) => (
-      <StatusValidationBadge
-        status={value ?? "approved"}
-      ></StatusValidationBadge>
-    ),
+    cell: (value: StatusValidation) => statusValidationLabel[value],
   },
 ];
 
