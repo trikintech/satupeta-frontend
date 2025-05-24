@@ -11,13 +11,9 @@ import { Mapset } from "@/shared/types/mapset";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ChevronsUpDown,
-  Eye,
-  Edit,
-  Trash,
   MoreHorizontal,
   ChevronUp,
   ChevronDown,
-  Power,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -233,7 +229,6 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -245,14 +240,12 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                       }
                       className="flex items-center gap-2"
                     >
-                      <Edit className="h-4 w-4" />
                       Edit Mapset
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setMapsetToToggle(mapset)}
                       className="flex items-center gap-2"
                     >
-                      <Power className="h-4 w-4" />
                       {mapset.is_active ? "Nonaktifkan" : "Aktifkan"} Mapset
                     </DropdownMenuItem>
                   </>
@@ -265,7 +258,6 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                         onClick={() => setMapsetToSubmit(mapset)}
                         className="flex items-center gap-2 text-warning focus:text-warning"
                       >
-                        <ChevronUp className="h-4 w-4" />
                         Ajukan Validasi
                       </DropdownMenuItem>
                     </>
@@ -277,7 +269,6 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                       onClick={() => setMapsetToDelete(mapset)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus Mapset
                     </DropdownMenuItem>
                   </>

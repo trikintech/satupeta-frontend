@@ -9,9 +9,6 @@ import { Badge } from "@/shared/components/ds/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
   MoreHorizontal,
-  Eye,
-  Edit,
-  Trash,
   ChevronsUpDown,
   ChevronUp,
   ChevronDown,
@@ -181,7 +178,6 @@ export const useCategoryColumns = (): ColumnDef<Category>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -192,7 +188,6 @@ export const useCategoryColumns = (): ColumnDef<Category>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Edit className="h-4 w-4" />
                     Edit Kategori
                   </DropdownMenuItem>
                 )}
@@ -203,7 +198,6 @@ export const useCategoryColumns = (): ColumnDef<Category>[] => {
                       onClick={() => setCategoryToDelete(category)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus Kategori
                     </DropdownMenuItem>
                   </>

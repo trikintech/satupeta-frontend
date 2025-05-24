@@ -15,9 +15,6 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import {
   MoreHorizontal,
-  Eye,
-  Edit,
-  Trash,
   ChevronUp,
   ChevronDown,
   ChevronsUpDown,
@@ -149,7 +146,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                     onClick={() => router.push(`/admin/user/detail/${user.id}`)}
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -158,7 +154,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                     onClick={() => router.push(`/admin/user/edit/${user.id}`)}
                     className="flex items-center gap-2"
                   >
-                    <Edit className="h-4 w-4" />
                     Edit User
                   </DropdownMenuItem>
                 )}
@@ -169,7 +164,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                       onClick={() => setUserToDelete(user)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus User
                     </DropdownMenuItem>
                   </>

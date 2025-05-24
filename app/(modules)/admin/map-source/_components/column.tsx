@@ -13,9 +13,6 @@ import { MapSource } from "@/shared/types/map-source";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ChevronsUpDown,
-  Eye,
-  Edit,
-  Trash,
   MoreHorizontal,
   ChevronUp,
   ChevronDown,
@@ -186,7 +183,6 @@ export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -197,7 +193,6 @@ export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Edit className="h-4 w-4" />
                     Edit Mapserver & Metadata
                   </DropdownMenuItem>
                 )}
@@ -208,7 +203,6 @@ export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
                       onClick={() => setMapSourceToDelete(mapSource)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus Mapserver & Metadata
                     </DropdownMenuItem>
                   </>

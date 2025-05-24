@@ -13,9 +13,6 @@ import { Organization } from "@/shared/types/organization";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   ChevronsUpDown,
-  Eye,
-  Edit,
-  Trash,
   MoreHorizontal,
   ChevronUp,
   ChevronDown,
@@ -169,7 +166,6 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -180,7 +176,6 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Edit className="h-4 w-4" />
                     Edit Perangkat Daerah
                   </DropdownMenuItem>
                 )}
@@ -191,7 +186,6 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                       onClick={() => setOrganizationToDelete(organization)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus Perangkat Daerah
                     </DropdownMenuItem>
                   </>
