@@ -4,6 +4,8 @@ export const adminRoutePermissions: Record<
   string,
   { menu: string; permission: Permission }
 > = {
+  "/admin/dashboard": { menu: "dashboard", permission: "read" },
+
   "/admin/mapset": { menu: "mapset", permission: "read" },
   "/admin/mapset/create": { menu: "mapset", permission: "create" },
   "/admin/mapset/[id]": { menu: "mapset", permission: "read" }, // detail
