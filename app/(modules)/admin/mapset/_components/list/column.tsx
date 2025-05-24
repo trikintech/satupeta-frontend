@@ -69,7 +69,7 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     accessor: "is_active",
     sortable: true,
     cell: (value) => (
-      <Badge variant={value ? "success" : "secondary"}>
+      <Badge variant={value ? "success" : "destructive"}>
         {value ? "Aktif" : "Tidak Aktif"}
       </Badge>
     ),

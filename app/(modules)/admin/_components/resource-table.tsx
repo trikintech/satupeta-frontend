@@ -8,17 +8,18 @@ import LoadingSpinner from "@/shared/components/loading-spinner";
 import SearchAndActionBar from "./search-action-bar";
 import Image from "next/image";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
+import { useState } from "react";
 
 interface ResourceTableProps<T> {
   data: T[];
-  columns: ColumnDef<T, unknown>[]; // Replace `any` with `unknown` for better type safety
+  columns: ColumnDef<T, unknown>[];
   total: number;
   isLoading: boolean;
   isError: boolean;
   refetchAction: () => void;
   searchValue: string;
   onSearchChangeAction: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  sorting: SortingState; // Use `SortingState` from `@tanstack/react-table`
+  sorting: SortingState;
   onSortingChangeAction: (sorting: SortingState) => void;
   pageIndex: number;
   pageCount: number;
@@ -35,7 +36,11 @@ interface ResourceTableProps<T> {
   actionBarProps: {
     buttonLabel: string;
     buttonLink: string;
+    bulkLabel?: string;
+    showBulkAction?: boolean;
+    onBulkAction?: (selectedRows: T[]) => void;
   };
+  enableRowSelection?: boolean;
 }
 
 export function ResourceTable<T>({
@@ -55,7 +60,10 @@ export function ResourceTable<T>({
   onPaginationChangeAction,
   emptyStateProps,
   actionBarProps,
+  enableRowSelection,
 }: ResourceTableProps<T>) {
+  const [selectedRows, setSelectedRows] = useState<T[]>([]);
+
   const defaultEmptyIcon = (
     <div className="text-gray-400 mx-auto mb-4">
       <Image
@@ -67,6 +75,16 @@ export function ResourceTable<T>({
     </div>
   );
 
+  const handleBulkAction = () => {
+    if (actionBarProps.onBulkAction) {
+      actionBarProps.onBulkAction(selectedRows);
+    }
+  };
+
+  const handleRowSelectionChange = (rows: T[]) => {
+    setSelectedRows(rows);
+  };
+
   return (
     <div className="space-y-4">
       <SearchAndActionBar
@@ -74,6 +92,10 @@ export function ResourceTable<T>({
         buttonLink={actionBarProps.buttonLink}
         searchValue={searchValue}
         onChange={onSearchChangeAction}
+        selectedCount={selectedRows.length}
+        onBulkAction={handleBulkAction}
+        bulkLabel={actionBarProps.bulkLabel}
+        showBulkAction={actionBarProps.showBulkAction}
       />
 
       {(() => {
@@ -104,17 +126,19 @@ export function ResourceTable<T>({
           );
         } else {
           return (
-            <DataTable<T, unknown> // Replace `any` with `unknown`
+            <DataTable<T, unknown>
               data={data}
               columns={columns}
               pageCount={pageCount}
               pageIndex={pageIndex}
               pageSize={pageSize}
               onPaginationChangeAction={onPaginationChangeAction}
+              onRowSelectionChange={handleRowSelectionChange}
               manualPagination
               rowCount={total}
               sorting={sorting}
               onSortingChangeAction={onSortingChangeAction}
+              enableRowSelection={enableRowSelection}
             />
           );
         }

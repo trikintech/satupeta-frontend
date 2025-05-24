@@ -10,7 +10,6 @@ const mapsetApi = {
     offset?: number;
     sort?: string;
   }): Promise<PaginatedResponse<Mapset[]>> => {
-    // Remove the `sort` key if it is undefined or empty
     const filteredParams = { ...params };
     if (!filteredParams.sort) {
       delete filteredParams.sort;
@@ -19,7 +18,7 @@ const mapsetApi = {
     return apiHelpers.get("/mapsets", {
       params: filteredParams,
       paramsSerializer: {
-        indexes: null, // This allows multiple params with the same name
+        indexes: null,
       },
     });
   },
@@ -55,6 +54,13 @@ const mapsetApi = {
       status_validation: status,
       notes: notes,
       layer_url,
+    });
+  },
+
+  bulkDeactivate: async (mapsetIds: string[]): Promise<Mapset[]> => {
+    return apiHelpers.patch("/mapsets/activation", {
+      ids: mapsetIds,
+      is_active: false,
     });
   },
 };

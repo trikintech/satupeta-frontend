@@ -9,6 +9,7 @@ import {
   PaginationState,
   SortingState,
   Updater,
+  RowSelectionState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -18,8 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/components/ui/table";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Pagination } from "@/shared/components/ui/pagination";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -32,6 +34,8 @@ interface DataTableProps<TData, TValue> {
   rowCount: number;
   sorting: SortingState;
   onSortingChangeAction: (sorting: SortingState) => void;
+  onRowSelectionChange?: (selectedRows: TData[]) => void;
+  enableRowSelection?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,14 +47,46 @@ export function DataTable<TData, TValue>({
   sorting,
   onSortingChangeAction,
   onPaginationChangeAction,
+  onRowSelectionChange,
+  enableRowSelection = false,
   manualPagination = true,
   rowCount,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = useState({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex,
     pageSize,
   });
+
+  const columnsWithSelection = useMemo<ColumnDef<TData, TValue>[]>(() => {
+    if (!enableRowSelection) return columns;
+
+    return [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      ...columns,
+    ];
+  }, [columns, enableRowSelection]);
 
   useEffect(() => {
     if (
@@ -61,9 +97,13 @@ export function DataTable<TData, TValue>({
     }
   }, [pagination.pageIndex, pagination.pageSize, pageIndex, pageSize]);
 
+  useEffect(() => {
+    setRowSelection({});
+  }, [pageIndex]);
+
   const table = useReactTable({
     data,
-    columns,
+    columns: columnsWithSelection,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualPagination,
@@ -94,8 +134,30 @@ export function DataTable<TData, TValue>({
           : updaterOrValue;
       onSortingChangeAction(newSorting);
     },
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: enableRowSelection
+      ? (updater) => {
+          const newSelection =
+            typeof updater === "function" ? updater(rowSelection) : updater;
+          setRowSelection(newSelection);
+
+          if (onRowSelectionChange) {
+            const selectedRowIndices = Object.keys(newSelection).filter(
+              (key) => newSelection[key]
+            );
+            const selectedRows = selectedRowIndices
+              .map((index) => data[parseInt(index)])
+              .filter(Boolean);
+            onRowSelectionChange(selectedRows);
+          }
+        }
+      : undefined,
+    enableRowSelection,
+    getRowId: (row, index) => index.toString(),
   });
+
+  const selectedRowCount = Object.keys(rowSelection).filter(
+    (key) => rowSelection[key]
+  ).length;
 
   return (
     <div className="space-y-4">
@@ -135,7 +197,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={columnsWithSelection.length}
                   className="h-24 text-center"
                 >
                   Tidak ada data
@@ -147,9 +209,13 @@ export function DataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-500">
-          {Object.keys(rowSelection).length} dari {rowCount} baris dipilih.
-        </div>
+        {enableRowSelection ? (
+          <div className="text-sm text-gray-500">
+            {selectedRowCount} dari {data.length} baris dipilih.
+          </div>
+        ) : (
+          <div></div>
+        )}
         <Pagination
           totalPages={pageCount}
           currentPage={pageIndex + 1}
