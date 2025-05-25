@@ -4,13 +4,11 @@ import Link from "next/link";
 
 export default function MapsetMetadataSection({ mapset }: { mapset: Mapset }) {
   const geoserverSource = mapset.sources.find(
-    (source) =>
-      source.credential.credential_type === "geoserver" &&
-      source.url.includes("geoserver")
+    (source) => source.credential.credential_type === "geoserver"
   );
 
-  const geonetworkSource = mapset.sources.find((source) =>
-    source.url.includes("geonetwork")
+  const geonetworkSource = mapset.sources.find(
+    (source) => source.credential.credential_type === "geonetwork"
   );
 
   return (

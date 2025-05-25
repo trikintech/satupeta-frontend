@@ -125,7 +125,7 @@ export const LayerControlItem = ({
   return (
     <div className="bg-muted rounded-lg border border-primary p-3">
       <div className="cursor-pointer w-full flex items-center justify-between text-sm">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-1 items-center gap-2">
           <button className="cursor-pointer self-start mt-0.5">
             <GripHorizontal className="w-4 h-4 text-zinc-950"></GripHorizontal>
           </button>

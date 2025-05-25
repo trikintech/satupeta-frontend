@@ -3,7 +3,7 @@ import PageHeader from "../../../_components/page-header";
 import MapSourceEditPageClient from "./page.client";
 
 export const metadata = {
-  title: "Kategori",
+  title: "Ubah Mapserver & Metadata",
 };
 
 export default function CategoryPage() {
