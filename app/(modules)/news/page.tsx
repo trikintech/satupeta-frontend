@@ -8,11 +8,12 @@ import DOMPurify from "isomorphic-dompurify";
 import { getFileUrl } from "@/shared/utils/file";
 import Image from "next/image";
 import Link from "next/link";
+import { NewspaperIcon } from "lucide-react";
 
 export default function NewsPage() {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter] = useState("");
+  const [filter] = useState('["is_active=true"]');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const limit = 10;
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
@@ -109,11 +110,13 @@ export default function NewsPage() {
           </p>
         </div>
 
-        {isLoading ? (
+        {isLoading && (
           <div className="flex justify-center items-center py-10">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
           </div>
-        ) : (
+        )}
+
+        {!isLoading && data?.items && data?.items?.length > 0 && (
           <>
             <div className="flex flex-col space-y-4">
               {data?.items.map((newsItem) => (
@@ -188,6 +191,18 @@ export default function NewsPage() {
               </div>
             )}
           </>
+        )}
+
+        {!isLoading && data?.items.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-20 text-center text-slate-500">
+            <NewspaperIcon width={150} height={150} className="mb-6" />
+            <h3 className="text-xl font-semibold mb-2">
+              Tidak ada berita ditemukan
+            </h3>
+            <p className="text-gray-500 max-w-md">
+              Coba kata kunci pencarian lain atau periksa ejaan Anda.
+            </p>
+          </div>
         )}
       </div>
     </div>
