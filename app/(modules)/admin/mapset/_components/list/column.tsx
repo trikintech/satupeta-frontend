@@ -1,4 +1,3 @@
-import { Badge } from "@/shared/components/ds/badge";
 import { Button } from "@/shared/components/ds/button";
 import {
   DropdownMenu,
@@ -11,14 +10,10 @@ import {
 import { Mapset } from "@/shared/types/mapset";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
-  Eye,
-  Edit,
-  Trash,
+  ChevronsUpDown,
   MoreHorizontal,
-  ArrowUp,
-  ArrowDown,
-  Power,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -28,8 +23,10 @@ import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
 import { hasPermission } from "@/shared/config/role";
 import { useAuthSession } from "@/shared/hooks/use-session";
-import { StatusValidationBadge } from "@/shared/components/status-validation-badge";
 import { ConfirmationDialog } from "../../../_components/confirmation-dialog";
+import StatusValidation, {
+  statusValidationLabel,
+} from "@/shared/config/status-validation";
 
 // Type for column configuration
 interface ColumnConfig {
@@ -50,6 +47,14 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     header: "Nama Mapset",
     accessor: "name",
     sortable: true,
+    cell: (value) => (
+      <div
+        className="truncate max-w-[300px] 2xl:max-w-[500px]"
+        title={value as string}
+      >
+        {value as string}
+      </div>
+    ),
   },
   {
     id: "classification",
@@ -62,27 +67,27 @@ const COLUMN_CONFIGS: ColumnConfig[] = [
     header: "Instansi",
     accessorFn: (row) => row.producer?.name,
     sortable: false,
+    cell: (value) => (
+      <div
+        className="truncate max-w-[250px] 2xl:max-w-[300px]"
+        title={value as string}
+      >
+        {value as string}
+      </div>
+    ),
   },
   {
     id: "is_active",
     header: "Status Aktif",
     accessor: "is_active",
     sortable: true,
-    cell: (value) => (
-      <Badge variant={value ? "success" : "secondary"}>
-        {value ? "Aktif" : "Tidak Aktif"}
-      </Badge>
-    ),
+    cell: (value) => (value ? "Aktif" : "Non-aktif"),
   },
   {
     id: "status_validation",
     accessor: "status_validation",
     header: "Status Validasi",
-    cell: (value) => (
-      <StatusValidationBadge
-        status={value ?? "approved"}
-      ></StatusValidationBadge>
-    ),
+    cell: (value: StatusValidation) => statusValidationLabel[value],
   },
 ];
 
@@ -154,16 +159,16 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
     <Button
       variant="ghost"
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      className="p-0 hover:bg-transparent"
+      className="p-0 hover:bg-transparent flex items-center"
     >
       {label}
       {(() => {
         if (column.getIsSorted() === "asc") {
-          return <ArrowUp className="ml-2 h-4 w-4" />;
+          return <ChevronUp className="ml-2 h-4 w-4" />;
         } else if (column.getIsSorted() === "desc") {
-          return <ArrowDown className="ml-2 h-4 w-4" />;
+          return <ChevronDown className="ml-2 h-4 w-4" />;
         } else {
-          return <ArrowUpDown className="ml-2 h-4 w-4" />;
+          return <ChevronsUpDown className="ml-2 h-4 w-4" />;
         }
       })()}
     </Button>
@@ -224,7 +229,6 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -236,14 +240,12 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                       }
                       className="flex items-center gap-2"
                     >
-                      <Edit className="h-4 w-4" />
                       Edit Mapset
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => setMapsetToToggle(mapset)}
                       className="flex items-center gap-2"
                     >
-                      <Power className="h-4 w-4" />
                       {mapset.is_active ? "Nonaktifkan" : "Aktifkan"} Mapset
                     </DropdownMenuItem>
                   </>
@@ -256,7 +258,6 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                         onClick={() => setMapsetToSubmit(mapset)}
                         className="flex items-center gap-2 text-warning focus:text-warning"
                       >
-                        <ArrowUp className="h-4 w-4" />
                         Ajukan Validasi
                       </DropdownMenuItem>
                     </>
@@ -268,7 +269,6 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                       onClick={() => setMapsetToDelete(mapset)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus Mapset
                     </DropdownMenuItem>
                   </>

@@ -57,7 +57,7 @@ export function Header() {
   };
 
   const handleLogin = () => {
-    router.push("/auth/admin/login?callbackUrl=/");
+    router.push("/auth/admin/login?callbackUrl=/admin");
   };
 
   return (

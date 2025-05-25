@@ -31,6 +31,8 @@ import MapsetOrganizationSection from "./mapset-organization-section";
 import { MapsetStatus } from "./mapset-status";
 import MapsetVersionSection from "./mapset-version-section";
 import PreviewMap from "@/shared/components/preview-map";
+import MapsetHistory from "./mapset-history";
+import { featureFlags } from "@/shared/config/feature-flag";
 
 interface MapsetDetailProps {
   id: string;
@@ -92,7 +94,7 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
 
     try {
       toast.loading("Mempersiapkan download...");
-      const response = await fetch(`/fe-api/mapset/download/${id}`);
+      const response = await fetch(`/fe-api/mapset/download/geojson/${id}`);
 
       if (!response.ok) {
         const error = await response.json();
@@ -258,6 +260,11 @@ export function MapsetDetail({ id }: MapsetDetailProps) {
           </div>
         </div>
       </div>
+      {canEdit && featureFlags.mapsetHistory.isActive && (
+        <div className="mt-6 border border-zinc-200 rounded-lg px-6 p-4">
+          <MapsetHistory id={id} />
+        </div>
+      )}
 
       {mapset && (
         <VerifyMapsetDialog

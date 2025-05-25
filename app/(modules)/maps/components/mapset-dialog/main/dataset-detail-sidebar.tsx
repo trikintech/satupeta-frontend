@@ -10,6 +10,9 @@ import {
 import { cn } from "@/shared/utils/utils";
 import { useAtomValue } from "jotai";
 import { selectedMapsetAtom } from "../../../state/mapset-dialog";
+import DownloadGeojsonBtn from "./download-geojson-btn";
+import DownloadShpBtn from "./download-shp-btn";
+import DownloadKmlBtn from "./download-kml-btn";
 
 export function DatasetDetailSidebar({
   open,
@@ -120,6 +123,11 @@ export function DatasetDetailSidebar({
           </div>
         </TabsContent>
       </Tabs>
+      <div className="absolute bottom-0 w-full bg-zinc-100 py-2.5 px-4 grid grid-cols-3 gap-2">
+        <DownloadGeojsonBtn mapset={selectedMapset} />
+        <DownloadShpBtn mapset={selectedMapset} />
+        <DownloadKmlBtn mapset={selectedMapset} />
+      </div>
     </div>
   );
 }

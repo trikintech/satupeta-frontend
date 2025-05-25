@@ -4,4 +4,10 @@ enum StatusValidation {
   REJECTED = "rejected",
 }
 
+export const statusValidationLabel: Record<StatusValidation, string> = {
+  [StatusValidation.ON_VERIFICATION]: "Menunggu Validasi",
+  [StatusValidation.APPROVED]: "Tervalidasi",
+  [StatusValidation.REJECTED]: "Tidak Tervalidasi",
+};
+
 export default StatusValidation;

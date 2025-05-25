@@ -28,7 +28,6 @@ export default function PreviewMap({
         );
         if (newBounds) {
           setBounds(newBounds);
-          console.log("New bounds set:", newBounds);
         }
       }
     };
@@ -56,7 +55,7 @@ export default function PreviewMap({
       {...(bounds ? { bounds } : { center, zoom })}
       className="h-full w-full"
       style={{ height: "100%", width: "100%" }}
-      attributionControl={isActiveControl ?? false}
+      attributionControl={false}
       zoomControl={isActiveControl ?? false}
       scrollWheelZoom={isActiveControl ?? false}
       dragging={isActiveControl ?? false}

@@ -15,12 +15,9 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import {
   MoreHorizontal,
-  Eye,
-  Edit,
-  Trash,
-  ArrowUp,
-  ArrowDown,
-  ArrowUpDown,
+  ChevronUp,
+  ChevronDown,
+  ChevronsUpDown,
 } from "lucide-react";
 import { Badge } from "@/shared/components/ds/badge";
 import { toast } from "sonner";
@@ -60,11 +57,11 @@ export const useUserColumns = (): ColumnDef<User>[] => {
     >
       {label}
       {column.getIsSorted() === "asc" ? (
-        <ArrowUp className="ml-2 h-4 w-4" />
+        <ChevronUp className="ml-2 h-4 w-4" />
       ) : column.getIsSorted() === "desc" ? (
-        <ArrowDown className="ml-2 h-4 w-4" />
+        <ChevronDown className="ml-2 h-4 w-4" />
       ) : (
-        <ArrowUpDown className="ml-2 h-4 w-4" />
+        <ChevronsUpDown className="ml-2 h-4 w-4" />
       )}
     </Button>
   );
@@ -149,7 +146,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                     onClick={() => router.push(`/admin/user/detail/${user.id}`)}
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -158,7 +154,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                     onClick={() => router.push(`/admin/user/edit/${user.id}`)}
                     className="flex items-center gap-2"
                   >
-                    <Edit className="h-4 w-4" />
                     Edit User
                   </DropdownMenuItem>
                 )}
@@ -169,7 +164,6 @@ export const useUserColumns = (): ColumnDef<User>[] => {
                       onClick={() => setUserToDelete(user)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus User
                     </DropdownMenuItem>
                   </>

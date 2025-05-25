@@ -13,6 +13,10 @@ export const featureFlags = {
     name: "User Management",
     isActive: true,
   },
+  mapsetHistory: {
+    name: "Mapset History",
+    isActive: false,
+  },
 } satisfies Record<string, FeatureConfig>;
 
 export type FeatureKey = keyof typeof featureFlags;

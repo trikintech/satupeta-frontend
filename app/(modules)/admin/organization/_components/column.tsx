@@ -12,13 +12,10 @@ import {
 import { Organization } from "@/shared/types/organization";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
-  Eye,
-  Edit,
-  Trash,
+  ChevronsUpDown,
   MoreHorizontal,
-  ArrowUp,
-  ArrowDown,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -103,11 +100,11 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
       {label}
       {(() => {
         if (column.getIsSorted() === "asc") {
-          return <ArrowUp className="ml-2 h-4 w-4" />;
+          return <ChevronUp className="ml-2 h-4 w-4" />;
         } else if (column.getIsSorted() === "desc") {
-          return <ArrowDown className="ml-2 h-4 w-4" />;
+          return <ChevronDown className="ml-2 h-4 w-4" />;
         } else {
-          return <ArrowUpDown className="ml-2 h-4 w-4" />;
+          return <ChevronsUpDown className="ml-2 h-4 w-4" />;
         }
       })()}
     </Button>
@@ -169,7 +166,6 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -180,7 +176,6 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Edit className="h-4 w-4" />
                     Edit Perangkat Daerah
                   </DropdownMenuItem>
                 )}
@@ -191,7 +186,6 @@ export const useOrganizationColumns = (): ColumnDef<Organization>[] => {
                       onClick={() => setOrganizationToDelete(organization)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus Perangkat Daerah
                     </DropdownMenuItem>
                   </>

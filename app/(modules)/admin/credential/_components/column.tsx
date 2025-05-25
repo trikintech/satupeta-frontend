@@ -11,9 +11,9 @@ import {
   MoreHorizontal,
   Edit,
   Trash,
-  ArrowUpDown,
-  ArrowUp,
-  ArrowDown,
+  ChevronsUpDown,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -120,11 +120,11 @@ export const useCredentialColumns = (): ColumnDef<Credential>[] => {
     >
       {label}
       {column.getIsSorted() === "asc" ? (
-        <ArrowUp className="ml-2 h-4 w-4" />
+        <ChevronUp className="ml-2 h-4 w-4" />
       ) : column.getIsSorted() === "desc" ? (
-        <ArrowDown className="ml-2 h-4 w-4" />
+        <ChevronDown className="ml-2 h-4 w-4" />
       ) : (
-        <ArrowUpDown className="ml-2 h-4 w-4" />
+        <ChevronsUpDown className="ml-2 h-4 w-4" />
       )}
     </Button>
   );

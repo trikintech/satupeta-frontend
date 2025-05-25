@@ -19,7 +19,7 @@ export default function MapsetItem({
   return (
     <button
       key={mapset.id}
-      className="flex justify-between items-start w-full text-left"
+      className="cursor-pointer flex justify-between items-start w-full text-left"
       onClick={() => onClick(mapset)}
     >
       <span
@@ -31,17 +31,21 @@ export default function MapsetItem({
         {mapset.name}
       </span>
       {isActiveLayer ? (
-        <Minus
-          className="absolute right-2.5 w-4 h-4 mt-1 text-zinc-950"
-          onClick={toggleLayer}
-          strokeWidth={1}
-        />
+        <div className="absolute right-2.5 hover:bg-blue-100 flex items-center justify-center w-4.5 h-4.5 rounded-full">
+          <Minus
+            className=" w-4 h-4 text-zinc-950"
+            onClick={toggleLayer}
+            strokeWidth={1}
+          />
+        </div>
       ) : (
-        <Plus
-          className="absolute right-2.5 w-4 h-4 mt-1 text-zinc-950"
-          onClick={toggleLayer}
-          strokeWidth={1}
-        />
+        <div className="absolute right-2.5 hover:bg-blue-100 flex items-center justify-center w-4.5 h-4.5 rounded-full">
+          <Plus
+            className="w-4 h-4  text-zinc-950"
+            onClick={toggleLayer}
+            strokeWidth={1}
+          />
+        </div>
       )}
     </button>
   );

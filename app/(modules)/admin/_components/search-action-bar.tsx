@@ -1,14 +1,18 @@
-import { Button } from "@/shared/components/ui/button";
+import { Button } from "@/shared/components/ds/button";
 import Link from "next/link";
-import { PlusIcon } from "lucide-react";
+import { CirclePlusIcon, UnlinkIcon } from "lucide-react";
 import { SearchInput } from "./search-input";
 
 interface SearchAndActionBarProps {
   searchValue: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  buttonLabel: string; // Label for the action button
-  buttonLink: string; // Link for the action button
-  placeholder?: string; // Placeholder for the search input
+  buttonLabel: string;
+  buttonLink: string;
+  placeholder?: string;
+  selectedCount?: number;
+  onBulkAction?: () => void;
+  bulkLabel?: string;
+  showBulkAction?: boolean;
 }
 
 const SearchAndActionBar = ({
@@ -16,7 +20,11 @@ const SearchAndActionBar = ({
   onChange,
   buttonLabel,
   buttonLink,
-  placeholder = "Masukkan kata kunci", // Default placeholder
+  placeholder = "Masukkan kata kunci",
+  selectedCount = 0,
+  onBulkAction,
+  bulkLabel = "Nonaktifkan",
+  showBulkAction = false,
 }: SearchAndActionBarProps) => (
   <div className="flex items-center justify-between">
     <SearchInput
@@ -27,9 +35,19 @@ const SearchAndActionBar = ({
     />
 
     <div className="flex items-center gap-2">
+      {showBulkAction && (
+        <Button
+          disabled={selectedCount === 0}
+          onClick={onBulkAction}
+          className="bg-white text-zinc-950 border border-zinc-200 border-dashed rounded-lg"
+        >
+          <UnlinkIcon className="h-4 w-4 mr-2 text-zinc-950" />
+          <span className="text-zinc-950">{bulkLabel}</span>
+        </Button>
+      )}
       <Link href={buttonLink}>
         <Button size="sm">
-          <PlusIcon className="h-4 w-4 mr-2" />
+          <CirclePlusIcon className="h-4 w-4 mr-2" />
           {buttonLabel}
         </Button>
       </Link>

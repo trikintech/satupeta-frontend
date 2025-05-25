@@ -11,6 +11,7 @@ export interface RolePermission {
   id: string;
   label: string;
   menus: MenuPermission[];
+  redirectTo: string;
 }
 
 export const roles: Record<string, RolePermission> = {
@@ -18,6 +19,10 @@ export const roles: Record<string, RolePermission> = {
     id: "administrator",
     label: "Administrator",
     menus: [
+      {
+        menu: "dashboard",
+        permissions: ["create", "read", "update", "delete", "verify"],
+      },
       {
         menu: "credential",
         permissions: ["create", "read", "update", "delete", "verify"],
@@ -33,11 +38,16 @@ export const roles: Record<string, RolePermission> = {
         permissions: ["create", "read", "update", "delete"],
       },
     ],
+    redirectTo: "/admin/user",
   },
   data_validator: {
     id: "data_validator",
     label: "Walidata",
     menus: [
+      {
+        menu: "dashboard",
+        permissions: ["create", "read", "update", "delete", "verify"],
+      },
       {
         menu: "mapset",
         permissions: ["create", "read", "update", "delete", "verify"],
@@ -51,12 +61,17 @@ export const roles: Record<string, RolePermission> = {
         permissions: ["create", "read", "update", "delete", "verify"],
       },
     ],
+    redirectTo: "/admin/mapset",
   },
   data_manager: {
     id: "data_manager",
     label: "Pengelola",
     menus: [
       {
+        menu: "dashboard",
+        permissions: ["create", "read", "update", "delete", "verify"],
+      },
+      {
         menu: "mapset",
         permissions: ["create", "read", "update", "delete"],
       },
@@ -65,12 +80,17 @@ export const roles: Record<string, RolePermission> = {
         permissions: ["create", "read", "update", "delete"],
       },
     ],
+    redirectTo: "/admin/mapset",
   },
   data_viewer: {
     id: "data_viewer",
     label: "Viewer",
     menus: [
       {
+        menu: "dashboard",
+        permissions: ["create", "read", "update", "delete", "verify"],
+      },
+      {
         menu: "mapset",
         permissions: ["create", "read", "update", "delete"],
       },
@@ -79,6 +99,7 @@ export const roles: Record<string, RolePermission> = {
         permissions: ["create", "read", "update", "delete"],
       },
     ],
+    redirectTo: "/admin/mapset",
   },
 };
 

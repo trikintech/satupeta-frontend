@@ -12,13 +12,10 @@ import {
 import { MapSource } from "@/shared/types/map-source";
 import { ColumnDef } from "@tanstack/react-table";
 import {
-  ArrowUpDown,
-  Eye,
-  Edit,
-  Trash,
+  ChevronsUpDown,
   MoreHorizontal,
-  ArrowUp,
-  ArrowDown,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -122,11 +119,11 @@ export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
       {label}
       {(() => {
         if (column.getIsSorted() === "asc") {
-          return <ArrowUp className="ml-2 h-4 w-4" />;
+          return <ChevronUp className="ml-2 h-4 w-4" />;
         } else if (column.getIsSorted() === "desc") {
-          return <ArrowDown className="ml-2 h-4 w-4" />;
+          return <ChevronDown className="ml-2 h-4 w-4" />;
         } else {
-          return <ArrowUpDown className="ml-2 h-4 w-4" />;
+          return <ChevronsUpDown className="ml-2 h-4 w-4" />;
         }
       })()}
     </Button>
@@ -186,7 +183,6 @@ export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Eye className="h-4 w-4" />
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
@@ -197,7 +193,6 @@ export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
                     }
                     className="flex items-center gap-2"
                   >
-                    <Edit className="h-4 w-4" />
                     Edit Mapserver & Metadata
                   </DropdownMenuItem>
                 )}
@@ -208,7 +203,6 @@ export const useMapSourceColumns = (): ColumnDef<MapSource>[] => {
                       onClick={() => setMapSourceToDelete(mapSource)}
                       className="flex items-center gap-2 text-destructive focus:text-destructive"
                     >
-                      <Trash className="h-4 w-4" />
                       Hapus Mapserver & Metadata
                     </DropdownMenuItem>
                   </>
