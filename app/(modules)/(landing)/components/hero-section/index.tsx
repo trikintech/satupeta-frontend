@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import HighlightMapset from "./highlight-mapset";
 import SearchInput from "./search-input";
-import { appsName } from "@/shared/config/app-config";
+import { appConfig } from "@/shared/config/app-config";
 
 export function HeroSection() {
   return (
@@ -20,7 +20,7 @@ export function HeroSection() {
                 <span className="text-primary">Pahami Lebih Dalam</span>
               </h1>
               <p className="text-zinc-700 max-w-[550px] text-xl">
-                Portal geospasial resmi {appsName.wilayah} untuk akses data
+                Portal geospasial resmi {appConfig.wilayah} untuk akses data
                 spasial yang akurat, terkini, dan mendukung pengambilan
                 keputusan berbasis lokasi.
               </p>
@@ -30,7 +30,7 @@ export function HeroSection() {
           <div className="hidden md:flex items-stretch">
             <div className="w-full h-full relative">
               <Image
-                src="/illustration-map.png"
+                src={appConfig.illustrationMap}
                 alt="Satu Peta Illustration"
                 fill
                 className="object-cover rounded-lg shadow-lg"

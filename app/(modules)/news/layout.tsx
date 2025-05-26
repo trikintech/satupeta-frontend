@@ -1,11 +1,11 @@
 import Footer from "@/shared/components/layout/footer";
 import { Header } from "@/shared/components/layout/header";
-import { appsName } from "@/shared/config/app-config";
+import { appConfig } from "@/shared/config/app-config";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `${appsName.name} ${appsName.wilayah}`,
-  description: `Dapatkan berita terbaru dan pengumuman resmi terkait pengelolaan data geospasial ${appsName.wilayah}. Temukan informasi terkini yang mendukung transparansi dan pengambilan keputusan berbasis lokasi.`,
+  title: `${appConfig.name} ${appConfig.wilayah}`,
+  description: `Dapatkan berita terbaru dan pengumuman resmi terkait pengelolaan data geospasial ${appConfig.wilayah}. Temukan informasi terkini yang mendukung transparansi dan pengambilan keputusan berbasis lokasi.`,
 };
 
 export default function NewsLayout({
