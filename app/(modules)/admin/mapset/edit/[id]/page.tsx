@@ -85,11 +85,11 @@ export default function EditMapsPageClient() {
   useEffect(() => {
     if (mapset) {
       const geoserverSource = mapset.sources.find((source) =>
-        source.url.includes("geoserver")
+        source.url?.includes("geoserver")
       );
 
       const geonetworkSource = mapset.sources.find((source) =>
-        source.url.includes("geonetwork")
+        source.url?.includes("geonetwork")
       );
       setFormState({
         info: {

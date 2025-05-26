@@ -35,13 +35,6 @@ export default function PreviewMap({
     fetchBounds();
   }, [parsed?.baseUrl, parsed?.params.layers, parsed?.params.bounds]);
 
-  // Add a new useEffect to handle bounds changes
-  useEffect(() => {
-    if (bounds) {
-      console.log("Bounds changed:", bounds);
-    }
-  }, [bounds]);
-
   // Add a fallback center and zoom
   const center: [number, number] = centerCustom ?? [
     mapConfig.center[0],
