@@ -184,11 +184,11 @@ export default function DrawingTools() {
 
   // Handler untuk tab click
   const handleTabClick = (tab: "location" | "edit" | "expand") => {
-    // Batalkan operasi drawing yang sedang berjalan
-    if (map) {
-      // @ts-expect-error - API typings might not include this
-      if (map.pm && map.pm.Draw) map.pm.Draw.disable();
-      map.fire("draw:drawstop");
+    // Disable all drawing tools first
+    if (drawingToolsRef.current) {
+      drawingToolsRef.current.marker?.disable();
+      drawingToolsRef.current.polyline?.disable();
+      drawingToolsRef.current.polygon?.disable();
     }
 
     // Toggle active tab
@@ -199,12 +199,12 @@ export default function DrawingTools() {
       return tab;
     });
 
-    // Jika tab dinonaktifkan, tidak perlu memulai drawing baru
+    // If tab is deactivated, don't enable any drawing tool
     if (activeTab === tab) {
       return;
     }
 
-    // Aktifkan drawing tool sesuai tab
+    // Enable the selected drawing tool
     if (drawingToolsRef.current) {
       switch (tab) {
         case "location":
@@ -223,13 +223,6 @@ export default function DrawingTools() {
   // Reset semua item yang digambar
   const handleReset = () => {
     setActiveTab(null);
-
-    // Batalkan operasi drawing yang sedang berjalan
-    if (map) {
-      // @ts-expect-error - API typings might not include this
-      if (map.pm && map.pm.Draw) map.pm.Draw.disable();
-      map.fire("draw:drawstop");
-    }
 
     // Hapus semua layer
     if (drawnItemsRef.current) {
