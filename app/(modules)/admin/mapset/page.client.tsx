@@ -8,10 +8,12 @@ import { ResourceTable } from "../_components/resource-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { TabNavigation } from "./_components/list/tab-navigation";
 import { useTabState } from "../_hooks/use-tab";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useState } from "react";
 import { ConfirmationDialog } from "../_components/confirmation-dialog";
+import organizationApi from "@/shared/services/organization";
+import { Organization } from "@/shared/types/organization";
 
 export default function MapsetPageClient() {
   const columns = useMapsetColumns();
@@ -21,6 +23,11 @@ export default function MapsetPageClient() {
     Mapset[]
   >([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  const { data: organizations } = useQuery({
+    queryKey: ["organizations"],
+    queryFn: () => organizationApi.getOrganizations().then((res) => res.items),
+  });
 
   const {
     data: mapsets,
@@ -105,6 +112,32 @@ export default function MapsetPageClient() {
           onBulkAction: handleBulkAction,
         }}
         refetchAction={refetch}
+        filterOptions={[
+          {
+            label: "Menunggu Validasi",
+            value: "on_verification",
+            group: "status_validation",
+            groupLabel: "Status Validasi",
+          },
+          {
+            label: "Tervalidasi",
+            value: "approved",
+            group: "status_validation",
+            groupLabel: "Status Validasi",
+          },
+          {
+            label: "Ditolak",
+            value: "rejected",
+            group: "status_validation",
+            groupLabel: "Status Validasi",
+          },
+          ...(organizations?.map((org: Organization) => ({
+            label: org.name,
+            value: org.id,
+            group: "producer_id",
+            groupLabel: "Organisasi",
+          })) || []),
+        ]}
       />
 
       <ConfirmationDialog
