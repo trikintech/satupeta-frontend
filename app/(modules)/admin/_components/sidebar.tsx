@@ -222,7 +222,7 @@ const Sidebar = () => {
             <div className="ml-3">
               <p className="text-sm font-medium">{session?.user?.name}</p>
               <div className="text-xs text-gray-500">
-                {getRoleLabelById(userRole.name ?? "")}
+                {getRoleLabelById(userRole?.name ?? "")}
               </div>
             </div>
           )}
