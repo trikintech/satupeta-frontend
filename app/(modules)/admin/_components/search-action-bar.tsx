@@ -147,8 +147,17 @@ const SearchAndActionBar = ({
                 <Button className="bg-white text-zinc-950 text-sm gap-3 border border-zinc-200 px-4 py-2">
                   <ListFilter className="w-4 h-4" />
                   Filter
-                  {selectedFilters.length > 0 && (
-                    <Badge className="ml-2">{selectedFilters.length}</Badge>
+                  {filterOptions.length > 0 && selectedFilters.length > 0 && (
+                    <Badge className="ml-2">
+                      {
+                        selectedFilters.filter((filter) => {
+                          const [key, value] = filter.split("=");
+                          return filterOptions.some(
+                            (opt) => opt.group === key && opt.value === value
+                          );
+                        }).length
+                      }
+                    </Badge>
                   )}
                 </Button>
               </PopoverTrigger>
@@ -218,23 +227,33 @@ const SearchAndActionBar = ({
       {/* Active Filters */}
       {selectedFilters.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {selectedFilters.map((filter) => {
-            const [key, value] = filter.split("=");
-            const option = filterOptions.find(
-              (opt) => opt.group === key && opt.value === value
-            );
-            return (
-              <Badge key={filter} className="flex items-center gap-1 px-3 py-1">
-                {option?.label || filter}
-                <button
-                  onClick={() => removeFilter(filter)}
-                  className="ml-1 rounded-full outline-none focus:ring-2 focus:ring-ring"
+          {selectedFilters
+            .filter((filter) => {
+              const [key, value] = filter.split("=");
+              return filterOptions.some(
+                (opt) => opt.group === key && opt.value === value
+              );
+            })
+            .map((filter) => {
+              const [key, value] = filter.split("=");
+              const option = filterOptions.find(
+                (opt) => opt.group === key && opt.value === value
+              );
+              return (
+                <Badge
+                  key={filter}
+                  className="flex items-center gap-1 px-3 py-1"
                 >
-                  <X className="h-3 w-3" />
-                </button>
-              </Badge>
-            );
-          })}
+                  {option?.label || filter}
+                  <button
+                    onClick={() => removeFilter(filter)}
+                    className="ml-1 rounded-full outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </Badge>
+              );
+            })}
         </div>
       )}
     </div>
