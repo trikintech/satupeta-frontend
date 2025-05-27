@@ -8,10 +8,13 @@ import { ResourceTable } from "../_components/resource-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { TabNavigation } from "./_components/list/tab-navigation";
 import { useTabState } from "../_hooks/use-tab";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useState } from "react";
 import { ConfirmationDialog } from "../_components/confirmation-dialog";
+import organizationApi from "@/shared/services/organization";
+import { Organization } from "@/shared/types/organization";
+import classificationApi from "@/shared/services/classification";
 
 export default function MapsetPageClient() {
   const columns = useMapsetColumns();
@@ -21,6 +24,17 @@ export default function MapsetPageClient() {
     Mapset[]
   >([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  const { data: organizations } = useQuery({
+    queryKey: ["organizations"],
+    queryFn: () => organizationApi.getOrganizations().then((res) => res.items),
+  });
+
+  const { data: classifications } = useQuery({
+    queryKey: ["classifications"],
+    queryFn: () =>
+      classificationApi.getClassifications().then((res) => res.items),
+  });
 
   const {
     data: mapsets,
@@ -105,6 +119,20 @@ export default function MapsetPageClient() {
           onBulkAction: handleBulkAction,
         }}
         refetchAction={refetch}
+        filterOptions={[
+          ...(classifications?.map((classification) => ({
+            label: classification.name,
+            value: classification.id.toString(),
+            group: "classification_id",
+            groupLabel: "Klasifikasi",
+          })) || []),
+          ...(organizations?.map((org: Organization) => ({
+            label: org.name,
+            value: org.id,
+            group: "producer_id",
+            groupLabel: "Organisasi",
+          })) || []),
+        ]}
       />
 
       <ConfirmationDialog
