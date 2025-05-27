@@ -9,10 +9,11 @@ import { useEffect } from "react";
 import { hasPermission, Permission } from "../config/role";
 
 export function useAuthSession(requireAuth = false) {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
   const isLoading = status === "loading";
   const isAuthenticated = status === "authenticated";
+  const hasTokenError = session?.error === "RefreshAccessTokenError";
 
   const checkPermission = (module: string, action: Permission) => {
     const userRole = session?.user?.role;
@@ -21,10 +22,15 @@ export function useAuthSession(requireAuth = false) {
   };
 
   useEffect(() => {
+    if (hasTokenError) {
+      router.push("/auth/signin");
+      return;
+    }
+
     if (!isLoading && !isAuthenticated && requireAuth) {
       router.push("/auth/signin");
     }
-  }, [isLoading, isAuthenticated, requireAuth, router]);
+  }, [isLoading, isAuthenticated, requireAuth, router, hasTokenError]);
 
   return {
     session,
@@ -32,5 +38,6 @@ export function useAuthSession(requireAuth = false) {
     isAuthenticated,
     status,
     checkPermission,
+    update,
   };
 }
