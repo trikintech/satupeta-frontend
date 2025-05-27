@@ -22,7 +22,7 @@ const DashboardPage = () => {
   const userRole = session?.user?.role;
   if (userRole && roles[userRole.name]) {
     const redirectPath = roles[userRole.name].redirectTo;
-    if (redirectPath !== "/admin/dashboard") {
+    if (redirectPath !== "/admin") {
       router.replace(redirectPath);
       return null;
     }
