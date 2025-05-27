@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/shared/utils/utils";
 import { Button } from "@/shared/components/ds/button";
-import { isActiveFeature } from "@/shared/config/app-config";
+import { appConfig, isActiveFeature } from "@/shared/config/app-config";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { handleLogout } from "@/shared/hooks/use-auth-api";
 
@@ -72,7 +72,7 @@ export function Header() {
           <div className="flex items-center">
             <Link href="/" className=" w-40 h-auto">
               <Image
-                src="/logo.svg"
+                src={appConfig.logo}
                 alt="Satu Peta"
                 width={120}
                 height={120}

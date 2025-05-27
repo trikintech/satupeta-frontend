@@ -9,6 +9,7 @@ import { Input } from "@/shared/components/ui/input";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
+import { appConfig } from "@/shared/config/app-config";
 
 export default function LoginPageClient() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function LoginPageClient() {
     <div className="h-screen py-18 px-13 grid lg:grid-cols-2 ">
       <div className="h-full  flex items-center justify-center overflow-hidden">
         <Image
-          src="/ilustration-login.svg"
+          src={appConfig.illustrationLogin}
           width={600}
           height={800}
           alt="illustration-login"

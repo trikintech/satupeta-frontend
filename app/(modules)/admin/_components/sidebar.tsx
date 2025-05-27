@@ -22,6 +22,7 @@ import Image from "next/image";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { getRoleLabelById, hasPermission } from "@/shared/config/role";
 import { handleLogout } from "@/shared/hooks/use-auth-api";
+import { appConfig } from "@/shared/config/app-config";
 
 interface MenuItem {
   name: string;
@@ -118,7 +119,7 @@ const Sidebar = () => {
         {!collapsed && (
           <div>
             <Image
-              src={"/logo.svg"}
+              src={appConfig.logo}
               alt="admin-logo"
               width={140}
               height={120}

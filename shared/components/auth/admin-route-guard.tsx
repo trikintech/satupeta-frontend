@@ -30,7 +30,10 @@ export default function AdminRouteGuard({
   const permission = matched?.[1]?.permission;
 
   const isAllowed =
-    role && menu && permission ? hasPermission(role, menu, permission) : false;
+    pathname === "/admin" ||
+    (role && menu && permission
+      ? hasPermission(role, menu, permission)
+      : false);
 
   useEffect(() => {
     if (hasTokenError && isAdminRoute) {

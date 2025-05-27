@@ -47,8 +47,8 @@ const Footer: React.FC = () => {
           }}
         />
         <div className="flex items-center space-x-8 ">
-          <div className="coordinates">Lat: {coordinates.lat}</div>
-          <div className="coordinates">Lng: {coordinates.lng}</div>
+          <div className="coordinates">Lat {coordinates.lat}</div>
+          <div className="coordinates">Long {coordinates.lng}</div>
           {mapType === "leaflet" && <ScaleBar />}
         </div>
       </div>
