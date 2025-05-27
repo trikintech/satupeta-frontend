@@ -14,6 +14,7 @@ import { useState } from "react";
 import { ConfirmationDialog } from "../_components/confirmation-dialog";
 import organizationApi from "@/shared/services/organization";
 import { Organization } from "@/shared/types/organization";
+import classificationApi from "@/shared/services/classification";
 
 export default function MapsetPageClient() {
   const columns = useMapsetColumns();
@@ -27,6 +28,12 @@ export default function MapsetPageClient() {
   const { data: organizations } = useQuery({
     queryKey: ["organizations"],
     queryFn: () => organizationApi.getOrganizations().then((res) => res.items),
+  });
+
+  const { data: classifications } = useQuery({
+    queryKey: ["classifications"],
+    queryFn: () =>
+      classificationApi.getClassifications().then((res) => res.items),
   });
 
   const {
@@ -113,24 +120,12 @@ export default function MapsetPageClient() {
         }}
         refetchAction={refetch}
         filterOptions={[
-          {
-            label: "Menunggu Validasi",
-            value: "on_verification",
-            group: "status_validation",
-            groupLabel: "Status Validasi",
-          },
-          {
-            label: "Tervalidasi",
-            value: "approved",
-            group: "status_validation",
-            groupLabel: "Status Validasi",
-          },
-          {
-            label: "Ditolak",
-            value: "rejected",
-            group: "status_validation",
-            groupLabel: "Status Validasi",
-          },
+          ...(classifications?.map((classification) => ({
+            label: classification.name,
+            value: classification.id.toString(),
+            group: "classification_id",
+            groupLabel: "Klasifikasi",
+          })) || []),
           ...(organizations?.map((org: Organization) => ({
             label: org.name,
             value: org.id,
