@@ -1,9 +1,9 @@
 export const appConfig = {
   name: "Satu Peta",
-  wilayah: "xxx",
-  logo: "/log.svg",
-  illustrationMap: "/illustration-ma.png",
-  illustrationLogin: "/ilustration-logi.svg",
+  wilayah: "Jatim",
+  logo: "/logo.svg",
+  illustrationMap: "/illustration-map.png",
+  illustrationLogin: "/ilustration-login.svg",
 };
 
 export const isActiveFeature = {
