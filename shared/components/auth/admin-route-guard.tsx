@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { adminRoutePermissions } from "@/shared/config/route-permission-map";
 import { hasPermission } from "@/shared/config/role";
+import { roles } from "@/shared/config/role";
 
 export default function AdminRouteGuard({
   children,
@@ -20,6 +21,11 @@ export default function AdminRouteGuard({
   const role = session?.user?.role;
   const hasTokenError = session?.error === "RefreshAccessTokenError";
 
+  // Get redirect path from role configuration
+  const redirectPath = role
+    ? roles[role.name]?.redirectTo
+    : "/auth/admin/login";
+
   // Detect menu + permission based on pathname
 
   const matched = Object.entries(adminRoutePermissions).find(([route]) =>
@@ -30,7 +36,10 @@ export default function AdminRouteGuard({
   const permission = matched?.[1]?.permission;
 
   const isAllowed =
-    role && menu && permission ? hasPermission(role, menu, permission) : false;
+    pathname === "/admin" ||
+    (role && menu && permission
+      ? hasPermission(role, menu, permission)
+      : false);
 
   useEffect(() => {
     if (hasTokenError && isAdminRoute) {
@@ -42,9 +51,9 @@ export default function AdminRouteGuard({
 
   useEffect(() => {
     if (status === "authenticated" && !isAllowed && isAdminRoute) {
-      router.push("/not-found");
+      router.push(redirectPath);
     }
-  }, [status, isAllowed, isAdminRoute, router]);
+  }, [status, isAllowed, isAdminRoute, router, redirectPath]);
 
   if (
     isAdminRoute &&

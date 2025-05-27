@@ -100,6 +100,8 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
   const [mapsetToToggle, setMapsetToToggle] = useState<Mapset | null>(null);
 
   const userRole = session?.user?.role;
+  const userOrganizationId = session?.user?.organizationId;
+  const isDataManager = userRole?.name === "data_manager";
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -210,6 +212,8 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
       enableHiding: false,
       cell: ({ row }) => {
         const mapset = row.original;
+        const canManageMapset =
+          !isDataManager || mapset.producer?.id === userOrganizationId;
 
         return (
           <>
@@ -232,26 +236,28 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                     Lihat Detail
                   </DropdownMenuItem>
                 )}
-                {hasPermission(userRole, "mapset", "update") && (
-                  <>
-                    <DropdownMenuItem
-                      onClick={() =>
-                        router.push(`/admin/mapset/edit/${mapset.id}`)
-                      }
-                      className="flex items-center gap-2"
-                    >
-                      Edit Mapset
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => setMapsetToToggle(mapset)}
-                      className="flex items-center gap-2"
-                    >
-                      {mapset.is_active ? "Nonaktifkan" : "Aktifkan"} Mapset
-                    </DropdownMenuItem>
-                  </>
-                )}
                 {hasPermission(userRole, "mapset", "update") &&
-                  mapset.status_validation === "rejected" && (
+                  canManageMapset && (
+                    <>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          router.push(`/admin/mapset/edit/${mapset.id}`)
+                        }
+                        className="flex items-center gap-2"
+                      >
+                        Edit Mapset
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => setMapsetToToggle(mapset)}
+                        className="flex items-center gap-2"
+                      >
+                        {mapset.is_active ? "Nonaktifkan" : "Aktifkan"} Mapset
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                {hasPermission(userRole, "mapset", "update") &&
+                  mapset.status_validation === "rejected" &&
+                  canManageMapset && (
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
@@ -262,17 +268,18 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
                       </DropdownMenuItem>
                     </>
                   )}
-                {hasPermission(userRole, "mapset", "delete") && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => setMapsetToDelete(mapset)}
-                      className="flex items-center gap-2 text-destructive focus:text-destructive"
-                    >
-                      Hapus Mapset
-                    </DropdownMenuItem>
-                  </>
-                )}
+                {hasPermission(userRole, "mapset", "delete") &&
+                  canManageMapset && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => setMapsetToDelete(mapset)}
+                        className="flex items-center gap-2 text-destructive focus:text-destructive"
+                      >
+                        Hapus Mapset
+                      </DropdownMenuItem>
+                    </>
+                  )}
               </DropdownMenuContent>
             </DropdownMenu>
 

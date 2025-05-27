@@ -1,4 +1,4 @@
-import { appsName } from "@/shared/config/app-config";
+import { appConfig } from "@/shared/config/app-config";
 import { CircleAlertIcon } from "lucide-react";
 
 export default function EmptyState() {
@@ -6,7 +6,7 @@ export default function EmptyState() {
     <div className="text-sm leading-5 text-zinc-700 flex flex-col gap-3 ">
       <div>
         Temukan dataset geospasial dari berbagai perangkat daerah di{" "}
-        {appsName.name} {appsName.wilayah}.
+        {appConfig.name} {appConfig.wilayah}.
       </div>
       <div className="bg-white flex flex-col gap-2 p-3">
         <div className="text-red-700 flex items-center gap-2">

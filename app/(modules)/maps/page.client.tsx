@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { QueryParamProvider } from "use-query-params";
 import NextAdapterApp from "next-query-params/app";
 import { Header } from "@/shared/components/layout/header";
+import Footer from "./components/footer";
 
 export default function MapsPageClient() {
   return (
@@ -16,7 +17,10 @@ export default function MapsPageClient() {
           <Header />
           <div className="flex-1 relative overflow-hidden">
             <Sidebar />
-            <MapComponent />
+            <div>
+              <MapComponent />
+              <Footer />
+            </div>
             <MapsetDialog />
             <FeatureInformation />
           </div>

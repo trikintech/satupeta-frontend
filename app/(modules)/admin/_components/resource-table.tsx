@@ -10,6 +10,13 @@ import Image from "next/image";
 import { ColumnDef, SortingState } from "@tanstack/react-table";
 import { useState } from "react";
 
+interface FilterOption {
+  label: string;
+  value: string;
+  group: string;
+  groupLabel: string;
+}
+
 interface ResourceTableProps<T> {
   data: T[];
   columns: ColumnDef<T, unknown>[];
@@ -41,6 +48,7 @@ interface ResourceTableProps<T> {
     onBulkAction?: (selectedRows: T[]) => void;
   };
   enableRowSelection?: boolean;
+  filterOptions?: FilterOption[];
 }
 
 export function ResourceTable<T>({
@@ -61,6 +69,7 @@ export function ResourceTable<T>({
   emptyStateProps,
   actionBarProps,
   enableRowSelection,
+  filterOptions = [],
 }: ResourceTableProps<T>) {
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
 
@@ -96,6 +105,7 @@ export function ResourceTable<T>({
         onBulkAction={handleBulkAction}
         bulkLabel={actionBarProps.bulkLabel}
         showBulkAction={actionBarProps.showBulkAction}
+        filterOptions={filterOptions}
       />
 
       {(() => {
