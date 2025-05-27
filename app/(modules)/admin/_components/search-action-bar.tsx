@@ -98,8 +98,18 @@ const SearchAndActionBar = ({
     const newParams = new URLSearchParams(searchParams.toString());
 
     if (filters.length > 0) {
-      // Create the exact format [["key=value"]]
-      const filterString = JSON.stringify(filters.map((f) => [f]));
+      // Group filters by their group property
+      const groupedFilters = filters.reduce((acc, filter) => {
+        const [group] = filter.split("=");
+        if (!acc[group]) {
+          acc[group] = [];
+        }
+        acc[group].push(filter);
+        return acc;
+      }, {} as Record<string, string[]>);
+
+      // Convert grouped filters to array format
+      const filterString = JSON.stringify(Object.values(groupedFilters));
       newParams.set("filter", filterString);
     } else {
       newParams.delete("filter");
