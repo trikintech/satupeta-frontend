@@ -67,6 +67,7 @@ export default function AddMapsPageClient() {
         },
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDataManager, !isDiskominfo, userOrganizationId, setFormState]);
 
   const { data: projectionSystemsResponse, isLoading: isLoadingProjections } =

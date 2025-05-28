@@ -1,12 +1,16 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
-import { SessionProvider } from "next-auth/react";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "./theme-provider";
-import { queryClient } from "../utils/query-client";
-import { GlobalDialogProvider } from "./global-dialog-provider";
+
+import { ReactNode, useEffect, useState } from "react";
+
+import { SessionProvider } from "next-auth/react";
+
 import { useAuthApi } from "../hooks/use-auth-api";
+import { queryClient } from "../utils/query-client";
+
+import { GlobalDialogProvider } from "./global-dialog-provider";
+import { ThemeProvider } from "./theme-provider";
 
 function ApiAuthProvider({ children }: { children: ReactNode }) {
   useAuthApi();
@@ -23,7 +27,11 @@ export function Providers({
   }, []);
 
   return (
-    <SessionProvider basePath="/auth" refetchInterval={0}>
+    <SessionProvider
+      basePath="/auth"
+      refetchInterval={5 * 60}
+      refetchOnWindowFocus={true}
+    >
       <ApiAuthProvider>
         <QueryClientProvider client={queryClient}>
           {mounted ? (
