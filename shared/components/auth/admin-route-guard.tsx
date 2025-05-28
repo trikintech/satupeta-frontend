@@ -50,10 +50,15 @@ export default function AdminRouteGuard({
   }, [hasTokenError, isAdminRoute, pathname, router]);
 
   useEffect(() => {
-    if (status === "authenticated" && !isAllowed && isAdminRoute) {
+    if (
+      status === "authenticated" &&
+      !isAllowed &&
+      isAdminRoute &&
+      pathname !== redirectPath
+    ) {
       router.push(redirectPath);
     }
-  }, [status, isAllowed, isAdminRoute, router, redirectPath]);
+  }, [status, isAllowed, isAdminRoute, router, redirectPath, pathname]);
 
   if (
     isAdminRoute &&
