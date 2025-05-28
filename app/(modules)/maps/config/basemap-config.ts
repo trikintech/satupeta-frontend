@@ -88,4 +88,23 @@ export const basemapConfig: BasemapConfig = {
       },
     },
   },
+  rbi: {
+    name: "RBI",
+    thumbnail: "rbi-thumb.png",
+    leaflet: {
+      url: "https://geoservices.big.go.id/rbi/rest/services/BASEMAP/Rupabumi_Indonesia/MapServer/tile/{z}/{y}/{x}",
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      maxZoom: 19,
+    },
+    cesium: {
+      type: "UrlTemplateImageryProvider",
+      options: {
+        url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+        subdomains: ["a", "b", "c", "d"],
+        minimumLevel: 0,
+        maximumLevel: 19,
+      },
+    },
+  },
 };
