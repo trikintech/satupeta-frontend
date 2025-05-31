@@ -1,6 +1,8 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
+
 import { useEffect, useRef } from "react";
+
 import { setupApiInterceptors } from "../services/api";
 import authApi from "../services/auth";
 
@@ -24,7 +26,6 @@ export function useAuthApi() {
     const getToken = () => {
       if (!session?.access_token) return null;
       if (session?.error === "RefreshAccessTokenError") {
-        handleLogout();
         return null;
       }
       return session.access_token;
