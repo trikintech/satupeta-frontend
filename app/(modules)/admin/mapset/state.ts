@@ -18,6 +18,7 @@ export interface MapsetFormState {
     classification_id: string;
     organization_id: string;
     is_popular: boolean;
+    layer_type: "line" | "polygon" | "point" | null;
   };
   metadata: {
     source_id: string | null;
@@ -48,6 +49,7 @@ const initialFormState: MapsetFormState = {
     data_status: "sementara",
     organization_id: "",
     is_popular: false,
+    layer_type: "polygon",
   },
   metadata: {
     source_id: "",

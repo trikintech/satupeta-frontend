@@ -63,6 +63,7 @@ export type Mapset = {
   description: string;
   scale: string;
   layer_url: string;
+  layer_type: "line" | "polygon" | "point" | null;
   metadata_url: string;
   status_validation: string;
   classification: Classification;
@@ -96,6 +97,7 @@ export interface MapsetSubmitPayload {
   is_popular: boolean;
   is_active: boolean;
   layer_url: string;
+  layer_type: "line" | "polygon" | "point" | null;
   metadata_url: string;
   regional_id: string;
   classification_id: string;

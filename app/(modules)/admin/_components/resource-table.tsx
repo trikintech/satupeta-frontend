@@ -119,7 +119,7 @@ export function ResourceTable<T>({
           return (
             <EmptyState
               icon={<RefreshCwIcon className="h-10 w-10 text-gray-400" />}
-              title="Error memuat data"
+              title="Gagal memuat data"
               description="Terjadi kesalahan saat memuat data. Silakan coba lagi."
               action={
                 <Button onClick={() => refetchAction()}>Coba Lagi</Button>
