@@ -26,12 +26,12 @@ export default function MapsetPageClient() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const { data: organizations } = useQuery({
-    queryKey: ["organizations"],
+    queryKey: ["organizations_filter"],
     queryFn: () => organizationApi.getOrganizations().then((res) => res.items),
   });
 
   const { data: classifications } = useQuery({
-    queryKey: ["classifications"],
+    queryKey: ["classifications_filter"],
     queryFn: () =>
       classificationApi.getClassifications().then((res) => res.items),
   });

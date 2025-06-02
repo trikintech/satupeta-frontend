@@ -26,6 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/shared/components/ui/radio-group";
 import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Switch } from "@/shared/components/ui/switch";
+import { layerTypeOptions } from "@/shared/config/layer-type";
 
 // Validation schema
 const mapsetInfoSchema = z.object({
@@ -35,6 +36,7 @@ const mapsetInfoSchema = z.object({
   scale: z.string().min(1, "Skala harus diisi"),
   projection_system_id: z.string().min(1, "Sistem proyeksi harus dipilih"),
   category_id: z.string().min(1, "Kategori harus dipilih"),
+  layer_type: z.string().nullable(),
   classification_id: z.string().min(1, "Klasifikasi harus dipilih"),
   organization_id: z.string().min(1, "Organisasi harus dipilih"),
   data_status: z.enum(["sementara", "tetap"], {
@@ -220,7 +222,7 @@ export function MapsetInfoForm({
                     <SelectValue placeholder="Pilih klasifikasi" />
                   </SelectTrigger>
                   <SelectContent>
-                    {classifications.map((item) => (
+                    {classifications?.map((item) => (
                       <SelectItem key={item.id} value={item.id}>
                         {item.name}
                       </SelectItem>
@@ -229,6 +231,32 @@ export function MapsetInfoForm({
                 </Select>
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="layer_type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tipe Layer</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value || undefined}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih tipe layer" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {layerTypeOptions.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
             </FormItem>
           )}
         />

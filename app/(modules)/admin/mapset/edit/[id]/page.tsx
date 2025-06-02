@@ -102,6 +102,7 @@ export default function EditMapsPageClient() {
           classification_id: mapset.classification.id,
           organization_id: mapset.producer.id,
           is_popular: mapset.is_popular,
+          layer_type: mapset.layer_type,
         },
         metadata: {
           source_id: geoserverSource?.id || null,
@@ -192,6 +193,7 @@ export default function EditMapsPageClient() {
       data_status: formState.info.data_status,
       classification_id: formState.info.classification_id,
       producer_id: formState.info.organization_id,
+      layer_type: formState.info.layer_type,
       source_id: [
         formState.metadata.source_id,
         formState.metadata.metadata_source_id,

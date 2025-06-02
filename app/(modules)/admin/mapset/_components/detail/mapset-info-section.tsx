@@ -1,3 +1,4 @@
+import { layerTypeLabel } from "@/shared/config/layer-type";
 import { Mapset } from "@/shared/types/mapset";
 
 export default function MapsetInfoSection({ mapset }: { mapset: Mapset }) {
@@ -26,6 +27,15 @@ export default function MapsetInfoSection({ mapset }: { mapset: Mapset }) {
           {mapset.projection_system.name}
         </div>
       </div>
+      {mapset.layer_type && (
+        <div className="py-2 px-4">
+          <div className="text-sm font-medium text-zinc-950">Tipe Layer</div>
+          <div className="text-sm text-zinc-800">
+            {layerTypeLabel[mapset.layer_type]}
+          </div>
+        </div>
+      )}
+
       <div className="py-2 px-4">
         <div className="text-sm font-medium text-zinc-950">Kategori</div>
         <div className="text-sm text-zinc-800">{mapset.category.name}</div>
