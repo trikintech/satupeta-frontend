@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { GripHorizontal, ChevronUp, Eye, EyeOff } from "lucide-react";
 import L from "leaflet";
 import { useAtom } from "jotai";
@@ -17,40 +17,20 @@ import mapsetApi from "@/shared/services/mapset";
 import { LegendDisplay } from "./legend-display";
 import { OpacityControl } from "./opacity-control";
 import { LayerActions } from "./layer-actions";
-import ChoroplethControl from "./choropleth-control";
+import dynamic from "next/dynamic";
+
+const ChoroplethControl = dynamic(() => import("./choropleth-control"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full aspect-square bg-gray-200 animate-pulse" />
+  ),
+});
 
 interface LayerControlItemProps {
   layer: ActiveLayer;
   layerInstance?: L.Layer;
   onZoom: (bounds?: L.LatLngBoundsExpression | null) => void;
 }
-
-const checkPointLayer = async (
-  layerName: string,
-  baseUrl: string
-): Promise<boolean> => {
-  try {
-    // Extract the base layer name without namespace
-    const baseLayerName = layerName.split(":").pop() || layerName;
-
-    // Directly fetch a single feature using WFS
-    const getFeatureUrl = `${baseUrl}?service=WFS&version=1.1.0&request=GetFeature&typeName=${baseLayerName}&maxFeatures=1&outputFormat=application/json`;
-    const featureResponse = await fetch(getFeatureUrl);
-    if (!featureResponse.ok) return false;
-
-    const featureData = await featureResponse.json();
-    if (featureData.features && featureData.features.length > 0) {
-      const geometryType =
-        featureData.features[0].geometry?.type?.toLowerCase();
-      return geometryType === "point" || geometryType === "multipoint";
-    }
-
-    return false;
-  } catch (error) {
-    console.error("Error checking layer geometry type:", error);
-    return false;
-  }
-};
 
 export const LayerControlItem = ({
   layer,
@@ -59,33 +39,21 @@ export const LayerControlItem = ({
 }: LayerControlItemProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [opacity, setOpacity] = useState(1);
-  const [isPointLayer, setIsPointLayer] = useState(false);
   const [, setIsOpenDialog] = useAtom(isOpenMapsetDialogAtom);
   const [, setSelectedMapset] = useAtom(selectedMapsetAtom);
   const [, removeLayer] = useAtom(removeLayerAtom);
   const [, toggleLayer] = useAtom(toggleLayerAtom);
-  const { data: mapsets } = useQuery({
-    queryKey: ["mapsets"],
+  const { data: mapset } = useQuery({
+    queryKey: ["mapset", layer.source.id],
     queryFn: () =>
-      mapsetApi.getMapsets().then((res) => {
-        return res.items;
+      mapsetApi.getMapsetById(layer.source.id.toString()).then((res) => {
+        return res;
       }),
   });
   const [map] = useAtom(mapAtom);
 
-  useEffect(() => {
-    const checkLayer = async () => {
-      if (layer.layer.layers && layer.layer.url) {
-        const isPoint = await checkPointLayer(
-          layer.layer.layers,
-          layer.layer.url
-        );
-        setIsPointLayer(isPoint);
-      }
-    };
-
-    checkLayer();
-  }, [layer.layer.layers, layer.layer.url]);
+  console.log(layer);
+  console.log(layerInstance);
 
   const handleOpacityChange = (value: number[]) => {
     if (layerInstance && layerInstance instanceof L.TileLayer.WMS) {
@@ -95,16 +63,10 @@ export const LayerControlItem = ({
   };
 
   const handleInfo = () => {
-    if (!mapsets) return;
+    if (!mapset) return;
 
-    const foundMapset = mapsets.find((mapset) => mapset.id === layer.source.id);
-
-    if (foundMapset) {
-      setSelectedMapset(foundMapset);
-      setIsOpenDialog(true);
-    } else {
-      console.warn("Mapset not found for this layer:", layer.id);
-    }
+    setSelectedMapset(mapset);
+    setIsOpenDialog(true);
   };
 
   const handleToggleVisibility = () => {
@@ -217,7 +179,8 @@ export const LayerControlItem = ({
             onOpacityChange={handleOpacityChange}
           />
 
-          {isPointLayer && <ChoroplethControl />}
+          {/* {mapset?.layer_type === "point" && <ChoroplethControl />} */}
+          {<ChoroplethControl />}
         </div>
       )}
     </div>
