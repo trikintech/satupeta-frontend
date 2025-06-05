@@ -32,7 +32,7 @@ jobs:
       - name: Write file .env in root build apps
         run: |
           echo "NEXT_PUBLIC_API_URL=${{secrets.NEXT_PUBLIC_API_URL}}" > .env
-          echo "NEXT_PUBLIC_ARCGIS_GEOCODESERVER=${{secrets.NEXT_PUBLIC_ARCGIS_GEOCODESERVER}}" > .env
+          echo "NEXT_PUBLIC_ARCGIS_GEOCODESERVER=${{secrets.NEXT_PUBLIC_ARCGIS_GEOCODESERVER}}" >> .env
           echo "AUTH_SECRET=${{secrets.AUTH_SECRET}}" >> .env
           echo "AUTH_URL=${{secrets.AUTH_URL}}" >> .env
 
