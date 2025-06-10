@@ -17,14 +17,13 @@ interface GeocodingResult {
   score: number;
 }
 
-// Jawa Timur extent in Web Mercator (EPSG:3857)
-const JAWA_TIMUR_EXTENT = {
-  xmin: (111.5 * 20037508.34) / 180, // West boundary
-  ymin: (-8.5 * 20037508.34) / 180, // South boundary
-  xmax: (114.5 * 20037508.34) / 180, // East boundary
-  ymax: (-6.5 * 20037508.34) / 180, // North boundary
-  spatialReference: { wkid: 102100 },
-};
+// const SPATIAL_EXTENT = {
+//   xmin: (111.5 * 20037508.34) / 180, // West boundary
+//   ymin: (-8.5 * 20037508.34) / 180, // South boundary
+//   xmax: (114.5 * 20037508.34) / 180, // East boundary
+//   ymax: (-6.5 * 20037508.34) / 180, // North boundary
+//   spatialReference: { wkid: 102100 },
+// };
 
 export default function GeocodingSearch() {
   const [map] = useAtom(mapAtom);
@@ -51,7 +50,7 @@ export default function GeocodingSearch() {
             singleLine: val,
             outFields: "Match_addr,Addr_type",
             maxLocations: "5",
-            searchExtent: JSON.stringify(JAWA_TIMUR_EXTENT),
+            // searchExtent: JSON.stringify(SPATIAL_EXTENT),
           })
       );
 

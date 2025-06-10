@@ -59,7 +59,7 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between text-gray-400 text-sm gap-4">
         <div>
-          <p>0821-0920 0019</p>
+          <p>{appConfig.phoneNumber}</p>
           <p></p>
         </div>
         <div className="text-right">

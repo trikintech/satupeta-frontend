@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import mapsetApi from "@/shared/services/mapset";
 import { getTotalMetadata } from "@/shared/utils/geonetwork";
+import { appConfig } from "@/shared/config/app-config";
 
 export function StatisticsSection() {
   const [mapsetCount, setMapsetCount] = useState<number>(0);
@@ -71,7 +72,7 @@ export function StatisticsSection() {
                 <p className="mb-4 text-2xl">Metadata</p>
               </div>
               <Link
-                href="https://geonetwork.jatimprov.go.id/"
+                href={appConfig.geonetworkUrl}
                 className="flex items-center text-sm font-medium hover:underline"
               >
                 Lihat selengkapnya

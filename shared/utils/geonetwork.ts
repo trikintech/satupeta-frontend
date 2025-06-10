@@ -1,7 +1,9 @@
+import { appConfig } from "../config/app-config";
+
 // utils/getTotalMetadata.ts
 export async function getTotalMetadata(): Promise<number | null> {
   const url =
-    "https://geonetwork.jatimprov.go.id/geonetwork/srv/api/search/records/_search";
+    appConfig.geonetworkUrl + "/geonetwork/srv/api/search/records/_search";
 
   const payload = {
     size: 0,
