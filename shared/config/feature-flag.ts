@@ -15,7 +15,7 @@ export const featureFlags = {
   },
   mapsetHistory: {
     name: "Mapset History",
-    isActive: false,
+    isActive: true,
   },
 } satisfies Record<string, FeatureConfig>;
 
