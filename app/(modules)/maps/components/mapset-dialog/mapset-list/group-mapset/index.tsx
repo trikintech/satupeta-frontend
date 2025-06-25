@@ -12,6 +12,7 @@ import { selectedMapsetAtom } from "../../../../state/mapset-dialog";
 import { useAtom } from "jotai";
 import { Mapset } from "@/shared/types/mapset";
 import MapsetItem from "./mapset-item";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface GroupMapsetProps {
   item: Organization | Category;
@@ -23,6 +24,8 @@ export default function GroupMapset({ item, type, search }: GroupMapsetProps) {
   const [open, setOpen] = useState(!!search);
   const [selectedMapset, setSelectedMapset] = useAtom(selectedMapsetAtom);
   const queryClient = useQueryClient();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const dynamicFilter =
     type === "organization"
@@ -53,9 +56,17 @@ export default function GroupMapset({ item, type, search }: GroupMapsetProps) {
     });
   }, [search, item.id, type, queryClient]);
 
-  const handleAddLayer = useCallback((mapset: Mapset) => {
-    setSelectedMapset(mapset);
-  }, []);
+  const handleAddLayer = useCallback(
+    (mapset: Mapset) => {
+      setSelectedMapset(mapset);
+
+      // Update the URL with the new mapset-id
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("mapset-id", mapset.id.toString());
+      router.replace(`?${params.toString()}`, { scroll: false });
+    },
+    [setSelectedMapset, router, searchParams]
+  );
 
   if (isLoading) {
     return (
