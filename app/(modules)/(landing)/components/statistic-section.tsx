@@ -15,7 +15,11 @@ export function StatisticsSection() {
       try {
         const [mapsetResponse, metadataResponse] = await Promise.all([
           mapsetApi.getMapsets({
-            filter: ["is_active=true", "status_validation=approved"],
+            filter: JSON.stringify([
+              "is_active=true",
+              "status_validation=approved",
+              "is_deleted=false",
+            ]),
           }),
           getTotalMetadata(),
         ]);
