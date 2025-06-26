@@ -208,6 +208,7 @@ export default function EditMapsPageClient() {
       is_active: mapset?.is_active || true,
       regional_id:
         mapset?.regional.id || "01968b53-a910-7a67-bd10-975b8923b92e",
+      notes: "Mapset dilakukan perubahan",
       status_validation:
         mapset?.status_validation || StatusValidation.ON_VERIFICATION,
     };

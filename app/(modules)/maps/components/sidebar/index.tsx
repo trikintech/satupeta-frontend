@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import OpenTrigger from "./open-trigger";
-import SearchInput from "@/shared/components/search-input";
 import CloseTrigger from "./close-trigger";
 import { Button } from "@/shared/components/ui/button";
 import { useSetAtom } from "jotai";
@@ -18,17 +17,14 @@ const DrawingTools = dynamic(() => import("./drawing-tools"), {
   ssr: false,
 });
 
+const GeocodingSearch = dynamic(() => import("../geocoding-search"), {
+  ssr: false,
+});
+
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const setIsOpenDialog = useSetAtom(isOpenMapsetDialogAtom);
   const [openCatalog] = useQueryParam("open-catalog", StringParam);
-  const [, setQuery] = useQueryParam("query", StringParam);
-  const [input, setInput] = useState("");
-
-  const handleChange = (val: string) => {
-    setInput(val);
-    setQuery(val);
-  };
 
   useEffect(() => {
     if (openCatalog === "true") {
@@ -49,11 +45,7 @@ export default function Sidebar() {
           }`}
         >
           <div className="flex flex-col gap-3 p-6 border-b border-gray-200">
-            <SearchInput
-              value={input}
-              onChange={(val) => handleChange(val)}
-              placeholder="Cari Lokasi/Dataset"
-            />
+            <GeocodingSearch />
             <Button onClick={() => setIsOpenDialog(true)}>Jelajahi Data</Button>
           </div>
           <div className="p-6 border-b border-gray-200 text-sm">

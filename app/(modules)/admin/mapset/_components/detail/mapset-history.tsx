@@ -16,7 +16,9 @@ export default function MapsetHistory({ id }: { id: string }) {
 
   return (
     <div className="overflow-x-auto">
-      <h2 className="text-lg font-semibold mb-4">Riwayat Mapset</h2>
+      <h2 className="text-lg font-semibold mb-4">
+        Catatan Verifikasi/Validasi Mapset
+      </h2>
 
       <table className="w-full border-separate border-spacing-0 border border-zinc-200 rounded-lg text-sm">
         <thead>
