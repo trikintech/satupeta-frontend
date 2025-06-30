@@ -1,7 +1,7 @@
 import { Button } from "@/shared/components/ui/button";
 import { Info, Trash2, Download, MousePointer2 } from "lucide-react";
-import { ActiveLayer } from "../../../state/active-layers";
 import L from "leaflet";
+import { ActiveLayer } from "@/app/(modules)/maps/state/active-layers";
 
 interface LayerActionsProps {
   layer: ActiveLayer;

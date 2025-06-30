@@ -5,14 +5,14 @@ import { useAtom } from "jotai";
 import {
   isOpenMapsetDialogAtom,
   selectedMapsetAtom,
-} from "../../../state/mapset-dialog";
+} from "../../../../state/mapset-dialog";
 import { useQuery } from "@tanstack/react-query";
 import {
   ActiveLayer,
   removeLayerAtom,
   toggleLayerAtom,
-} from "../../../state/active-layers";
-import { mapAtom } from "../../../state/map";
+} from "../../../../state/active-layers";
+import { mapAtom } from "../../../../state/map";
 import mapsetApi from "@/shared/services/mapset";
 import { LegendDisplay } from "./legend-display";
 import { OpacityControl } from "./opacity-control";
@@ -52,12 +52,16 @@ export const LayerControlItem = ({
   });
   const [map] = useAtom(mapAtom);
 
-  console.log(layer);
-  console.log(layerInstance);
-
   const handleOpacityChange = (value: number[]) => {
     if (layerInstance && layerInstance instanceof L.TileLayer.WMS) {
       layerInstance.setOpacity(value[0]);
+    }
+
+    if (layerInstance && layerInstance instanceof L.GeoJSON) {
+      layerInstance.setStyle({
+        fillOpacity: value[0],
+        opacity: value[0],
+      });
     }
     setOpacity(value[0]);
   };
@@ -180,7 +184,7 @@ export const LayerControlItem = ({
           />
 
           {/* {mapset?.layer_type === "point" && <ChoroplethControl />} */}
-          {<ChoroplethControl />}
+          {<ChoroplethControl layer={layer} />}
         </div>
       )}
     </div>

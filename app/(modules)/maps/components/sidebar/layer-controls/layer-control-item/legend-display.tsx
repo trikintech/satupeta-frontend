@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getLegendUrl } from "@/shared/utils/wms";
-import { ActiveLayer } from "../../../state/active-layers";
+import { ActiveLayer } from "@/app/(modules)/maps/state/active-layers";
 
 interface LegendDisplayProps {
   layer: ActiveLayer;

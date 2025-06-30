@@ -42,14 +42,17 @@ const DraggableLayerItem = ({
 
   const [, drop] = useDrop({
     accept: "LAYER",
-    hover(item: { id: string; index: number }) {
+    drop(item: { id: string; index: number }) {
       if (!ref.current) return;
+
       const dragIndex = item.index;
       const hoverIndex = index;
 
       if (dragIndex === hoverIndex) return;
 
       moveLayer(dragIndex, hoverIndex);
+
+      // Update the item's index so it's correct for future operations
       item.index = hoverIndex;
     },
   });

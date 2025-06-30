@@ -22,12 +22,15 @@ export type Source = {
   source: string;
 };
 
+export type LayerMode = "basic" | "choropleth";
+
 export type ActiveLayer = {
   id: string;
   name: string;
   source: Source;
   settings: LayerSettings;
   layer: WMSLayerConfig;
+  mode?: LayerMode;
 };
 
 export const activeLayersAtom = atom<ActiveLayer[]>([]);
@@ -143,3 +146,12 @@ export const anyLayersVisibleAtom = atom((get) =>
 export const removeAllLayersAtom = atom(null, (get, set) => {
   set(activeLayersAtom, []); // Clear all layers from the activeLayersAtom
 });
+
+export const setLayerModeAtom = atom(
+  null,
+  (get, set, { layerId, mode }: { layerId: string; mode: LayerMode }) => {
+    set(activeLayersAtom, (prev) =>
+      prev.map((layer) => (layer.id === layerId ? { ...layer, mode } : layer))
+    );
+  }
+);
