@@ -12,10 +12,15 @@ import jatimGeojson from "@/public/jatim.json";
 import L from "leaflet";
 import { mapAtom } from "@/app/(modules)/maps/state/map";
 import { leafletLayerInstancesAtom } from "@/app/(modules)/maps/state/leaflet-layer-instances";
+import { useState } from "react";
 
 interface ChoropleControlProps {
   layer: ActiveLayer;
 }
+
+// Add a new atom or use local state to store the original (basic) layer instance
+const basicLayerInstances = new Map<string, L.Layer>();
+
 export default function ChoroplethControl({ layer }: ChoropleControlProps) {
   const setLayerMode = useSetAtom(setLayerModeAtom);
   const [map] = useAtom(mapAtom);
@@ -23,7 +28,11 @@ export default function ChoroplethControl({ layer }: ChoropleControlProps) {
   const [layerInstances, setLayerInstances] = useAtom(
     leafletLayerInstancesAtom
   );
-  const { data: colorScale } = useQuery({
+
+  // Loading state for choropleth
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: colorScale, isFetching } = useQuery({
     queryKey: ["color-scale", layer.id],
     queryFn: () =>
       colorScaleApi
@@ -35,10 +44,16 @@ export default function ChoroplethControl({ layer }: ChoropleControlProps) {
     staleTime: 5000,
   });
 
-  const changeToColorpleth = () => {
-    if (!colorScale?.data) return;
-    if (!map) return;
+  const changeToColorpleth = async () => {
+    if (!colorScale?.data || !map) return;
+    setIsLoading(true);
+
     const existingLayer = layerInstances.get(layer.id);
+
+    // Save the basic layer instance if not already saved
+    if (existingLayer && !basicLayerInstances.has(layer.id)) {
+      basicLayerInstances.set(layer.id, existingLayer);
+    }
 
     if (existingLayer) map.removeLayer(existingLayer);
 
@@ -67,23 +82,42 @@ export default function ChoroplethControl({ layer }: ChoropleControlProps) {
     newMap.set(layer.id, leafletLayer);
 
     setLayerInstances(newMap);
+    setIsLoading(false);
+  };
+
+  const restoreBasicLayer = () => {
+    if (!map) return;
+
+    const currentLayer = layerInstances.get(layer.id);
+    if (currentLayer) map?.removeLayer(currentLayer);
+
+    const basicLayer = basicLayerInstances.get(layer.id);
+    if (basicLayer) {
+      basicLayer.addTo(map);
+      const newMap = new Map(layerInstances);
+      newMap.set(layer.id, basicLayer);
+      setLayerInstances(newMap);
+    }
+    setLayerMode({ layerId: layer.id, mode: "basic" });
   };
 
   return (
     <div className="bg-zinc-100 p-1 grid grid-cols-2 space-x-1">
       <button
         className="bg-white cursor-pointer rounded-md flex flex-col gap-1 justify-center items-center text-sm text-zinc-950 py-2 px-3"
-        onClick={() => setLayerMode({ layerId: layer.id, mode: "basic" })}
+        onClick={restoreBasicLayer}
+        disabled={isLoading || isFetching}
       >
         <MapIcon size={32} />
         Basic
       </button>
       <button
         className="bg-white cursor-pointer rounded-md flex flex-col gap-1 justify-center items-center text-sm text-zinc-950 py-2 px-3"
-        onClick={() => changeToColorpleth()}
+        onClick={changeToColorpleth}
+        disabled={isLoading || isFetching}
       >
         <ChoroplethIcon size={32} />
-        Choropleth
+        {isLoading || isFetching ? "Loading..." : "Choropleth"}
       </button>
     </div>
   );

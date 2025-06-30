@@ -183,8 +183,9 @@ export const LayerControlItem = ({
             onOpacityChange={handleOpacityChange}
           />
 
-          {/* {mapset?.layer_type === "point" && <ChoroplethControl />} */}
-          {<ChoroplethControl layer={layer} />}
+          {mapset?.layer_type === "point" && (
+            <ChoroplethControl layer={layer} />
+          )}
         </div>
       )}
     </div>
