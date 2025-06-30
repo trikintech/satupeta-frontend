@@ -1,3 +1,5 @@
+import { WMSLayerConfig } from "@/app/(modules)/maps/state/active-layers";
+
 import { LatLngBoundsExpression } from "leaflet";
 
 interface GetLegendUrlOptions {
@@ -37,6 +39,30 @@ export const parseWmsUrl = (url: string | undefined | null) => {
     console.error("Invalid WMS URL:", error);
     return null;
   }
+};
+
+export const constructWfsUrl = (wmsConfig: WMSLayerConfig) => {
+  const { url, layers } = wmsConfig;
+
+  if (!url) return;
+  // Replace 'wms' with 'ows' in the base URL
+  const baseUrl = url.replace("/wms", "/ows");
+
+  // Construct query parameters
+  const params = {
+    service: "WFS",
+    version: "1.0.0",
+    request: "GetFeature",
+    typeName: layers,
+    maxFeatures: 50,
+    outputFormat: "application/json",
+  };
+  const queryString = Object.entries(params)
+    .filter(([value]) => value !== undefined)
+    .map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`)
+    .join("&");
+
+  return `${baseUrl}?${queryString}`;
 };
 
 export const getWmsTileLayerUrl = (url: string | undefined | null) => {

@@ -1,32 +1,30 @@
 import { useState } from "react";
-import { Button } from "@/shared/components/ui/button";
-import { Slider } from "@/shared/components/ui/slider";
-import {
-  Trash2,
-  Info,
-  ChevronUp,
-  GripHorizontal,
-  Eye,
-  EyeOff,
-  Download,
-  MousePointer2,
-} from "lucide-react";
+import { GripHorizontal, ChevronUp, Eye, EyeOff } from "lucide-react";
 import L from "leaflet";
-import { getLegendUrl } from "../../../../../../shared/utils/wms";
-import Image from "next/image";
 import { useAtom } from "jotai";
 import {
   isOpenMapsetDialogAtom,
   selectedMapsetAtom,
-} from "../../../state/mapset-dialog";
+} from "../../../../state/mapset-dialog";
 import { useQuery } from "@tanstack/react-query";
 import {
   ActiveLayer,
   removeLayerAtom,
   toggleLayerAtom,
-} from "../../../state/active-layers";
-import { mapAtom } from "../../../state/map";
+} from "../../../../state/active-layers";
+import { mapAtom } from "../../../../state/map";
 import mapsetApi from "@/shared/services/mapset";
+import { LegendDisplay } from "./legend-display";
+import { OpacityControl } from "./opacity-control";
+import { LayerActions } from "./layer-actions";
+import dynamic from "next/dynamic";
+
+const ChoroplethControl = dynamic(() => import("./choropleth-control"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full aspect-square bg-gray-200 animate-pulse" />
+  ),
+});
 
 interface LayerControlItemProps {
   layer: ActiveLayer;
@@ -45,11 +43,11 @@ export const LayerControlItem = ({
   const [, setSelectedMapset] = useAtom(selectedMapsetAtom);
   const [, removeLayer] = useAtom(removeLayerAtom);
   const [, toggleLayer] = useAtom(toggleLayerAtom);
-  const { data: mapsets } = useQuery({
-    queryKey: ["mapsets"],
+  const { data: mapset } = useQuery({
+    queryKey: ["mapset", layer.source.id],
     queryFn: () =>
-      mapsetApi.getMapsets().then((res) => {
-        return res.items;
+      mapsetApi.getMapsetById(layer.source.id.toString()).then((res) => {
+        return res;
       }),
   });
   const [map] = useAtom(mapAtom);
@@ -58,20 +56,21 @@ export const LayerControlItem = ({
     if (layerInstance && layerInstance instanceof L.TileLayer.WMS) {
       layerInstance.setOpacity(value[0]);
     }
+
+    if (layerInstance && layerInstance instanceof L.GeoJSON) {
+      layerInstance.setStyle({
+        fillOpacity: value[0],
+        opacity: value[0],
+      });
+    }
     setOpacity(value[0]);
   };
 
   const handleInfo = () => {
-    if (!mapsets) return;
+    if (!mapset) return;
 
-    const foundMapset = mapsets.find((mapset) => mapset.id === layer.source.id);
-
-    if (foundMapset) {
-      setSelectedMapset(foundMapset);
-      setIsOpenDialog(true);
-    } else {
-      console.warn("Mapset not found for this layer:", layer.id);
-    }
+    setSelectedMapset(mapset);
+    setIsOpenDialog(true);
   };
 
   const handleToggleVisibility = () => {
@@ -88,11 +87,9 @@ export const LayerControlItem = ({
   };
 
   function toLatLngBounds(bounds: L.LatLngBoundsExpression): L.LatLngBounds {
-    // Jika sudah objek LatLngBounds, return langsung
     if ("getSouthWest" in bounds && "getNorthEast" in bounds) {
       return bounds as L.LatLngBounds;
     }
-    // Kalau array koordinat, convert dengan L.latLngBounds()
     return L.latLngBounds(bounds as L.LatLngExpression[]);
   }
 
@@ -103,7 +100,6 @@ export const LayerControlItem = ({
     if (!rawBounds) return;
 
     const bounds = toLatLngBounds(rawBounds);
-
     const southWest = bounds.getSouthWest();
     const northEast = bounds.getNorthEast();
 
@@ -153,7 +149,6 @@ export const LayerControlItem = ({
           </button>
         )}
 
-        {/* Vertical Line */}
         {!isExpanded && (
           <div className="border-l border-gray-300 h-4 mx-2"></div>
         )}
@@ -175,74 +170,22 @@ export const LayerControlItem = ({
 
       {isExpanded && (
         <div className="space-y-3 mt-3">
-          <div className="pt-2 mt-2">
-            <div className="text-xs text-gray-500">
-              {layer.layer.url ? (
-                <Image
-                  src={getLegendUrl({
-                    baseUrl: layer.layer.url,
-                    layerName: layer.layer.layers ?? "",
-                    width: 200,
-                  })}
-                  alt={`${layer.name} legend`}
-                  width={200}
-                  height={40}
-                  className="w-auto h-auto max-w-full"
-                  unoptimized
-                />
-              ) : (
-                <p>No legend available</p>
-              )}
-            </div>
-          </div>
-          <div className="text-sm flex justify-between items-center border text-zinc-950 border-zinc-200">
-            <Button
-              variant="ghost"
-              className="flex items-center gap-1 hover:bg-transparent font-normal"
-              onClick={() => layer.layer.bounds && onZoom(layer.layer.bounds)}
-            >
-              <MousePointer2 size={24} />
-              <span>Pusatkan</span>
-            </Button>
-            <div className="h-full w-px bg-gray-200" />
-            <Button
-              variant="ghost"
-              className="flex items-center gap-1  hover:bg-transparent font-normal"
-              onClick={handleInfo}
-            >
-              <Info size={24} />
-              <span>Informasi</span>
-            </Button>
-            <div className="h-full w-px bg-gray-200" />
-            <Button
-              variant="ghost"
-              className="flex items-center gap-1  hover:bg-transparent font-normal"
-              onClick={() => removeLayer(layer.id)}
-            >
-              <Trash2 size={24} />
-            </Button>
-            <div className="h-full w-px bg-gray-200" />
-            <Button
-              variant="ghost"
-              className="flex items-center gap-1  hover:bg-transparent font-normal"
-              onClick={() => handleDownloadImage()}
-            >
-              <Download size={24} />
-            </Button>
-          </div>
+          <LegendDisplay layer={layer} />
+          <LayerActions
+            layer={layer}
+            onZoom={onZoom}
+            onInfo={handleInfo}
+            onRemove={() => removeLayer(layer.id)}
+            onDownload={handleDownloadImage}
+          />
+          <OpacityControl
+            opacity={opacity}
+            onOpacityChange={handleOpacityChange}
+          />
 
-          <div>
-            <label className="block text-sm text-zinc-700 mb-1">
-              Opacity: {Math.round(opacity * 100)}%
-            </label>
-            <Slider
-              value={[opacity]}
-              min={0}
-              max={1}
-              step={0.01}
-              onValueChange={handleOpacityChange}
-            />
-          </div>
+          {mapset?.layer_type === "point" && (
+            <ChoroplethControl layer={layer} />
+          )}
         </div>
       )}
     </div>
