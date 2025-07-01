@@ -1,5 +1,3 @@
-import { FeatureCollection, Feature, Geometry } from "geojson";
-
 import { VillageBoundaryFeature } from "../services/color-scale";
 
 /**
@@ -11,19 +9,11 @@ import { VillageBoundaryFeature } from "../services/color-scale";
  * @returns             A new GeoJSON FeatureCollection with added
  *                      value and color properties
  */
-export function mergeDataToGeoJSON<
-  G extends Geometry,
-  P extends Record<string, unknown>
->(
-  geojsonInput: FeatureCollection<G, P>,
+export function mergeDataToGeoJSON(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  geojsonInput: any,
   dataList: VillageBoundaryFeature[]
-): FeatureCollection<
-  G,
-  P & {
-    value: number | null;
-    color: string;
-  }
-> {
+) {
   // Build lookup map from hc-key to { value, color }
   const lookupByKey: Record<string, { value: number; color: string }> = {};
 
@@ -35,12 +25,11 @@ export function mergeDataToGeoJSON<
   }
 
   // Deep-clone so we don’t mutate the original
-  const mergedGeoJSON = JSON.parse(
-    JSON.stringify(geojsonInput)
-  ) as FeatureCollection<G, P>;
+  const mergedGeoJSON = JSON.parse(JSON.stringify(geojsonInput));
 
   mergedGeoJSON.features = mergedGeoJSON.features.map(
-    (feature: Feature<G, P>) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (feature: any) => {
       const key = (feature.properties as never)["hc-key"] as string;
       const match = lookupByKey[key] ?? {
         value: null,
@@ -58,8 +47,5 @@ export function mergeDataToGeoJSON<
     }
   );
 
-  return mergedGeoJSON as FeatureCollection<
-    G,
-    P & { value: number | null; color: string }
-  >;
+  return mergedGeoJSON;
 }
