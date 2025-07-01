@@ -11,87 +11,6 @@ interface LoginResponse {
   message?: string;
 }
 
-let refreshPromise: Promise<any> | null = null;
-const MAX_REFRESH_ATTEMPTS = 2;
-
-async function refreshAccessToken(token: any) {
-  refreshPromise ??= (async () => {
-    try {
-      // Initialize refreshAttempts if not present
-      const refreshAttempts = (token.refreshAttempts ?? 0) + 1;
-
-      if (refreshAttempts > MAX_REFRESH_ATTEMPTS) {
-        // Reset attempts and throw error to trigger login redirect
-        await signOut();
-        throw new Error("Max refresh attempts reached");
-      }
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ refresh_token: token.refresh_token }),
-        }
-      );
-
-      const refreshedTokens = await response.json();
-
-      if (!response.ok) {
-        throw new Error("Refresh failed");
-      }
-
-      const userResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${refreshedTokens.access_token}`,
-          },
-        }
-      );
-
-      const userData = await userResponse.json();
-
-      const newToken = {
-        access_token: refreshedTokens.access_token,
-        refresh_token: refreshedTokens.refresh_token ?? token.refresh_token,
-        accessTokenExpires: refreshedTokens.expires_at * 1000,
-        refreshAttempts: 0, // Reset attempts on successful refresh
-        user: {
-          id: String(userData.id),
-          name: userData.name,
-          email: userData.email,
-          image: userData.image,
-          username: userData.username,
-          role: userData.role,
-          organizationId: userData.organization?.id ?? null,
-        },
-      };
-
-      return newToken;
-    } catch (err) {
-      console.error("Refresh failed", err);
-      if ((token.refreshAttempts ?? 0) >= MAX_REFRESH_ATTEMPTS) {
-        // Force sign out by returning error
-        return {
-          ...token,
-          error: "RefreshAccessTokenError",
-          forceSignOut: true,
-        };
-      }
-      return {
-        ...token,
-        error: "RefreshAccessTokenError",
-        refreshAttempts: (token.refreshAttempts ?? 0) + 1,
-      };
-    } finally {
-      refreshPromise = null; // Reset lock
-    }
-  })();
-
-  return refreshPromise;
-}
-
 export const { auth, handlers, signIn, signOut } = NextAuth({
   basePath: "/auth",
   providers: [
@@ -162,7 +81,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           access_token: user.access_token,
           refresh_token: user.refresh_token,
           accessTokenExpires: user.accessTokenExpires,
-          refreshAttempts: 0, // Initialize refresh attempts
+          refreshAttempts: 0,
           user: {
             id: user.id,
             name: user.name,
@@ -170,7 +89,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             image: user.image,
             username: user.username,
             role: user.role,
-            organizationId: user.organizationId, // Only ID
+            organizationId: user.organizationId,
           },
         };
       }
@@ -182,20 +101,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return token;
       }
 
-      return refreshAccessToken(token);
+      return token;
     },
     session: async ({ session, token }) => {
-      // If we need to force sign out, trigger sign out and return empty session
-      if (token.forceSignOut) {
-        await signOut();
-        return session;
-      }
-
-      // Only proceed with session if we have a valid token
-      if (!token.access_token) {
-        return session;
-      }
-
       session.access_token = token.access_token as string;
       session.refresh_token = token.refresh_token as string;
       session.error = token.error as string;

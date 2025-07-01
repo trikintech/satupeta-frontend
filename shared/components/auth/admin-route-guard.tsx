@@ -19,14 +19,10 @@ export default function AdminRouteGuard({
 
   const { session, status } = useAuthSession(true);
   const role = session?.user?.role;
-  const hasTokenError = session?.error === "RefreshAccessTokenError";
 
-  // Get redirect path from role configuration
   const redirectPath = role
     ? roles[role.name]?.redirectTo
     : "/auth/admin/login";
-
-  // Detect menu + permission based on pathname
 
   const matched = Object.entries(adminRoutePermissions).find(([route]) =>
     pathname.startsWith(route)
@@ -42,12 +38,12 @@ export default function AdminRouteGuard({
       : false);
 
   useEffect(() => {
-    if (hasTokenError && isAdminRoute) {
+    if (isAdminRoute && status === "unauthenticated") {
       router.push(
         `/auth/admin/login?callbackUrl=${encodeURIComponent(pathname)}`
       );
     }
-  }, [hasTokenError, isAdminRoute, pathname, router]);
+  }, [isAdminRoute, pathname, router, status]);
 
   useEffect(() => {
     if (
