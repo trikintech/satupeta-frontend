@@ -3,10 +3,10 @@ import PageHeader from "../../../_components/page-header";
 import OrganizationEditPageClient from "./page.client";
 
 export const metadata = {
-  title: "Kategori",
+  title: "Perangkat Daerah",
 };
 
-export default function CategoryPage() {
+export default function OrganizationPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Ubah Perangkat Daerah" />

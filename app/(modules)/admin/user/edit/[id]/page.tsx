@@ -6,7 +6,7 @@ export const metadata = {
   title: "User",
 };
 
-export default function CategoryPage() {
+export default function UserPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Ubah User" />

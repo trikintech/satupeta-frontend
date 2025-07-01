@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import AddCategoryPageClient from "./page.client";
+import AddOrganizationPageClient from "./page.client";
 import PageHeader from "../../_components/page-header";
 
 export default function AddOrganizationPage() {
@@ -8,7 +8,7 @@ export default function AddOrganizationPage() {
       <PageHeader title="Tambah Perangkat Daerah" className="bg-zinc-50" />
       <div className="px-6">
         <Suspense fallback={<div>Memuat form...</div>}>
-          <AddCategoryPageClient />
+          <AddOrganizationPageClient />
         </Suspense>
       </div>
     </div>
