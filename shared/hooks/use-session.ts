@@ -13,7 +13,6 @@ export function useAuthSession(requireAuth = false) {
   const router = useRouter();
   const isLoading = status === "loading";
   const isAuthenticated = status === "authenticated";
-  const hasTokenError = session?.error === "RefreshAccessTokenError";
 
   const checkPermission = (module: string, action: Permission) => {
     const userRole = session?.user?.role;
@@ -22,15 +21,10 @@ export function useAuthSession(requireAuth = false) {
   };
 
   useEffect(() => {
-    if (hasTokenError) {
-      router.push("/auth/signin");
-      return;
-    }
-
     if (!isLoading && !isAuthenticated && requireAuth) {
       router.push("/auth/signin");
     }
-  }, [isLoading, isAuthenticated, requireAuth, router, hasTokenError]);
+  }, [isLoading, isAuthenticated, requireAuth, router]);
 
   return {
     session,

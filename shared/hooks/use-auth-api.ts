@@ -21,20 +21,15 @@ export function useAuthApi() {
   const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (status !== "authenticated" || isInitialized.current) return;
 
     const getToken = () => {
       if (!session?.access_token) return null;
-      if (session?.error === "RefreshAccessTokenError") {
-        return null;
-      }
       return session.access_token;
     };
 
-    if (!isInitialized.current) {
-      setupApiInterceptors(getToken);
-      isInitialized.current = true;
-    }
+    setupApiInterceptors(getToken);
+    isInitialized.current = true;
   }, [session, status]);
 
   return {
