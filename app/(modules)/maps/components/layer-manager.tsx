@@ -7,7 +7,6 @@ import {
   featureInformationAtom,
   FeatureInformationType,
 } from "../state/feature-information";
-import { FeatureCollection, Geometry } from "geojson";
 import { constructWfsUrl } from "@/shared/utils/wms";
 import colorScaleApi from "@/shared/services/color-scale";
 import { appConfig } from "@/shared/config/app-config";
@@ -172,10 +171,8 @@ export const LayerManager = ({ map }: { map: L.Map | null }) => {
             if (!colorScale?.data) return null;
 
             const enrichedGeoJSON = mergeDataToGeoJSON(
-              jatimGeojson as FeatureCollection<
-                Geometry,
-                Record<string, unknown>
-              >,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              jatimGeojson as any,
               colorScale.data
             );
 

@@ -7,7 +7,6 @@ import colorScaleApi from "@/shared/services/color-scale";
 import { appConfig } from "@/shared/config/app-config";
 import { useQuery } from "@tanstack/react-query";
 import { mergeDataToGeoJSON } from "@/shared/utils/mege-data-geojson";
-import { FeatureCollection, Geometry } from "geojson";
 import jatimGeojson from "@/public/jatim.json";
 import L from "leaflet";
 import { mapAtom } from "@/app/(modules)/maps/state/map";
@@ -58,7 +57,8 @@ export default function ChoroplethControl({ layer }: ChoropleControlProps) {
     if (existingLayer) map.removeLayer(existingLayer);
 
     const enrichedGeoJSON = mergeDataToGeoJSON(
-      jatimGeojson as FeatureCollection<Geometry, Record<string, unknown>>,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      jatimGeojson as any,
       colorScale.data
     );
 
