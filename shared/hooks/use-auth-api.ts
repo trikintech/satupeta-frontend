@@ -1,7 +1,7 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { setupApiInterceptors } from "../services/api";
 import authApi from "../services/auth";
@@ -18,9 +18,10 @@ export const handleLogout = async () => {
 
 export function useAuthApi() {
   const { data: session, status, update } = useSession();
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (status === "loading") return;
+    if (status !== "authenticated" || isInitialized.current) return;
 
     const getToken = () => {
       if (!session?.access_token) return null;
@@ -28,6 +29,7 @@ export function useAuthApi() {
     };
 
     setupApiInterceptors(getToken);
+    isInitialized.current = true;
   }, [session, status]);
 
   return {
