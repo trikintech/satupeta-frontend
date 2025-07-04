@@ -11,7 +11,10 @@ export default function HighlightMapset() {
       mapsetApi
         .getMapsets({
           limit: 3,
-          filter: ["is_active=true", "status_validation=approved"],
+          filter: JSON.stringify([
+            "is_active=true",
+            "status_validation=approved",
+          ]),
         })
         .then((res) => {
           return res.items;
