@@ -6,7 +6,7 @@ export const metadata = {
   title: "Ubah Mapserver & Metadata",
 };
 
-export default function CategoryPage() {
+export default function MapSourcePage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Ubah Mapserver & Metadata" />

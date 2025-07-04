@@ -12,7 +12,6 @@ export function OrganizationSection() {
     queryFn: () =>
       organizationApi
         .getOrganizations({
-          limit: 5,
           filter: ["is_active=true"],
         })
         .then((res) => {
