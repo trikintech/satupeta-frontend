@@ -28,9 +28,24 @@ const fetchWMSLayersFromSourceId = async (
     layers.forEach((layer) => {
       const name = layer.getElementsByTagName("Name")[0]?.textContent;
       if (name) {
+        // Get bounding box from layer XML
+        const bboxElement = layer.getElementsByTagName("BoundingBox")[0];
+        let bbox = "-20037508.34,-20037508.34,20037508.34,20037508.34"; // default fallback
+
+        if (bboxElement) {
+          const minx = bboxElement.getAttribute("minx");
+          const miny = bboxElement.getAttribute("miny");
+          const maxx = bboxElement.getAttribute("maxx");
+          const maxy = bboxElement.getAttribute("maxy");
+
+          if (minx && miny && maxx && maxy) {
+            bbox = `${minx},${miny},${maxx},${maxy}`;
+          }
+        }
+
         layerMap.set(name, {
           name,
-          url: `${serverUrl}/wms?layers=${name}&service=WMS&request=GetMap`,
+          url: `${serverUrl}/wms?service=WMS&version=1.1.0&request=GetMap&layers=${name}&bbox=${bbox}&width=768&height=534&srs=EPSG:4326&styles=&format=application/openlayers`,
         });
       }
     });
