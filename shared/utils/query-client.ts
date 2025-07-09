@@ -30,8 +30,6 @@ function handleGlobalError(error: unknown) {
     const axiosError = error as AxiosError;
 
     if (axiosError.response?.status === 401) {
-      // Hanya menangani error 401 (Unauthorized)
-      // Skip auth endpoints (karena mungkin sedang refresh token)
       const requestUrl = axiosError.config?.url;
       const isAuthEndpoint =
         requestUrl?.includes("/auth/refresh") ||
@@ -43,6 +41,7 @@ function handleGlobalError(error: unknown) {
       if (!hasRedirected) {
         hasRedirected = true;
         toast.error("Session expired. Refreshing token...");
+        window.location.href = "/auth/admin/logout";
       }
     } else {
       toast.error(axiosError.message || "Something went wrong.");
