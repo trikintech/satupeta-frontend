@@ -13,6 +13,7 @@ export default function HighlightMapset() {
           limit: 3,
           filter: JSON.stringify([
             "is_active=true",
+            "is_popular=true",
             "status_validation=approved",
           ]),
         })
