@@ -21,7 +21,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { DeleteDialog } from "../../../_components/delete-dialog";
 import mapsetApi from "@/shared/services/mapset";
 import { toast } from "sonner";
-import { hasPermission } from "@/shared/config/role";
+import {
+  hasPermission,
+  isAdministrator,
+  isDataValidator,
+} from "@/shared/config/role";
 import { useAuthSession } from "@/shared/hooks/use-session";
 import { ConfirmationDialog } from "../../../_components/confirmation-dialog";
 import StatusValidation, {
@@ -101,7 +105,6 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
 
   const userRole = session?.user?.role;
   const userOrganizationId = session?.user?.organizationId;
-  const isDataManager = userRole?.name === "data_manager";
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -213,7 +216,9 @@ export const useMapsetColumns = (): ColumnDef<Mapset>[] => {
       cell: ({ row }) => {
         const mapset = row.original;
         const canManageMapset =
-          !isDataManager || mapset.producer?.id === userOrganizationId;
+          isAdministrator(userRole) ||
+          isDataValidator(userRole) ||
+          mapset.producer?.id === userOrganizationId;
 
         return (
           <>
