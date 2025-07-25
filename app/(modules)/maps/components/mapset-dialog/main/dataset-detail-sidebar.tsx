@@ -33,7 +33,7 @@ export function DatasetDetailSidebar({
   return (
     <div
       className={cn(
-        "absolute z-[400] top-0 right-0 h-full w-[480px] bg-white shadow-lg border-l  transition-transform duration-300",
+        "absolute z-[400] top-0 right-0 h-full w-[480px] bg-white shadow-lg border-l transition-transform duration-300 flex flex-col", // <-- add flex flex-col
         open ? "translate-x-0" : "translate-x-full"
       )}
     >
@@ -52,7 +52,11 @@ export function DatasetDetailSidebar({
         </button>
       </div>
 
-      <Tabs defaultValue="informasi" className="w-full">
+      {/* Make Tabs fill available space and be flex column */}
+      <Tabs
+        defaultValue="informasi"
+        className="w-full flex-1 min-h-0 flex flex-col"
+      >
         <TabsList className="grid grid-cols-2 rounded-none w-full p-0 h-auto bg-white border-b border-gray-200">
           <TabsTrigger
             value="informasi"
@@ -68,7 +72,7 @@ export function DatasetDetailSidebar({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="informasi" className="p-6">
+        <TabsContent value="informasi" className="p-6 pb-20 overflow-y-auto">
           <div className="space-y-3 text-sm">
             <Row
               label="Klasifikasi"
@@ -140,10 +144,6 @@ export function DatasetDetailSidebar({
               }
             />
 
-            <Row
-              label="Sistem Proyeksi"
-              value={`: ${selectedMapset.projection_system.name}`}
-            />
             <Row
               label="Status Validasi"
               value={`: ${
