@@ -13,6 +13,9 @@ import { selectedMapsetAtom } from "../../../state/mapset-dialog";
 import DownloadGeojsonBtn from "./download-geojson-btn";
 import DownloadShpBtn from "./download-shp-btn";
 import DownloadKmlBtn from "./download-kml-btn";
+import { statusValidationLabel } from "@/shared/config/status-validation";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 export function DatasetDetailSidebar({
   open,
@@ -91,8 +94,63 @@ export function DatasetDetailSidebar({
               value={`: ${selectedMapset.projection_system.name}`}
             />
             <Row
+              label="Tautan Layer"
+              value={
+                selectedMapset.layer_url ? (
+                  <>
+                    :{" "}
+                    <Link
+                      href={selectedMapset.layer_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      <div className="inline-flex text-sm items-center space-x-1 bg-slate-100 p-1 rounded">
+                        <div>View Layer</div>
+                        <ExternalLink width={14} height={14} />
+                      </div>
+                    </Link>
+                  </>
+                ) : (
+                  ": -"
+                )
+              }
+            />
+            <Row
+              label="Tautan Metadata"
+              value={
+                selectedMapset.metadata_url ? (
+                  <>
+                    :{" "}
+                    <Link
+                      href={selectedMapset.metadata_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      <div className="inline-flex text-sm items-center space-x-1 bg-slate-100 p-1 rounded">
+                        <div>View Metadata</div>
+                        <ExternalLink width={14} height={14} />
+                      </div>
+                    </Link>
+                  </>
+                ) : (
+                  ": -"
+                )
+              }
+            />
+
+            <Row
+              label="Sistem Proyeksi"
+              value={`: ${selectedMapset.projection_system.name}`}
+            />
+            <Row
               label="Status Validasi"
-              value={`: ${selectedMapset.status_validation}`}
+              value={`: ${
+                statusValidationLabel[
+                  selectedMapset.status_validation as keyof typeof statusValidationLabel
+                ]
+              }`}
             />
           </div>
         </TabsContent>
@@ -132,7 +190,7 @@ export function DatasetDetailSidebar({
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="flex">
       <span className="w-[160px] font-medium">{label}</span>

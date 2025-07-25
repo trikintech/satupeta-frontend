@@ -24,7 +24,7 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { fetchWMSLayersFromSourceId } from "@/shared/services/map-layer";
-import { fetchGeoNetworkLayersFromSourceId } from "@/shared/services/metadata-url";
+// import { fetchGeoNetworkLayersFromSourceId } from "@/shared/services/metadata-url"; // No longer needed
 
 const metadataSchema = z.object({
   source_id: z.string().nullable(),
@@ -73,16 +73,16 @@ export function MapsetMetadataForm({
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const sourceId = useWatch({ control: form.control, name: "source_id" });
-  const metadataSourceId = useWatch({
-    control: form.control,
-    name: "metadata_source_id",
-  });
+  // const metadataSourceId = useWatch({
+  //   control: form.control,
+  //   name: "metadata_source_id",
+  // }); // No longer needed
 
   const [layerOptions, setLayerOptions] = useState<LayerOption[]>([]);
-  const [metadataOptions, setMetadataOptions] = useState<LayerOption[]>([]);
+  // const [metadataOptions, setMetadataOptions] = useState<LayerOption[]>([]); // No longer needed
 
   const [loadingLayers, setLoadingLayers] = useState(false);
-  const [loadingMetadata, setLoadingMetadata] = useState(false);
+  // const [loadingMetadata, setLoadingMetadata] = useState(false); // No longer needed
 
   const mapSourcesWithOthers = [
     ...mapSources,
@@ -113,13 +113,13 @@ export function MapsetMetadataForm({
     );
   }, [debouncedSearchQuery, layerOptions]);
 
-  const filteredMetadataOptions = useMemo(() => {
-    if (!debouncedSearchQuery) return metadataOptions;
-    const query = debouncedSearchQuery.toLowerCase();
-    return metadataOptions.filter((meta) =>
-      meta.name.toLowerCase().includes(query)
-    );
-  }, [debouncedSearchQuery, metadataOptions]);
+  // const filteredMetadataOptions = useMemo(() => {
+  //   if (!debouncedSearchQuery) return metadataOptions;
+  //   const query = debouncedSearchQuery.toLowerCase();
+  //   return metadataOptions.filter((meta) =>
+  //     meta.name.toLowerCase().includes(query)
+  //   );
+  // }, [debouncedSearchQuery, metadataOptions]);
 
   useEffect(() => {
     const loadLayers = async () => {
@@ -143,30 +143,30 @@ export function MapsetMetadataForm({
     loadLayers();
   }, [sourceId]);
 
-  useEffect(() => {
-    const loadMetadata = async () => {
-      if (!metadataSourceId || metadataSourceId === "lainnya") {
-        setMetadataOptions([]);
-        return;
-      }
-
-      setLoadingMetadata(true);
-      try {
-        const metadata = await fetchGeoNetworkLayersFromSourceId(
-          metadataSourceId
-        );
-
-        setMetadataOptions(metadata);
-      } catch (error) {
-        console.error("Failed to fetch metadata:", error);
-        setMetadataOptions([]);
-      } finally {
-        setLoadingMetadata(false);
-      }
-    };
-
-    loadMetadata();
-  }, [metadataSourceId]);
+  // useEffect(() => {
+  //   const loadMetadata = async () => {
+  //     if (!metadataSourceId || metadataSourceId === "lainnya") {
+  //       setMetadataOptions([]);
+  //       return;
+  //     }
+  //
+  //     // setLoadingMetadata(true); // No longer needed
+  //     try {
+  //       const metadata = await fetchGeoNetworkLayersFromSourceId(
+  //         metadataSourceId
+  //       );
+  //
+  //       setMetadataOptions(metadata);
+  //     } catch (error) {
+  //       console.error("Failed to fetch metadata:", error);
+  //       setMetadataOptions([]);
+  //     } finally {
+  //       // setLoadingMetadata(false); // No longer needed
+  //     }
+  //   };
+  //
+  //   loadMetadata();
+  // }, [metadataSourceId]);
 
   useEffect(() => {
     form.reset(initialData);
@@ -294,38 +294,15 @@ export function MapsetMetadataForm({
         )}
 
         {/* METADATA SERVER */}
-        <FormField
-          control={form.control}
-          name="metadata_source_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Pilih Metadata Server<span className="text-red-500">*</span>
-              </FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value ?? undefined}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Pilih metadata server" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {mapSourcesWithOthers.map((source) => (
-                      <SelectItem key={source.id} value={source.id}>
-                        {source.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+        {/* Hide the metadata server select and set default to 'lainnya' */}
+        <input
+          type="hidden"
+          value="lainnya"
+          {...form.register("metadata_source_id")}
         />
 
         {/* METADATA URL */}
-        {metadataSourceId === "lainnya" ? (
+        {true ? (
           <FormField
             control={form.control}
             name="metadata_url"
@@ -335,81 +312,13 @@ export function MapsetMetadataForm({
                   URL Metadata<span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Masukkan URL metadata secara manual"
-                  />
+                  <Input {...field} placeholder="Masukkan URL metadata" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-        ) : (
-          <FormField
-            control={form.control}
-            name="metadata_url"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Pilih Metadata<span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={loadingMetadata}
-                    onOpenChange={(open) => {
-                      if (!open) setSearchQuery("");
-                      else setTimeout(() => searchInputRef.current?.focus(), 0);
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue
-                        placeholder={
-                          loadingMetadata
-                            ? "Memuat metadata..."
-                            : "Pilih metadata dari server"
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent className="min-w-[300px]">
-                      <div className="p-2 sticky top-0 bg-background z-10">
-                        <Input
-                          placeholder="Cari metadata..."
-                          value={searchQuery}
-                          ref={searchInputRef}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          onKeyDown={(e) =>
-                            e.key === "Escape" &&
-                            (e.target as HTMLInputElement).blur()
-                          }
-                          className="mb-2"
-                          autoFocus
-                        />
-                      </div>
-                      {loadingMetadata ? (
-                        <div className="p-4 text-center">
-                          <Loader2 className="mx-auto h-6 w-6 animate-spin" />
-                        </div>
-                      ) : filteredMetadataOptions.length > 0 ? (
-                        filteredMetadataOptions.map((meta) => (
-                          <SelectItem key={meta.url} value={meta.url}>
-                            {meta.name}
-                          </SelectItem>
-                        ))
-                      ) : (
-                        <div className="p-2 text-center text-sm text-muted-foreground">
-                          Tidak ada metadata yang sesuai
-                        </div>
-                      )}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
+        ) : null}
 
         {/* BUTTONS */}
         <div className="flex space-x-4 pt-4">
