@@ -181,7 +181,6 @@ export default function AddMapsPageClient() {
       layer_type: formState.info.layer_type,
       source_id: [
         formState.metadata.source_id,
-        formState.metadata.metadata_source_id,
       ].filter((id) => id !== "lainnya" && id !== null) as string[],
       layer_url: formState.metadata.layer_url,
       metadata_url: formState.metadata.metadata_url,
