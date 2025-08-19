@@ -11,6 +11,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { queryClient } from "@/shared/utils/query-client";
 import { getChangedFields } from "@/shared/utils/form";
+import { AxiosError } from "axios";
 
 export function useUserForm(defaultValues?: Partial<User>) {
   const router = useRouter();
@@ -20,6 +21,7 @@ export function useUserForm(defaultValues?: Partial<User>) {
   const handleSubmitUser = async (data: UserFormValues) => {
     try {
       setIsSubmitting(true);
+      
       if (isEdit) {
         const changedFields = getChangedFields(defaultValues || {}, data);
 
@@ -37,7 +39,12 @@ export function useUserForm(defaultValues?: Partial<User>) {
       router.push("/admin/user");
       router.refresh();
       queryClient.invalidateQueries();
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response?.status === 400 && error.response?.data?.detail === "Username already exists") {
+        toast.error("Username sudah digunakan");
+        return;
+      }
+      
       toast.error(isEdit ? "Gagal memperbarui user" : "Gagal menambahkan user");
       console.error(error);
     } finally {
