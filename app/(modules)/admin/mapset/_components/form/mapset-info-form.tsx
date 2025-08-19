@@ -80,6 +80,7 @@ export function MapsetInfoForm({
       classification_id: initialData.classification_id || "",
       organization_id: initialData.organization_id || "",
       data_status: initialData.data_status || "sementara",
+      layer_type: initialData.layer_type || null,
     },
   });
 
