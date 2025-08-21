@@ -45,6 +45,11 @@ export function useUserForm(defaultValues?: Partial<User>) {
         return;
       }
       
+      if (error instanceof AxiosError && error.response?.status === 400 && error.response?.data?.detail === "Email already exists") {
+        toast.error("Email sudah digunakan");
+        return;
+      }
+      
       toast.error(isEdit ? "Gagal memperbarui user" : "Gagal menambahkan user");
       console.error(error);
     } finally {

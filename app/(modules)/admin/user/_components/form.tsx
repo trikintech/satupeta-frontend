@@ -35,6 +35,13 @@ import { User } from "@/shared/types/user";
 
 type UserFormValues = z.infer<typeof userSchema>;
 
+// Helper component for required field labels
+const RequiredFormLabel = ({ children }: { children: React.ReactNode }) => (
+  <FormLabel>
+    {children} <span className="text-red-500">*</span>
+  </FormLabel>
+);
+
 interface UserFormProps {
   defaultValues?: Partial<User>;
   onSubmitAction: (data: UserFormValues) => void;
@@ -84,7 +91,7 @@ export function UserForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nama Lengkap</FormLabel>
+              <RequiredFormLabel>Nama Lengkap</RequiredFormLabel>
               <FormControl>
                 <Input placeholder="Masukkan nama lengkap" {...field} />
               </FormControl>
@@ -98,7 +105,7 @@ export function UserForm({
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <RequiredFormLabel>Username</RequiredFormLabel>
               <FormControl>
                 <Input placeholder="Masukkan username" {...field} />
               </FormControl>
@@ -112,7 +119,7 @@ export function UserForm({
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <RequiredFormLabel>Password</RequiredFormLabel>
               <FormControl>
                 <Input
                   type="password"
@@ -130,7 +137,7 @@ export function UserForm({
           name="confirm_password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Konfirmasi Password</FormLabel>
+              <RequiredFormLabel>Konfirmasi Password</RequiredFormLabel>
               <FormControl>
                 <Input
                   type="password"
@@ -148,7 +155,7 @@ export function UserForm({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <RequiredFormLabel>Email</RequiredFormLabel>
               <FormControl>
                 <Input placeholder="Masukkan email" type="email" {...field} />
               </FormControl>
@@ -190,7 +197,7 @@ export function UserForm({
           name="role_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Role</FormLabel>
+              <RequiredFormLabel>Role</RequiredFormLabel>
               <FormControl>
                 <Select
                   value={field.value}
@@ -231,7 +238,7 @@ export function UserForm({
           name="organization_id"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Organisasi</FormLabel>
+              <RequiredFormLabel>Organisasi</RequiredFormLabel>
               <FormControl>
                 <Select
                   value={field.value}

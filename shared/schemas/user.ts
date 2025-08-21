@@ -3,7 +3,13 @@ import { z } from "zod";
 export const userSchema = z
   .object({
     name: z.string().min(1),
-    username: z.string().min(1),
+    username: z
+      .string()
+      .min(1)
+      .regex(
+        /^[a-zA-Z0-9]+$/,
+        "Username hanya boleh mengandung huruf dan angka"
+      ),
     email: z.string().email(),
     employee_id: z.string().optional(),
     position: z.string().optional(),
